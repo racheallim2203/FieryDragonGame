@@ -4,8 +4,11 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 public class PirateCard extends Card {
+
     public PirateCard(int count) {
-        super.count = count; }
+        setType("piratecard");
+        setCount(count);
+    }
 
     @Override
     public boolean applyEffect(Player player, GameMap gameMap) {
