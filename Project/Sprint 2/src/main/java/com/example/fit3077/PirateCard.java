@@ -8,7 +8,9 @@ public class PirateCard extends Card {
         super.count = count; }
 
     @Override
-    public boolean applyEffect() {
+    public boolean applyEffect(Player player, GameMap gameMap) {
+        player.moveToken(-this.count, gameMap); // Move backward
         return false; // This should always end the turn
     }
 }
+
