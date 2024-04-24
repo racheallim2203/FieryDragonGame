@@ -1,4 +1,4 @@
-package com.example.fx;
+package com.example.fit3077;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
