@@ -25,10 +25,9 @@ public class AnimalCard extends Card {
     It takes a Player and GameMap as parameters and returns a boolean indicating whether the
     move was successful.
         */
-
-
     @Override
     public boolean applyEffect() {
-        return false;
+            return true;
+        }
     }
-}
+
