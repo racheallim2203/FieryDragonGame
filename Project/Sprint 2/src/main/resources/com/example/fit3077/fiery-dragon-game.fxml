@@ -29,7 +29,7 @@
                         <Image url="@images/coveredcard.png" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="48.0" fitWidth="46.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="uncoveredCards" fitHeight="48.0" fitWidth="46.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@images/coveredcard.png" />
                      </image>

@@ -4,9 +4,7 @@ import javafx.scene.image.Image;
 
 public abstract class Card implements Effect {
     protected String type; // This can be "animal" or "pirate"
-    protected int count; // Already exists, to represent the number of animals or pirates on the card
-
-    // The constructors, getters, and setters would need to be updated to reflect the type of card
+    protected int count;
 
     public String getType() {
         return type;

@@ -25,7 +25,7 @@ public class AnimalCard extends Card {
 
     @Override
     public Image getImage() {
-        String imageName = animalType.toLowerCase() + count + ".png"; // Construct the image file name based on animal type and count
+        String imageName = getAnimalType().toLowerCase() + count + ".png"; // Construct the image file name based on animal type and count
         String pathName = "images/" + imageName;
         return new Image(AnimalCard.class.getResourceAsStream(pathName));
     }

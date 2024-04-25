@@ -19,6 +19,9 @@ public class FieryDragonGameController implements Initializable {
         private FlowPane cardsDeck;
 
         @FXML
+        private ImageView uncoveredCards;
+
+        @FXML
         private Label currentPlayer;
 
         @FXML
@@ -36,8 +39,7 @@ public class FieryDragonGameController implements Initializable {
         @FXML
         private ImageView pufferfish;
 
-        @FXML
-        private ImageView uncoveredCards;
+
 
         @FXML
         void startGame(ActionEvent event) {
@@ -46,6 +48,10 @@ public class FieryDragonGameController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        currentPlayer.setText("Fish");
+        AnimalCard animalCard = new AnimalCard("fish",1);
+        PirateCard pirateCard = new PirateCard(1);
+        uncoveredCards.setImage(animalCard.getImage());
     }
+
+
 }

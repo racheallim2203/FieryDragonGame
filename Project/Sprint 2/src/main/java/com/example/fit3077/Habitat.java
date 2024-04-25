@@ -21,19 +21,13 @@ public class Habitat {
     // Method to check if the habitat contains an animal card of a specific type
     public boolean containsAnimal(String animalType) {
         for (AnimalCard card : getCards()) {
-            if (card.getAnimal().equals(animalType)) {
+            if (card.getAnimalType().equals(animalType)) {
                 return true;
             }
         }
         return false;
     }
 
-    @Override
-    public String toString() {
-        return "Habitat{" +
-                "cards=" + cards +
-                '}';
-    }
 
 }
 
