@@ -17,92 +17,9 @@
 
 <AnchorPane prefHeight="600.0" prefWidth="600.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.fit3077.FieryDragonGameController">
    <children>
-      <VBox layoutX="187.33333333333334" layoutY="32.0" prefHeight="483.0" prefWidth="234.0" AnchorPane.bottomAnchor="85.0" AnchorPane.leftAnchor="187.0" AnchorPane.rightAnchor="179.0" AnchorPane.topAnchor="32.0">
+      <VBox alignment="CENTER" layoutX="211.33333333333334" layoutY="165.33333333333334" prefHeight="197.0" prefWidth="216.0" AnchorPane.bottomAnchor="238.0" AnchorPane.leftAnchor="211.0" AnchorPane.rightAnchor="173.0" AnchorPane.topAnchor="165.0">
          <children>
-            <FlowPane fx:id="cardsDeck" alignment="CENTER" prefHeight="483.0" prefWidth="240.0">
-               <children>
-                  <ImageView fitHeight="39.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/coveredcard.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="48.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/coveredcard.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="uncoveredCards" fitHeight="48.0" fitWidth="46.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/coveredcard.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="48.0" fitWidth="46.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/coveredcard.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="42.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/coveredcard.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="45.0" fitWidth="46.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/coveredcard.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="44.0" fitWidth="49.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/coveredcard.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="46.0" fitWidth="49.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/coveredcard.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="46.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/coveredcard.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="48.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/coveredcard.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="48.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/coveredcard.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/coveredcard.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="49.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/coveredcard.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="49.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/coveredcard.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="45.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/coveredcard.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="44.0" fitWidth="46.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/coveredcard.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </FlowPane>
+            <FlowPane fx:id="decks" columnHalignment="CENTER" prefHeight="197.0" prefWidth="215.0" />
          </children>
       </VBox>
       <VBox layoutX="4.0" prefHeight="600.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="-4.0" AnchorPane.topAnchor="0.0">

@@ -4,8 +4,8 @@ public class AnimalCard extends Card {
     private final String animalType; // Type of the animal on the card
 
     public AnimalCard(String animalType, int count) {
-        super.type = animalType;
-        super.count = count;
+        super.type = animalType.toLowerCase();
+        super.count = count; // Ensure this is within the range [1, 3] for AnimalCard
         this.animalType = animalType;
     }
 
@@ -28,6 +28,12 @@ public class AnimalCard extends Card {
     @Override
     public Image getImage() {
         String imageName = animalType.toLowerCase() + count + ".png";
+        String pathName = "images/" + imageName;
+        return new Image(getClass().getResourceAsStream(pathName));
+    }
+    @Override
+    public Image getHabitatImage() {
+        String imageName = animalType.toLowerCase() + ".png";
         String pathName = "images/" + imageName;
         return new Image(getClass().getResourceAsStream(pathName));
     }

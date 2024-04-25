@@ -7,30 +7,16 @@ import java.util.*;
 
 public class GameMap {
     private final List<Habitat> habitats;
-    private final Map<String, AnimalCave> animalCaves; // Maps animal types to their respective caves
 
     public GameMap() {
         this.habitats = new ArrayList<>();
-        this.animalCaves = new HashMap<>();
         initializeHabitats();
-        initializeAnimalCaves();
-    }
-
-    private void initializeAnimalCaves() {
-        animalCaves.put("Fish", new AnimalCave("Fish", 5));
-        animalCaves.put("Puffer Fish", new AnimalCave("Puffer Fish", 10));
-        animalCaves.put("Baby Dragon", new AnimalCave("Baby Dragon", 15));
-        animalCaves.put("Octopus", new AnimalCave("Octopus", 20));
-    }
-
-    public AnimalCave getAnimalCave(String type) {
-        return animalCaves.get(type);
     }
 
     // Populates the habitats with sets of AnimalCards, ensuring no repeated animals within a habitat
     // and each animal type appears exactly six times across all habitats.
     private void initializeHabitats() {
-        List<String> allAnimals = Arrays.asList("Fish", "Puffer Fish", "Baby Dragon", "Octopus");
+        List<String> allAnimals = Arrays.asList("fish", "pufferfish", "dragon", "octopus");
         int numHabitats = 8; // Total number of habitats
         int cardsPerHabitat = 3; // Cards per habitat
 
@@ -38,7 +24,7 @@ public class GameMap {
         List<AnimalCard> allCards = new ArrayList<>();
         for (String animal : allAnimals) {
             for (int i = 0; i < 6; i++) { // Each animal appears 6 times in total
-                allCards.add(new AnimalCard(animal, 1)); // Add an AnimalCard with a count of 1
+                allCards.add(new AnimalCard(animal,0)); // Add an AnimalCard with a count of 1
             }
         }
 

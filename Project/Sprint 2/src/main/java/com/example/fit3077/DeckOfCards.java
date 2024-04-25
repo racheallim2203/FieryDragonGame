@@ -12,6 +12,7 @@ import java.util.List;
 public class DeckOfCards {
     private final ArrayList<Card> deck;
 
+
     public DeckOfCards() {
         this.deck = new ArrayList<>();
         List<String> animalTypes = List.of("Dragon", "Fish", "Pufferfish", "Octopus"); // Add more animal types if necessary
@@ -20,7 +21,7 @@ public class DeckOfCards {
         // Create AnimalCards
         for (String animalType : animalTypes) {
             for (int count = 1; count <= numberOfEachType; count++) {
-                deck.add(new AnimalCard(animalType, count % 4 + 1)); // Assuming count goes from 1 to 3 repeatedly
+                deck.add(new AnimalCard(animalType,count));
             }
         }
 
@@ -65,6 +66,8 @@ public class DeckOfCards {
      * This will return the whole deck of cards.
      */
     public List<Card> getCards() {
-        return deck;
+        return new ArrayList<>(deck);
     }
+
+
 }

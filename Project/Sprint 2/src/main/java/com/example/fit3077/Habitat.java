@@ -1,6 +1,7 @@
 package com.example.fit3077;
 
 import javafx.application.Application;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -18,9 +19,8 @@ public class Habitat {
         return cards;
     }
 
-    // Method to check if the habitat contains an animal card of a specific type
     public boolean containsAnimal(String animalType) {
-        for (AnimalCard card : getCards()) {
+        for (AnimalCard card : cards) {
             if (card.getAnimalType().equals(animalType)) {
                 return true;
             }
@@ -28,7 +28,4 @@ public class Habitat {
         return false;
     }
 
-
 }
-
-

@@ -40,5 +40,7 @@ public abstract class Card implements Effect {
     public Image getBackOfCardImage() {
         return new Image(Card.class.getResourceAsStream("/images/uncoveredcards.png"));
     }
+
+    public abstract Image getHabitatImage();
 }
 
