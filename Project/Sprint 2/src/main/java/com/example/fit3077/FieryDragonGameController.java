@@ -145,10 +145,9 @@ public class FieryDragonGameController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         gameMap = new GameMap(); // Initialize gameMap which sets up the habitats
 
-//        Card previewCard = deck.dealTopCard(); // Get the top card from the deck
-//        uncoveredCards.setImage(previewCard.getImage()); // Display the image of the card
         arrangeAnimalsInCircle();
         displayShuffledDeck();
+
     }
 
     private void displayShuffledDeck() {
@@ -158,6 +157,7 @@ public class FieryDragonGameController implements Initializable {
 
         // Retrieve the shuffled list of cards
         List<Card> shuffledDeck = deck.getCards();
+
 
         // Iterate over the shuffled deck and the imageView IDs together
         for (int i = 0; i < shuffledDeck.size(); i++) {
@@ -182,6 +182,8 @@ public class FieryDragonGameController implements Initializable {
 
             // Add the ImageView to the container
             decks.getChildren().add(cardImageView);
+
+            initializeImageView();
         }
 
 
@@ -239,20 +241,20 @@ public class FieryDragonGameController implements Initializable {
     /**
      * This will add a number to each ImageView and set the image to be the back of a Card
      */
-//    private void initializeImageView()
-//    {
-//        for (int i=0; i<imagesFlowPane.getChildren().size();i++)
-//        {
-//            //"cast" the Node to be of type ImageView
-//            ImageView imageView = (ImageView) imagesFlowPane.getChildren().get(i);
-//            imageView.setImage(new Image(Card.class.getResourceAsStream("images/coveredcard.png")));
+    private void initializeImageView()
+    {
+        for (int i=0; i<decks.getChildren().size();i++)
+        {
+            //"cast" the Node to be of type ImageView
+            ImageView imageView = (ImageView) decks.getChildren().get(i);
+            imageView.setImage(new Image(Card.class.getResourceAsStream("images/coveredcard.png")));
 //            imageView.setUserData(i);
-//
+
 //            //register a click listener
-//            imageView.setOnMouseClicked(event -> {
-//                flipCard((int) imageView.getUserData());
-//            });
-//        }
-//    }
+            imageView.setOnMouseClicked(event -> {
+                System.out.println(imageView.getUserData());;
+            });
+        }
+    }
 }
 
