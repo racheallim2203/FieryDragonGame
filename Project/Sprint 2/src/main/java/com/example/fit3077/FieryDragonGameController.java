@@ -235,5 +235,24 @@ public class FieryDragonGameController implements Initializable {
         });
 
     }
+
+    /**
+     * This will add a number to each ImageView and set the image to be the back of a Card
+     */
+//    private void initializeImageView()
+//    {
+//        for (int i=0; i<imagesFlowPane.getChildren().size();i++)
+//        {
+//            //"cast" the Node to be of type ImageView
+//            ImageView imageView = (ImageView) imagesFlowPane.getChildren().get(i);
+//            imageView.setImage(new Image(Card.class.getResourceAsStream("images/coveredcard.png")));
+//            imageView.setUserData(i);
+//
+//            //register a click listener
+//            imageView.setOnMouseClicked(event -> {
+//                flipCard((int) imageView.getUserData());
+//            });
+//        }
+//    }
 }
 
