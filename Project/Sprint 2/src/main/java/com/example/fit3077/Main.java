@@ -4,40 +4,43 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import javafx.scene.paint.Color;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyCombination;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.Group;
 import java.io.IOException;
-import java.util.List;
 
 public class Main extends Application {
+
     @Override
     public void start(Stage stage) throws IOException {
+        // Load the main layout from FXML
         Parent root = FXMLLoader.load(getClass().getResource("fiery-dragon-game.fxml"));
-        Scene scene = new Scene(root);
-        String css = this.getClass().getResource("style.css").toExternalForm();
-        scene.getStylesheets().add(css);
-        stage.setTitle("Fiery Dragon Game");
 
+        // Define the size of the scene
+        Scene scene = new Scene(root, 600, 600);
+
+        // Fix the window size (Prevent resizing)
+        stage.setMinWidth(620);
+        stage.setMinHeight(620);
+        stage.setMaxWidth(620);
+        stage.setMaxHeight(620);
+
+        // Try to load the icon
         try {
             Image icon = new Image(getClass().getResourceAsStream("/BabyDragon.png"));
             stage.getIcons().add(icon);
-        } catch (Exception e) {
+        } catch (NullPointerException e) {
             System.err.println("Icon not found: " + e.getMessage());
         }
 
+        // Set the title of the window (stage)
+        stage.setTitle("Fiery Dragon Game");
+
+        // Set the scene and show the stage
         stage.setScene(scene);
         stage.show();
     }
+
     public static void main(String[] args) {
         launch(args);
     }
-
-
 }

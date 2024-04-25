@@ -28,12 +28,17 @@ public abstract class Card implements Effect {
 
     // This method will return an Image that represents the Card
     public Image getImage() {
-        String pathName = "images/" + type + count + ".png"; // Construct the path name based on card type and count
-        return new Image(Card.class.getResourceAsStream(pathName));
+        String fileName = type + count + ".png";
+        String pathName = "images/" + fileName;
+        Image image = new Image(Card.class.getResourceAsStream(pathName));
+        if (image.isError()) {
+            throw new RuntimeException("Failed to load image: " + pathName);
+        }
+        return image;
     }
 
     public Image getBackOfCardImage() {
-        return new Image(Card.class.getResourceAsStream("images/back_of_card.png"));
+        return new Image(Card.class.getResourceAsStream("/images/uncoveredcards.png"));
     }
 }
 

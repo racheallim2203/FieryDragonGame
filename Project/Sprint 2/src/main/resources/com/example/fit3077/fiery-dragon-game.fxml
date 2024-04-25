@@ -9,7 +9,9 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -103,11 +105,11 @@
             </FlowPane>
          </children>
       </VBox>
-      <VBox prefHeight="600.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox layoutX="4.0" prefHeight="600.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="-4.0" AnchorPane.topAnchor="0.0">
          <children>
-            <FlowPane fx:id="gameBoard" alignment="CENTER" prefHeight="549.0" prefWidth="611.0">
+            <FlowPane fx:id="gameBoard" alignment="CENTER" prefHeight="511.0" prefWidth="600.0">
                <children>
-                  <ImageView fitHeight="515.0" fitWidth="564.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="512.0" fitWidth="524.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@images/gameboard.png" />
                      </image>
@@ -157,133 +159,8 @@
             </FlowPane>
          </children>
       </VBox>
-      <VBox alignment="CENTER" layoutX="2.0" prefHeight="600.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="-2.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <FlowPane fx:id="boardcards">
-               <children>
-                  <ImageView fx:id="dragon" fitHeight="38.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/dragonboard.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="dragon" fitHeight="38.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/dragonboard.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="dragon" fitHeight="38.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/dragonboard.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="dragon" fitHeight="38.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/dragonboard.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="dragon" fitHeight="38.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/dragonboard.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="dragon" fitHeight="38.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/dragonboard.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="fish" fitHeight="38.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/fishboard.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="fish" fitHeight="38.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/fishboard.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="fish" fitHeight="38.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/fishboard.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="fish" fitHeight="38.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/fishboard.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="fish" fitHeight="38.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/fishboard.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="fish" fitHeight="38.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/fishboard.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="octopus" fitHeight="38.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/octopusboard.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="octopus" fitHeight="38.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/octopusboard.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="octopus" fitHeight="38.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/octopusboard.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="octopus" fitHeight="38.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/octopusboard.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="octopus" fitHeight="38.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/octopusboard.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="octopus" fitHeight="38.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/octopusboard.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="pufferfish" fitHeight="38.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/pufferfishboard.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="pufferfish" fitHeight="38.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/pufferfishboard.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="pufferfish" fitHeight="38.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/pufferfishboard.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="pufferfish" fitHeight="38.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/pufferfishboard.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="pufferfish" fitHeight="38.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/pufferfishboard.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="pufferfish" fitHeight="38.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@images/pufferfishboard.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </FlowPane>
-         </children>
-      </VBox>
+      <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="499.0" prefWidth="600.0">
+         <Pane fx:id="boardcards" prefHeight="522.0" prefWidth="615.0" stylesheets="@style.css" StackPane.alignment="CENTER" />
+      </StackPane>
    </children>
 </AnchorPane>

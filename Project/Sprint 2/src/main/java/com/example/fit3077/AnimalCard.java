@@ -4,9 +4,11 @@ public class AnimalCard extends Card {
     private final String animalType; // Type of the animal on the card
 
     public AnimalCard(String animalType, int count) {
+        super.type = animalType;
+        super.count = count;
         this.animalType = animalType;
-        this.count = count;
     }
+
 
     @Override
     public boolean applyEffect(Player player, GameMap gameMap) {
@@ -25,9 +27,9 @@ public class AnimalCard extends Card {
 
     @Override
     public Image getImage() {
-        String imageName = getAnimalType().toLowerCase() + count + ".png"; // Construct the image file name based on animal type and count
+        String imageName = animalType.toLowerCase() + count + ".png";
         String pathName = "images/" + imageName;
-        return new Image(AnimalCard.class.getResourceAsStream(pathName));
+        return new Image(getClass().getResourceAsStream(pathName));
     }
 
     public String getAnimalType() {

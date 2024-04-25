@@ -9,3 +9,9 @@
 .button{
     -fx-background-radius:40px;
 }
+
+.pane-centered {
+    -fx-alignment: center;
+    -fx-pref-width: 300px;
+    -fx-pref-height: 300px;
+}

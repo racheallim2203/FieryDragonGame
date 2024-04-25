@@ -25,14 +25,15 @@ public class DeckOfCards {
         }
 
         // Create PirateCards
-        // Assuming we want a similar number of pirate cards as animal cards, adjust numbers as needed
-        for (int i = 0; i < numberOfEachType; i++) {
+        // Only 2 of each pirate card needed
+        for (int i = 0; i < 2; i++) {
             deck.add(new PirateCard(1)); // Pirate card with 1 pirate
             deck.add(new PirateCard(2)); // Pirate card with 2 pirates
         }
 
-        // Shuffle the deck
-        shuffle();
+        // Debug: Print the number of cards in the deck after creation
+        System.out.println("Deck of Cards initialized with " + getNumOfCardsInDeck() + " cards.");
+
     }
 
     /**
@@ -47,7 +48,7 @@ public class DeckOfCards {
      * If the deck is empty, it will return null.
      */
     public Card dealTopCard() {
-        if (deck.size() > 0)
+        if (deck.size()>0)
             return deck.remove(0);
         else
             return null;
