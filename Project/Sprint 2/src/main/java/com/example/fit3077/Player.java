@@ -11,7 +11,6 @@ public class Player {
     private final AnimalToken animalToken; //  represents the which animal token is taken by the player
     private int position; //stores the player's current position on the game board.
 
-    private boolean winningStatus = false;
 
     // initializes a new Player object with an AnimalToken and sets the initial position to 0
     public Player(AnimalToken animalToken) {
@@ -21,13 +20,16 @@ public class Player {
 
     // adjusts the player's position on the game board based on a number of steps to move, which can be positive or negative
     public void moveToken(int steps, GameMap gameMap) {
-        this.position = (this.position + steps) % gameMap.getHabitats().size();
-        /* modulo operator to wrap the position around if it exceeds the number of habitats on the board
-        (ensuring the position stays within valid bounds). If the resulting position is negative
-        (possible with backward moves), it corrects this by adding the total number of habitats*/
-        if (this.position < 0) {
-            this.position += gameMap.getHabitats().size(); // Correction for negative positions
-        }
+        List<Habitat> habitats = gameMap.getHabitats();
+        int totalAnimals = habitats.stream().mapToInt(h -> h.getCards().size()).sum();
+        System.out.println("Current Position: " + this.position);
+        System.out.println("Steps to Move: " + steps);
+        System.out.println("Number of Habitats: " + totalAnimals);
+
+        // Adding totalHabitats ensures that the index remains positive, also works perfectly for positive steps
+        // Set the new position
+        this.position = (this.position + steps + totalAnimals) % totalAnimals;
+        System.out.println("New Position: " + this.position);
     }
 
 

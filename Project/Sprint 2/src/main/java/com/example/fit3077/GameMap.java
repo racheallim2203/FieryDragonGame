@@ -7,14 +7,16 @@ import java.util.*;
 
 public class GameMap {
     private final List<Habitat> habitats;
+    private final List<AnimalCave> animalCaves;
+
 
     public GameMap() {
         this.habitats = new ArrayList<>();
+        this.animalCaves = new ArrayList<>();
         initializeHabitats();
+        initializeAnimalCaves();
     }
 
-    // Populates the habitats with sets of AnimalCards, ensuring no repeated animals within a habitat
-    // and each animal type appears exactly six times across all habitats.
     private void initializeHabitats() {
         List<String> allAnimals = Arrays.asList("fish", "pufferfish", "dragon", "octopus");
         int numHabitats = 8; // Total number of habitats
@@ -23,8 +25,8 @@ public class GameMap {
         // Generate a list to hold all the required AnimalCards
         List<AnimalCard> allCards = new ArrayList<>();
         for (String animal : allAnimals) {
-            for (int i = 0; i < 6; i++) { // Each animal appears 6 times in total
-                allCards.add(new AnimalCard(animal,0)); // Add an AnimalCard with a count of 1
+            for (int i = 0; i < 6; i++) {
+                allCards.add(new AnimalCard(animal, 0)); // Add an AnimalCard with a count of 1
             }
         }
 
@@ -32,9 +34,17 @@ public class GameMap {
 
         // Distribute the cards into habitats
         for (int i = 0; i < numHabitats; i++) {
-            // Extract a sublist for each habitat
             List<AnimalCard> habitatCards = allCards.subList(i * cardsPerHabitat, (i + 1) * cardsPerHabitat);
             this.habitats.add(new Habitat(new ArrayList<>(habitatCards)));
+        }
+    }
+
+    private void initializeAnimalCaves() {
+        String[] animalTypes = new String[]{"fish", "pufferfish", "dragon", "octopus"};
+        for (int i = 0; i < animalTypes.length; i++) {
+            // Assuming each type of animal starts at the beginning of each quarter in a circular arrangement
+            int startingLocation = (habitats.size() / animalTypes.length) * i;
+            animalCaves.add(new AnimalCave(animalTypes[i], startingLocation));
         }
     }
 
@@ -46,8 +56,12 @@ public class GameMap {
         return habitats;
     }
 
+    public List<AnimalCave> getAnimalCaves() {
+        return animalCaves;
+    }
+
     @Override
     public String toString() {
-        return "GameMap{" + "habitats=" + habitats + '}';
+        return "GameMap{" + "habitats=" + habitats + ", animalCaves=" + animalCaves + '}';
     }
 }
