@@ -24,7 +24,7 @@ public abstract class Card implements Effect {
 
     // This method needs to be implemented in subclasses
     @Override
-    public abstract boolean applyEffect(Player player, GameMap gameMap);
+    public abstract void applyEffect(Player player, GameMap gameMap, Card card);
 
     // This method will return an Image that represents the Card
     public Image getImage() {

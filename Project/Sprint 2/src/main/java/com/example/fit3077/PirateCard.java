@@ -12,9 +12,10 @@ public class PirateCard extends Card {
     }
 
     @Override
-    public boolean applyEffect(Player player, GameMap gameMap) {
-        player.moveToken(-this.count, gameMap); // Move backward
-        return false; // This should always end the turn
+    public void applyEffect(Player currentPlayer, GameMap gameMap, Card card) {
+        // Apply the effect with a negative count to move backwards
+        int backwardSteps = -card.getCount(); // Make the steps negative here
+        currentPlayer.moveToken(backwardSteps, gameMap);
     }
 
     @Override

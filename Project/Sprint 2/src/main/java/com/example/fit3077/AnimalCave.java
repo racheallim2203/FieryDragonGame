@@ -23,7 +23,7 @@ public class AnimalCave {
     }
 
     public Image getTokenImage() {
-        String imageName = type.toLowerCase() + "token.png";
+        String imageName = type.toLowerCase() + "cave.png";
         String pathName = "images/" + imageName;
         return new Image(getClass().getResourceAsStream(pathName));
     }

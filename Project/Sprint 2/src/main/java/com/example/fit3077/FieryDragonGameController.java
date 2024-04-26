@@ -1,5 +1,6 @@
 package com.example.fit3077;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -76,16 +77,16 @@ public class FieryDragonGameController implements Initializable {
 
     @FXML
     void startGame() {
-        System.out.println("Starting game...");
+        System.out.println("Restart Game");
 
         shuffleAndDisplayAnimals(); // Shuffle habitats and animals
         displayShuffledDeck(); // Shuffle deck images
         initializeDeck();
         initializeImageView();
+        initializeTokenViews();
 
 
     }
-
 
 
     private final double radius = 180; // Adjust as needed for your layout
@@ -94,12 +95,16 @@ public class FieryDragonGameController implements Initializable {
 
     private final String[] animalPositions = new String[24]; // Assuming 24 positions available on the game board
 
+    private Map<String, ImageView> tokenViews = new HashMap<>(); // Stores token views by animal type
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         gameMap = new GameMap(); // Initialize gameMap which sets up the habitats
         startGame();
-        updateCurrentPlayerDisplay("Fish"); // Assuming Fish starts the game
+        updateCurrentPlayerDisplay("Fish"); // Assuming 'Fish' starts the game
+
+
+
 
 
     }
@@ -166,7 +171,6 @@ public class FieryDragonGameController implements Initializable {
         }
 
 
-
     }
 
     /**
@@ -218,51 +222,22 @@ public class FieryDragonGameController implements Initializable {
 
     }
 
-    private void updateGameBoard() {
-        // Clear existing tokens from the board for repositioning
-        for (Node child : boardcards.getChildren()) {
-            if (child instanceof ImageView && "token".equals(child.getUserData())) {
-                boardcards.getChildren().remove(child);
-            }
-        }
 
-        // Iterate through each player's token and reposition it on the game board
-        for (Player player : gameMap.getPlayers()) {
-            AnimalToken token = player.getAnimalToken();
-            int position = player.getPosition();
-            double angle = Math.toRadians(360.0 * position / gameMap.get());
-            double paneCenterX = boardcards.getWidth() / 2;
-            double paneCenterY = boardcards.getHeight() / 2;
 
-            ImageView tokenView = new ImageView(token.getImage());
-            tokenView.setFitWidth(50);  // Adjust token size as needed
-            tokenView.setFitHeight(50);
-            tokenView.setPreserveRatio(true);
-            tokenView.setUserData("token");  // Mark this ImageView as a token for easy identification
 
-            double xOffset = radius * Math.cos(angle) - tokenView.getFitWidth() / 2;
-            double yOffset = radius * Math.sin(angle) - tokenView.getFitHeight() / 2;
-
-            tokenView.setLayoutX(paneCenterX + xOffset);
-            tokenView.setLayoutY(paneCenterY + yOffset);
-
-            // Add the updated token view to the board
-            boardcards.getChildren().add(tokenView);
-        }
-    }
 
     private void arrangeAnimalTokens() {
         double paneCenterX = boardcards.getWidth() / 2;
         double paneCenterY = boardcards.getHeight() / 2;
-        double tokenRadius = radius + 40; // Increase radius by 40 units to place tokens outside the habitat circle
+        double tokenRadius = radius + 60; // Increase radius by 40 units to place tokens outside the habitat circle
 
         for (AnimalCave cave : gameMap.getAnimalCaves()) {
             ImageView tokenView = new ImageView(cave.getTokenImage());
             tokenView.setFitWidth(50); // Width of the token
             tokenView.setFitHeight(50); // Height of the token
             tokenView.setPreserveRatio(true);
-
-            double angle = Math.toRadians(360.0 * cave.getLocation() / gameMap.getHabitats().size());
+            //24 is the size of total number of animals in the list to form a gameboard
+            double angle = Math.toRadians(360.0 * cave.getLocation() / 24);
             double xOffset = tokenRadius * Math.cos(angle);
             double yOffset = tokenRadius * Math.sin(angle);
 
@@ -281,88 +256,136 @@ public class FieryDragonGameController implements Initializable {
     }
 
 
-    /**
-     * This will add a number to each ImageView and set the image to be the back of a Card
-     */
-    private void initializeImageView()
-    {
-        System.out.println("Initializing image views for card flip.");
-        for (int i = 0; i < decks.getChildren().size(); i++) {
-            ImageView imageView = (ImageView) decks.getChildren().get(i);
-            imageView.setImage(new Image(getClass().getResourceAsStream("images/coveredcard.png")));
-            imageView.setUserData(i);
+    private void initializeTokenViews() {
+        boardcards.layoutBoundsProperty().addListener((observable, oldValue, newValue) -> {
+                    if (newValue.getWidth() > 0 && newValue.getHeight() > 0) {
+                        double paneCenterX = boardcards.getWidth() / 2;
+                        double paneCenterY = boardcards.getHeight() / 2;
+                        double tokenRadius = radius + 40; // Place tokens outside the habitat circle
 
-            imageView.setOnMouseClicked(event -> {
-                int index = (int) imageView.getUserData();
-                System.out.println("Card at index " + index + " clicked.");
-                flipCard(index);
-            });
-        }
+                        for (AnimalCave cave : gameMap.getAnimalCaves()) {
+                            String tokenType = cave.getType();
+                            Image tokenImage = new Image(getClass().getResourceAsStream("images/" + tokenType + "token.png"));
+                            ImageView tokenView = new ImageView(tokenImage);
+                            tokenView.setFitWidth(50);
+                            tokenView.setFitHeight(50);
+                            tokenView.setPreserveRatio(true);
+
+                            //24 is the size of total number of animals in the list to form a gameboard
+                            double angle = Math.toRadians(360.0 * cave.getLocation() /24);
+                            double xOffset = tokenRadius * Math.cos(angle);
+                            double yOffset = tokenRadius * Math.sin(angle);
+
+                            tokenView.setLayoutX(paneCenterX + xOffset - tokenView.getFitWidth() / 2);
+                            tokenView.setLayoutY(paneCenterY + yOffset - tokenView.getFitHeight() / 2);
+
+                            boardcards.getChildren().add(tokenView);
+                            tokenViews.put(tokenType, tokenView); // Store the view by animal type
+                        }
+                    }
+        });
     }
 
-    private void flipCard(int indexOfCard) {
-        System.out.println("Flipping card at index " + indexOfCard);
-        ImageView imageView = (ImageView) decks.getChildren().get(indexOfCard);
+            /**
+             * This will add a number to each ImageView and set the image to be the back of a Card
+             */
+            private void initializeImageView() {
+                System.out.println("Initializing image views for card flip.");
+                for (int i = 0; i < decks.getChildren().size(); i++) {
+                    ImageView imageView = (ImageView) decks.getChildren().get(i);
+                    imageView.setImage(new Image(getClass().getResourceAsStream("images/coveredcard.png")));
+                    imageView.setUserData(i);
 
-        if (imageView != null && cardsInGame.size() > indexOfCard) {
-            Card card = cardsInGame.get(indexOfCard);
-            String flippedCard = card.getType() + card.getCount();
-            System.out.println("Flipped card: " + flippedCard);
-
-            Image image = card.getImage();
-            if (image != null) {
-                imageView.setImage(image); // Set the card image to show its face
-                processCardEffect(card);   // Process the effect of the card
-            } else {
-                System.err.println("Card image is null.");
+                    imageView.setOnMouseClicked(event -> {
+                        int index = (int) imageView.getUserData();
+                        System.out.println("Card at index " + index + " clicked.");
+                        flipCard(index);
+                    });
+                }
             }
-        } else {
-            System.err.println("ImageView is null or index is out of bounds.");
-        }
-    }
 
+            private void flipCard(int indexOfCard) {
+                System.out.println("Flipping card at index " + indexOfCard);
+                ImageView imageView = (ImageView) decks.getChildren().get(indexOfCard);
 
-    private void processCardEffect(Card card) {
-        Player currentPlayer = getCurrentPlayer();
-        int currentPlayerPosition = currentPlayer.getPosition();
-        String currentAnimalTypeAtPosition = animalPositions[currentPlayerPosition];
+                if (imageView != null && cardsInGame.size() > indexOfCard) {
+                    Card card = cardsInGame.get(indexOfCard);
+                    String flippedCard = card.getType() + card.getCount();
+                    System.out.println("Flipped card: " + flippedCard);
 
-        System.out.println("Current player: " + currentPlayer.getAnimalToken().getType());
-        System.out.println("Current position: " + currentPlayerPosition);
-        System.out.println("Animal at current position: " + currentAnimalTypeAtPosition);
-
-        if (card instanceof AnimalCard) {
-            AnimalCard animalCard = (AnimalCard) card;
-            // Check if the card type matches the animal at the current player's position
-            if (animalCard.getAnimalType().equalsIgnoreCase(currentAnimalTypeAtPosition)) {
-                // Apply card effect which includes moving the player forward
-                animalCard.applyEffect(currentPlayer, gameMap);
-                currentPlayer.moveToken(animalCard.getCount(),gameMap);
-                System.out.println(currentPlayer.getAnimalToken().getType() + " moves " + animalCard.getCount() + " steps forward to position " + currentPlayer.getPosition());
-            } else {
-                System.out.println("No match found, turn ends.");
+                    Image image = card.getImage();
+                    if (image != null) {
+                        imageView.setImage(image); // Set the card image to show its face
+                        processCardEffect(card);   // Process the effect of the card
+                    } else {
+                        System.err.println("Card image is null.");
+                    }
+                } else {
+                    System.err.println("ImageView is null or index is out of bounds.");
+                }
             }
-        } else if (card instanceof PirateCard) {
-            PirateCard pirateCard = (PirateCard) card;
-            // Apply the effect with a negative count to move backwards
-            int backwardSteps = -pirateCard.getCount(); // Make the steps negative here
-            currentPlayer.moveToken(backwardSteps, gameMap);
-            System.out.println(currentPlayer.getAnimalToken().getType() + " moves " + backwardSteps + " steps backward to position " + currentPlayer.getPosition());
+
+
+            private void processCardEffect(Card card) {
+                Player currentPlayer = getCurrentPlayer();
+                int currentPlayerPosition = currentPlayer.getPosition();
+                String currentAnimalTypeAtPosition = animalPositions[currentPlayerPosition];
+
+                System.out.println("Current player: " + currentPlayer.getAnimalToken().getType());
+                System.out.println("Current position: " + currentPlayerPosition);
+                System.out.println("Animal at current position: " + currentAnimalTypeAtPosition);
+
+                if (card instanceof AnimalCard) {
+                    AnimalCard animalCard = (AnimalCard) card;
+                    // Check if the card type matches the animal at the current player's position
+                    if (animalCard.getAnimalType().equalsIgnoreCase(currentAnimalTypeAtPosition)) {
+                        // Apply card effect which includes moving the player forward
+                        animalCard.applyEffect(currentPlayer, gameMap, animalCard);
+                        System.out.println(currentPlayer.getAnimalToken().getType() + " moves " + animalCard.getCount() + " steps forward to position " + currentPlayer.getPosition());
+                    } else {
+                        System.out.println("No match found, turn ends.");
+                    }
+                } else if (card instanceof PirateCard) {
+                    PirateCard pirateCard = (PirateCard) card;
+                    pirateCard.applyEffect(currentPlayer, gameMap, pirateCard);
+                    System.out.println(currentPlayer.getAnimalToken().getType() + " moves " + pirateCard.getCount() + " steps backward to position " + currentPlayer.getPosition());
+                }
+
+                // Optionally, after processing the card effect, update the UI or game state
+                updateGameBoard();
+            }
+
+            private void updateGameBoard() {
+                Player currentPlayer = getCurrentPlayer();
+                AnimalToken token = currentPlayer.getAnimalToken();
+                ImageView tokenView = tokenViews.get(token.getType()); // Retrieve the token's ImageView
+
+                if (tokenView != null) {
+                    double paneCenterX = boardcards.getWidth() / 2;
+                    double paneCenterY = boardcards.getHeight() / 2;
+                    int position = currentPlayer.getPosition();
+                    //24 is the size of total number of animals in the list to form a gameboard
+                    double angle = Math.toRadians(360.0 * position / 24);
+                    double xOffset = radius * Math.cos(angle);
+                    double yOffset = radius * Math.sin(angle);
+
+                    tokenView.setLayoutX(paneCenterX + xOffset - tokenView.getFitWidth() / 2);
+                    tokenView.setLayoutY(paneCenterY + yOffset - tokenView.getFitHeight() / 2);
+                }
+
+                System.out.println("Game board updated.");
+            }
+
+            private void updateCurrentPlayerDisplay(String animalType) {
+                currentPlayer.setText(animalType + "'s turn");
+            }
+
+            public Player getCurrentPlayer() {
+                if (inPlayPlayer == null) {
+                    inPlayPlayer = new Player(new AnimalToken("fish", 0)); // Initial setup
+                }
+                return inPlayPlayer;
+            }
         }
 
-        // Optionally, after processing the card effect, update the UI or game state
-        // updateGameBoard();
-    }
-
-    private void updateCurrentPlayerDisplay(String animalType) {
-        currentPlayer.setText(animalType + "'s turn");
-    }
-
-    public Player getCurrentPlayer() {
-        if (inPlayPlayer == null) {
-            inPlayPlayer = new Player(new AnimalToken("fish", 0)); // Initial setup
-        }
-        return inPlayPlayer;
-    }
-}
 

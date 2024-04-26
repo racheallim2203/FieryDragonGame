@@ -24,7 +24,6 @@ public class Player {
         int totalAnimals = habitats.stream().mapToInt(h -> h.getCards().size()).sum();
         System.out.println("Current Position: " + this.position);
         System.out.println("Steps to Move: " + steps);
-        System.out.println("Number of Habitats: " + totalAnimals);
 
         // Adding totalHabitats ensures that the index remains positive, also works perfectly for positive steps
         // Set the new position
