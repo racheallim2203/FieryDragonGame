@@ -28,5 +28,6 @@ public class AnimalToken {
     public void setPosition(int position) {
         this.position = position;
     }
+
 }
 

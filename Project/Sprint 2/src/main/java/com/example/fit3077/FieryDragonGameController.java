@@ -2,20 +2,17 @@ package com.example.fit3077;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.layout.FlowPane;
-import javafx.event.ActionEvent;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Collections;
 
 public class FieryDragonGameController implements Initializable {
 
@@ -76,8 +73,18 @@ public class FieryDragonGameController implements Initializable {
     @FXML
     private ImageView pufferfish3;
 
+    private ArrayList<Card> cardsInGame;
+
     @FXML
-    void startGame(ActionEvent event) {
+    void startGame() {
+        System.out.println("Starting game...");
+
+        shuffleAndDisplayAnimals(); // Shuffle habitats and animals
+        displayShuffledDeck(); // Shuffle deck images
+        initializeDeck();
+        initializeImageView();
+
+
     }
 
 
@@ -86,78 +93,45 @@ public class FieryDragonGameController implements Initializable {
 
     private GameMap gameMap;
 
-//    @Override
-//    public void initialize(URL url, ResourceBundle resourceBundle) {
-//        DeckOfCards deck = new DeckOfCards();
-//        deck.shuffle(); // Shuffle the deck
-//
-//        // Display the first card from the shuffled deck
-//        Card previewCard = deck.dealTopCard(); // Get the top card from the deck
-//        uncoveredCards.setImage(previewCard.getImage()); // Display the image of the card
-//        arrangeAnimalsInCircle();
-//    }
-//
-//    /**
-//     * This method will arrange images in a circle within the game board.
-//     */
-//    private void arrangeAnimalsInCircle() {
-//        // Delay the arrangement to ensure the Pane has been laid out and has width and height
-//        boardcards.layoutBoundsProperty().addListener((observable, oldValue, newValue) -> {
-//            // Check if the Pane has width and height greater than 0
-//            if(newValue.getWidth() > 0 && newValue.getHeight() > 0){
-//                double paneCenterX = newValue.getWidth() / 2;
-//                double paneCenterY = newValue.getHeight() / 2;
-//
-//                String[] animals = {"dragon", "fish", "pufferfish", "octopus"};
-//                double angleStep = 360.0 / (animals.length * numberOfAnimals);
-//
-//                for (int i = 0; i < animals.length * numberOfAnimals; i++) {
-//                    String animalName = animals[i % animals.length];
-//                    String imagePath = "images/" + animalName + ".png";
-//                    Image animalImage;
-//
-//                    try {
-//                        animalImage = new Image(getClass().getResourceAsStream(imagePath));
-//                    } catch (NullPointerException e) {
-//                        System.err.println("Could not load image at path: " + imagePath);
-//                        continue; // Skip this iteration if image loading fails
-//                    }
-//
-//                    ImageView imageView = new ImageView(animalImage);
-//                    imageView.setFitWidth(50); // Adjust size as needed
-//                    imageView.setFitHeight(50); // Adjust size as needed
-//                    imageView.setPreserveRatio(true);
-//
-//                    double angle = Math.toRadians(i * angleStep);
-//                    double xOffset = radius * Math.cos(angle);
-//                    double yOffset = radius * Math.sin(angle);
-//
-//                    imageView.setLayoutX(paneCenterX + xOffset - imageView.getFitWidth() / 2);
-//                    imageView.setLayoutY(paneCenterY + yOffset - imageView.getFitHeight() / 2);
-//
-//                    boardcards.getChildren().add(imageView);
-//                }
-//            }
-//        });
-//    }
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         gameMap = new GameMap(); // Initialize gameMap which sets up the habitats
-
-        arrangeAnimalsInCircle();
-        displayShuffledDeck();
+        startGame();
 
     }
 
+    private void initializeDeck() {
+        DeckOfCards deck = new DeckOfCards();
+        deck.shuffle(); // Shuffle the deck
+
+        // Initialize the list to hold the cards in play
+        cardsInGame = new ArrayList<>();
+
+        // Deal cards from the shuffled deck to the game
+        for (int i = 0; i < decks.getChildren().size(); i++) {
+            Card cardDealt = deck.dealTopCard();
+            if (cardDealt != null) { // Ensure that a card was dealt
+                // If the card type is "piratecard", create a PirateCard; otherwise, create an AnimalCard
+                if ("piratecard".equals(cardDealt.getType())) {
+                    cardsInGame.add(new PirateCard(cardDealt.getCount()));
+                } else {
+                    cardsInGame.add(new AnimalCard(cardDealt.getType(), cardDealt.getCount()));
+                }
+            }
+        }
+//        Collections.shuffle(cardsInGame);
+        System.out.println(cardsInGame);
+
+    }
+
+
     private void displayShuffledDeck() {
+        decks.getChildren().clear(); // Clear existing children to avoid duplicates
         // Instantiate the deck and shuffle it
         DeckOfCards deck = new DeckOfCards();
         deck.shuffle();
-
         // Retrieve the shuffled list of cards
         List<Card> shuffledDeck = deck.getCards();
-
 
         // Iterate over the shuffled deck and the imageView IDs together
         for (int i = 0; i < shuffledDeck.size(); i++) {
@@ -182,8 +156,9 @@ public class FieryDragonGameController implements Initializable {
 
             // Add the ImageView to the container
             decks.getChildren().add(cardImageView);
+            System.out.println(decks.getChildren().size());
 
-            initializeImageView();
+
         }
 
 
@@ -196,8 +171,6 @@ public class FieryDragonGameController implements Initializable {
     private void arrangeAnimalsInCircle() {
         boardcards.layoutBoundsProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.getWidth() > 0 && newValue.getHeight() > 0) {
-                boardcards.getChildren().clear(); // Clear existing children to avoid duplicates
-
                 double paneCenterX = newValue.getWidth() / 2;
                 double paneCenterY = newValue.getHeight() / 2;
                 List<Habitat> habitats = gameMap.getHabitats();
@@ -238,22 +211,51 @@ public class FieryDragonGameController implements Initializable {
 
     }
 
+    private void shuffleAndDisplayAnimals() {
+        // Shuffle the habitats to get a new random arrangement of the animals
+        Collections.shuffle(gameMap.getHabitats());
+        // Now call the method to display animals in a circle
+        arrangeAnimalsInCircle();
+    }
+
+
     /**
      * This will add a number to each ImageView and set the image to be the back of a Card
      */
     private void initializeImageView()
     {
-        for (int i=0; i<decks.getChildren().size();i++)
-        {
-            //"cast" the Node to be of type ImageView
+        System.out.println("Initializing image views for card flip.");
+        for (int i = 0; i < decks.getChildren().size(); i++) {
             ImageView imageView = (ImageView) decks.getChildren().get(i);
-            imageView.setImage(new Image(Card.class.getResourceAsStream("images/coveredcard.png")));
-//            imageView.setUserData(i);
+            imageView.setImage(new Image(getClass().getResourceAsStream("images/coveredcard.png")));
+            imageView.setUserData(i);
 
-//            //register a click listener
             imageView.setOnMouseClicked(event -> {
-                System.out.println(imageView.getUserData());;
+                int index = (int) imageView.getUserData();
+                System.out.println("Card at index " + index + " clicked.");
+                flipCard(index);
             });
+        }
+    }
+
+    private void flipCard(int indexOfCard){
+
+        System.out.println("Flipping card at index " + indexOfCard);
+        ImageView imageView = (ImageView) decks.getChildren().get(indexOfCard);
+        if (imageView != null && cardsInGame.size() > indexOfCard) {
+            Card card = cardsInGame.get(indexOfCard);
+            if (card != null) {
+                Image image = card.getImage();
+                if (image != null) {
+                    imageView.setImage(image);
+                } else {
+                    System.err.println("Card image is null.");
+                }
+            } else {
+                System.err.println("Card object is null.");
+            }
+        } else {
+            System.err.println("ImageView is null or index is out of bounds.");
         }
     }
 }

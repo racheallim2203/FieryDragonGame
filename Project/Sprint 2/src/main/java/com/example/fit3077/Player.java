@@ -30,14 +30,6 @@ public class Player {
         }
     }
 
-    // assuming cards are drawn from the top of the deck, and pop() removes the top card from the stack and returns it.
-    public Card drawCard(Stack<Card> deck) {
-        return deck.pop();
-    }
-
-    public boolean hasWon() {
-        return winningStatus;
-    }
 
     public int getPosition() {
         return position;
@@ -47,8 +39,5 @@ public class Player {
         return animalToken;
     }
 
-    public void setWinningStatus(boolean status) {
-        this.winningStatus = status;
-    }
 
 }
