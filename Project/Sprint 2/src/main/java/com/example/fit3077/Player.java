@@ -1,12 +1,7 @@
 package com.example.fit3077;
 
-import javafx.application.Application;
-import javafx.stage.Stage;
+import java.util.List;
 
-import java.util.*;
-import java.util.List;
-import java.util.*;
-import java.util.List;
 public class Player {
     private final AnimalToken animalToken; //  represents the which animal token is taken by the player
     private int position; //stores the player's current position on the game board.
@@ -41,4 +36,7 @@ public class Player {
     }
 
 
+    public void resetPosition() {
+        this.position = 0;
+    }
 }
