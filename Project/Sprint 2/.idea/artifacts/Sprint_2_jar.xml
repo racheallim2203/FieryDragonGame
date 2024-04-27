@@ -1,0 +1,206 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Sprint 2:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Sprint_2_jar</output-path>
+    <root id="archive" name="Sprint 2.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="module-output" name="Sprint 2" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-maven-plugin/0.0.8/javafx-maven-plugin-0.0.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/maven/maven-plugin-api/3.6.0/maven-plugin-api-3.6.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/maven/maven-model/3.6.0/maven-model-3.6.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/maven/maven-artifact/3.6.0/maven-artifact-3.6.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/eclipse/sisu/org.eclipse.sisu.plexus/0.3.3/org.eclipse.sisu.plexus-0.3.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/javax/enterprise/cdi-api/1.0/cdi-api-1.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/javax/annotation/jsr250-api/1.0/jsr250-api-1.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/codehaus/plexus/plexus-utils/3.1.0/plexus-utils-3.1.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/codehaus/plexus/plexus-classworlds/2.5.2/plexus-classworlds-2.5.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/codehaus/plexus/plexus-java/0.9.11/plexus-java-0.9.11.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/ow2/asm/asm/7.0-beta/asm-7.0-beta.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/thoughtworks/qdox/qdox/2.0-M9/qdox-2.0-M9.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/codehaus/plexus/plexus-archiver/3.6.0/plexus-archiver-3.6.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/codehaus/plexus/plexus-io/3.0.1/plexus-io-3.0.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/commons-io/commons-io/2.6/commons-io-2.6.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/commons/commons-compress/1.16.1/commons-compress-1.16.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/objenesis/objenesis/2.6/objenesis-2.6.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/iq80/snappy/snappy/0.4/snappy-0.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/tukaani/xz/1.8/xz-1.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/commons/commons-exec/1.3/commons-exec-1.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/maven/maven-core/3.6.0/maven-core-3.6.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/maven/maven-settings/3.6.0/maven-settings-3.6.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/maven/maven-settings-builder/3.6.0/maven-settings-builder-3.6.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/codehaus/plexus/plexus-interpolation/1.25/plexus-interpolation-1.25.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/sonatype/plexus/plexus-sec-dispatcher/1.4/plexus-sec-dispatcher-1.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/sonatype/plexus/plexus-cipher/1.4/plexus-cipher-1.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/maven/maven-builder-support/3.6.0/maven-builder-support-3.6.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/maven/maven-repository-metadata/3.6.0/maven-repository-metadata-3.6.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/maven/maven-model-builder/3.6.0/maven-model-builder-3.6.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/maven/maven-resolver-provider/3.6.0/maven-resolver-provider-3.6.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/maven/resolver/maven-resolver-impl/1.3.1/maven-resolver-impl-1.3.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/maven/resolver/maven-resolver-api/1.3.1/maven-resolver-api-1.3.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/maven/resolver/maven-resolver-spi/1.3.1/maven-resolver-spi-1.3.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/maven/resolver/maven-resolver-util/1.3.1/maven-resolver-util-1.3.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/maven/shared/maven-shared-utils/3.2.1/maven-shared-utils-3.2.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/eclipse/sisu/org.eclipse.sisu.inject/0.3.3/org.eclipse.sisu.inject-0.3.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/inject/guice/4.2.1/guice-4.2.1-no_aop.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/aopalliance/aopalliance/1.0/aopalliance-1.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/guava/guava/25.1-android/guava-25.1-android.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/checkerframework/checker-compat-qual/2.0.0/checker-compat-qual-2.0.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/errorprone/error_prone_annotations/2.1.3/error_prone_annotations-2.1.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/j2objc/j2objc-annotations/1.1/j2objc-annotations-1.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/codehaus/mojo/animal-sniffer-annotations/1.14/animal-sniffer-annotations-1.14.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/javax/inject/javax.inject/1/javax.inject-1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/codehaus/plexus/plexus-component-annotations/1.7.1/plexus-component-annotations-1.7.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/commons/commons-lang3/3.8.1/commons-lang3-3.8.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-fxml/19/javafx-fxml-19-win.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/kuali/maven/plugins/s3-maven-plugin/1.0.2/s3-maven-plugin-1.0.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/amazonaws/aws-java-sdk/1.3.22/aws-java-sdk-1.3.22.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/httpcomponents/httpclient/4.1/httpclient-4.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/httpcomponents/httpcore/4.1/httpcore-4.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/commons-codec/commons-codec/1.3/commons-codec-1.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/codehaus/jackson/jackson-core-asl/1.8.9/jackson-core-asl-1.8.9.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/codehaus/jackson/jackson-mapper-asl/1.8.9/jackson-mapper-asl-1.8.9.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/kuali/common/kuali-s3/1.1.1/kuali-s3-1.1.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/kuali/common/kuali-threads/1.0.9/kuali-threads-1.0.9.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/commons-lang/commons-lang/2.6/commons-lang-2.6.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/commons-io/commons-io/2.3/commons-io-2.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/slf4j/slf4j-api/1.6.4/slf4j-api-1.6.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/slf4j/jcl-over-slf4j/1.6.4/jcl-over-slf4j-1.6.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/slf4j/slf4j-log4j12/1.6.4/slf4j-log4j12-1.6.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/log4j/log4j/1.2.16/log4j-1.2.16.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-controls/19/javafx-controls-19.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-maven-plugin/0.0.5/javafx-maven-plugin-0.0.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-base/19/javafx-base-19-win.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-graphics/19/javafx-graphics-19.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-base/19/javafx-base-19.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-controls/19/javafx-controls-19-win.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-fxml/19/javafx-fxml-19.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/openjfx/javafx-graphics/19/javafx-graphics-19-win.jar" path-in-jar="/" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-core-console-l1-1-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-core-console-l1-2-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-core-datetime-l1-1-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-core-debug-l1-1-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-core-errorhandling-l1-1-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-core-file-l1-1-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-core-file-l1-2-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-core-file-l2-1-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-core-handle-l1-1-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-core-heap-l1-1-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-core-interlocked-l1-1-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-core-libraryloader-l1-1-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-core-localization-l1-2-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-core-memory-l1-1-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-core-namedpipe-l1-1-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-core-processenvironment-l1-1-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-core-processthreads-l1-1-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-core-processthreads-l1-1-1.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-core-profile-l1-1-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-core-rtlsupport-l1-1-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-core-string-l1-1-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-core-synch-l1-1-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-core-synch-l1-2-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-core-sysinfo-l1-1-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-core-timezone-l1-1-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-core-util-l1-1-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-crt-conio-l1-1-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-crt-convert-l1-1-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-crt-environment-l1-1-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-crt-filesystem-l1-1-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-crt-heap-l1-1-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-crt-locale-l1-1-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-crt-math-l1-1-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-crt-multibyte-l1-1-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-crt-private-l1-1-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-crt-process-l1-1-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-crt-runtime-l1-1-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-crt-stdio-l1-1-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-crt-string-l1-1-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-crt-time-l1-1-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/api-ms-win-crt-utility-l1-1-0.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/attach.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/awt.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/dt_shmem.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/dt_socket.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/extnet.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/fontmanager.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/freetype.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/instrument.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/j2gss.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/j2pcsc.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/j2pkcs11.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/jaas.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/jabswitch.exe" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/jaccessinspector.exe" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/jaccesswalker.exe" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/jar.exe" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/jarsigner.exe" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/java.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/java.exe" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/javaaccessbridge.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/javac.exe" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/javadoc.exe" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/javajpeg.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/javap.exe" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/javaw.exe" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/jawt.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/jcmd.exe" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/jconsole.exe" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/jdb.exe" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/jdeprscan.exe" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/jdeps.exe" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/jdwp.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/jfr.exe" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/jhsdb.exe" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/jimage.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/jimage.exe" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/jinfo.exe" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/jli.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/jlink.exe" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/jmap.exe" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/jmod.exe" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/jpackage.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/jpackage.exe" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/jps.exe" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/jrunscript.exe" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/jshell.exe" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/jsound.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/jstack.exe" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/jstat.exe" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/jstatd.exe" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/jsvml.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/jwebserver.exe" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/keytool.exe" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/kinit.exe" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/klist.exe" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/ktab.exe" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/lcms.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/le.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/management.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/management_agent.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/management_ext.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/mlib_image.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/msvcp140.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/net.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/nio.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/prefs.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/rmi.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/rmiregistry.exe" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/saproc.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/serialver.exe" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/splashscreen.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/sspi_bridge.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/sunmscapi.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/syslookup.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/ucrtbase.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/vcruntime140.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/vcruntime140_1.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/verify.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/w2k_lsa_auth.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/windowsaccessbridge-64.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/zip.dll" />
+      <element id="file-copy" path="$USER_HOME$/jdk-19.0.2/bin/server/jvm.dll" />
+    </root>
+  </artifact>
+</component>
