@@ -1,0 +1,23 @@
+/*
+(1) How to build and run the executable software prototype:
+[Steps:]
+Go to out folder >
+artifects folder >
+Sprint_2_jar folder>
+Right click on Sprint 2.jar file >
+Open in Explorer and click on file
+
+(2) Platform to run executable
+- Windows
+
+(3) Java & SDK version to run executable
+- 22 (Latest Version)
+
+(4) Files alocation
+Src folder >
+Main Folder >
+> java [All the classes under com.example.fit3077 package folder]: Main() can be run on IDE to execute game
+> resources [All the images and fxml file under com.example.fit3077 package folder ]
+
+*/
+
