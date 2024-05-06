@@ -96,15 +96,19 @@ public class FieryDragonGameController implements Initializable {
         instructions.setText("-");
 
         // UI and game logic initialization
-        shuffleAndDisplayAnimals();
-        initializeTokenViews();
-        displayShuffledDeck();
-        initializeDeck();
-        initializeImageView();
+        Platform.runLater(() -> {
+            shuffleAndDisplayAnimals();
+            initializeTokenViews();
+            displayShuffledDeck();
+            initializeDeck();
+            initializeImageView();
 
-        // Set the current player to the initial state and update UI
-        resetPlayer();
-        updateCurrentPlayerDisplay("Fish");
+            // Set the current player to the initial state and update UI
+            resetPlayer();
+            updateCurrentPlayerDisplay("Fish");
+
+            System.out.println("Game started.");
+        });
     }
 
 
@@ -191,52 +195,47 @@ public class FieryDragonGameController implements Initializable {
      * This method will arrange images in a circle within the game board.
      */
     private void arrangeAnimalsInCircle() {
-        boardcards.layoutBoundsProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.getWidth() > 0 && newValue.getHeight() > 0) {
-                double paneCenterX = newValue.getWidth() / 2;
-                double paneCenterY = newValue.getHeight() / 2;
-                List<Habitat> habitats = gameMap.getHabitats();
+        // Shuffle each habitat's animal cards and the list of habitats
+        gameMap.getHabitats().forEach(Habitat::shuffle);
+        Collections.shuffle(gameMap.getHabitats());
 
-                // Debugging output
-                System.out.println("Habitats size: " + habitats.size());
+        Platform.runLater(() -> {
+            boardcards.getChildren().clear();
+            double paneCenterX = boardcards.getWidth() / 2;
+            double paneCenterY = boardcards.getHeight() / 2;
+            int totalAnimals = gameMap.getHabitats().stream().mapToInt(h -> h.getCards().size()).sum();
+            int animalIndex = 0;
 
-                int totalAnimals = habitats.stream().mapToInt(h -> h.getCards().size()).sum(); // More accurate count of total animals
-                System.out.println("Total animals to arrange: " + totalAnimals);
+            for (Habitat habitat : gameMap.getHabitats()) {
+                for (AnimalCard card : habitat.getCards()) {
+                    Image animalImage = card.getHabitatImage();
+                    ImageView imageView = new ImageView(animalImage);
+                    imageView.setFitWidth(50);
+                    imageView.setFitHeight(50);
+                    imageView.setPreserveRatio(true);
 
-                int animalIndex = 0; // index for positioning and array storage
+                    double angle = Math.toRadians(360.0 * animalIndex / totalAnimals);
+                    double xOffset = radius * Math.cos(angle);
+                    double yOffset = radius * Math.sin(angle);
 
-                for (Habitat habitat : habitats) {
-//                    System.out.println("Habitat contains:"); // Debugging output for each habitat
-                    for (AnimalCard card : habitat.getCards()) {
-//                        System.out.println(card.getAnimalType() + " with count " + card.getCount()); // Print each card's animal type and count
+                    imageView.setLayoutX(paneCenterX + xOffset - imageView.getFitWidth() / 2);
+                    imageView.setLayoutY(paneCenterY + yOffset - imageView.getFitHeight() / 2);
 
-                        Image animalImage = card.getHabitatImage();
-                        ImageView imageView = new ImageView(animalImage);
-                        imageView.setFitWidth(50);
-                        imageView.setFitHeight(50);
-                        imageView.setPreserveRatio(true);
-
-                        double angle = Math.toRadians(360.0 * animalIndex / totalAnimals);
-                        double xOffset = radius * Math.cos(angle);
-                        double yOffset = radius * Math.sin(angle);
-
-                        imageView.setLayoutX(paneCenterX + xOffset - imageView.getFitWidth() / 2);
-                        imageView.setLayoutY(paneCenterY + yOffset - imageView.getFitHeight() / 2);
-
-                        boardcards.getChildren().add(imageView);
-                        animalPositions[animalIndex % animalPositions.length] = card.getAnimalType();
-                        animalIndex++; // Increment the index to update position index
-                        arrangeAnimalTokens();
-                    }
-
+                    boardcards.getChildren().add(imageView);
+                    animalPositions[animalIndex % animalPositions.length] = card.getAnimalType();
+                    animalIndex++;
                 }
-                System.out.println(Arrays.toString(animalPositions));
             }
+            arrangeAnimalTokens(); // Call to arrange tokens after animals are set
         });
-
     }
 
-
+    private void shuffleAndDisplayAnimals() {
+        // Shuffle the habitats to get a new random arrangement of the animals
+        Collections.shuffle(gameMap.getHabitats());
+        // Now call the method to display animals in a circle
+        arrangeAnimalsInCircle();
+    }
     private void arrangeAnimalTokens() {
         double paneCenterX = boardcards.getWidth() / 2;
         double paneCenterY = boardcards.getHeight() / 2;
@@ -265,45 +264,41 @@ public class FieryDragonGameController implements Initializable {
     }
 
     private void initializeTokenViews() {
-        boardcards.layoutBoundsProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue.getWidth() > 0 && newValue.getHeight() > 0) {
-                double paneCenterX = boardcards.getWidth() / 2;
-                double paneCenterY = boardcards.getHeight() / 2;
-                double tokenRadius = radius + 60;
+        Platform.runLater(() -> {
 
-                int numTokens = gameMap.getAnimalCaves().size();
-                double angleIncrement = 360.0 / numTokens;
+            double paneCenterX = boardcards.getWidth() / 2;
+            double paneCenterY = boardcards.getHeight() / 2;
+            double tokenRadius = radius + 60; // Adjust the radius to position tokens correctly.
 
-                for (int i = 0; i < numTokens; i++) {
-                    AnimalCave cave = gameMap.getAnimalCaves().get(i);
-                    String tokenType = cave.getType();
-                    Image tokenImage = new Image(getClass().getResourceAsStream("images/" + tokenType + "token.png"));
-                    ImageView tokenView = new ImageView(tokenImage);
-                    tokenView.setFitWidth(50);
-                    tokenView.setFitHeight(50);
-                    tokenView.setPreserveRatio(true);
+            int numTokens = gameMap.getAnimalCaves().size();
+            double angleIncrement = 360.0 / numTokens; // Calculate the angle increment based on the number of tokens.
 
-                    // Calculate the angle for this token's position on the circle
-                    double angle = Math.toRadians(angleIncrement * i);
-                    double xOffset = tokenRadius * Math.cos(angle);
-                    double yOffset = tokenRadius * Math.sin(angle);
+            for (int i = 0; i < numTokens; i++) {
+                AnimalCave cave = gameMap.getAnimalCaves().get(i);
+                String tokenType = cave.getType();
+                Image tokenImage = new Image(getClass().getResourceAsStream("images/" + tokenType + "token.png"));
+                ImageView tokenView = new ImageView(tokenImage);
+                tokenView.setFitWidth(50);
+                tokenView.setFitHeight(50);
+                tokenView.setPreserveRatio(true);
 
-                    tokenView.setLayoutX(paneCenterX + xOffset - tokenView.getFitWidth() / 2);
-                    tokenView.setLayoutY(paneCenterY + yOffset - tokenView.getFitHeight() / 2);
+                // Calculate the angle for this token's position on the circle.
+                double angle = Math.toRadians(angleIncrement * i);
+                double xOffset = tokenRadius * Math.cos(angle);
+                double yOffset = tokenRadius * Math.sin(angle);
 
-                    boardcards.getChildren().add(tokenView);
-                    tokenViews.put(tokenType, tokenView); // Store the view by animal type
-                }
+                // Set the layout X and Y based on the calculated offsets.
+                tokenView.setLayoutX(paneCenterX + xOffset - tokenView.getFitWidth() / 2);
+                tokenView.setLayoutY(paneCenterY + yOffset - tokenView.getFitHeight() / 2);
+
+                // Add the ImageView to the boardcards Pane.
+                boardcards.getChildren().add(tokenView);
+                tokenViews.put(tokenType, tokenView); // Store the view by animal type in a map for easy access.
             }
         });
     }
 
-    private void shuffleAndDisplayAnimals() {
-        // Shuffle the habitats to get a new random arrangement of the animals
-        Collections.shuffle(gameMap.getHabitats());
-        // Now call the method to display animals in a circle
-        arrangeAnimalsInCircle();
-    }
+
 
 
     /**

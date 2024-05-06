@@ -28,4 +28,8 @@ public class Habitat {
         return false;
     }
 
+    public void shuffle() {
+        Collections.shuffle(cards);
+    }
+
 }
