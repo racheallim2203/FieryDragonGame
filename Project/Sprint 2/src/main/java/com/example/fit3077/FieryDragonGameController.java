@@ -344,7 +344,16 @@ public class FieryDragonGameController implements Initializable {
     private void processCardEffect(Card card) {
         Player currentPlayer = getCurrentPlayer();
         int currentPlayerPosition = currentPlayer.getPosition();
-        String currentAnimalTypeAtPosition = animalPositions[currentPlayerPosition];
+//          String currentAnimalTypeAtPosition = animalPositions[currentPlayerPosition];
+
+        String currentAnimalTypeAtPosition;
+        if (currentPlayerPosition < 0){
+            currentAnimalTypeAtPosition = currentPlayer.getAnimalToken().getType();
+        }
+        else {
+            currentAnimalTypeAtPosition = animalPositions[currentPlayerPosition];
+
+        }
 
         System.out.println("Current player: " + currentPlayer.getAnimalToken().getType());
         System.out.println("Current position: " + currentPlayerPosition);
@@ -362,10 +371,14 @@ public class FieryDragonGameController implements Initializable {
                 instructions.setText("No match found, turn ends.");
             }
         } else if (card instanceof PirateCard) {
-            PirateCard pirateCard = (PirateCard) card;
-            pirateCard.applyEffect(currentPlayer, gameMap, pirateCard);
-            instructions.setText(" moves " + pirateCard.getCount() + " steps backward");
-            System.out.println(currentPlayer.getAnimalToken().getType() + " moves " + pirateCard.getCount() + " steps backward to position " + currentPlayer.getPosition());
+            if (currentPlayerPosition < 0) {
+                instructions.setText("No match found, turn ends.");
+            } else {
+                PirateCard pirateCard = (PirateCard) card;
+                pirateCard.applyEffect(currentPlayer, gameMap, pirateCard);
+                instructions.setText(" moves " + pirateCard.getCount() + " steps backward");
+                System.out.println(currentPlayer.getAnimalToken().getType() + " moves " + pirateCard.getCount() + " steps backward to position " + currentPlayer.getPosition());
+            }
         }
 
         // Optionally, after processing the card effect, update the UI or game state
@@ -381,15 +394,18 @@ public class FieryDragonGameController implements Initializable {
             double paneCenterX = boardcards.getWidth() / 2;
             double paneCenterY = boardcards.getHeight() / 2;
             int position = currentPlayer.getPosition();
-            double tokenRadius = radius + 30;
+            if (position != -1){
+                double tokenRadius = radius + 30;
 
-            //24 is the size of total number of animals in the list to form a gameboard
-            double angle = Math.toRadians(360.0 * position / 24);
-            double xOffset = tokenRadius * Math.cos(angle);
-            double yOffset = tokenRadius * Math.sin(angle);
+                //24 is the size of total number of animals in the list to form a gameboard
+                double angle = Math.toRadians(360.0 * position / 24);
+                double xOffset = tokenRadius * Math.cos(angle);
+                double yOffset = tokenRadius * Math.sin(angle);
 
-            tokenView.setLayoutX(paneCenterX + xOffset - tokenView.getFitWidth() / 2);
-            tokenView.setLayoutY(paneCenterY + yOffset - tokenView.getFitHeight() / 2);
+                tokenView.setLayoutX(paneCenterX + xOffset - tokenView.getFitWidth() / 2);
+                tokenView.setLayoutY(paneCenterY + yOffset - tokenView.getFitHeight() / 2);
+            }
+
         }
 
         System.out.println("Game board updated.");

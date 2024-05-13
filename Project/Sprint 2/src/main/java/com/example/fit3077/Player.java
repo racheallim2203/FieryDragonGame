@@ -7,10 +7,10 @@ public class Player {
     private int position; //stores the player's current position on the game board.
 
 
-    // initializes a new Player object with an AnimalToken and sets the initial position to 0
+    // initializes a new Player object with an AnimalToken and sets the initial position to
     public Player(AnimalToken animalToken) {
         this.animalToken = animalToken; //
-        this.position = 0; //
+        this.position = -1; //
     }
 
     // adjusts the player's position on the game board based on a number of steps to move, which can be positive or negative
@@ -37,6 +37,6 @@ public class Player {
 
 
     public void resetPosition() {
-        this.position = 0;
+        this.position = -1;
     }
 }
