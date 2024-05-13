@@ -12,18 +12,22 @@ import java.util.List;
 public class DeckOfCards {
     private final ArrayList<Card> deck;
 
-
     public DeckOfCards() {
         this.deck = new ArrayList<>();
-        List<String> animalTypes = List.of("Dragon", "Fish", "Pufferfish", "Octopus"); // Add more animal types if necessary
         int numberOfEachType = 3;
 
-        // Create AnimalCards
-        for (String animalType : animalTypes) {
+        // Create AnimalCards - loop enumeration (Animal Type)
+        for (AnimalType animalType: AnimalType.values()) {
             for (int count = 1; count <= numberOfEachType; count++) {
                 deck.add(new AnimalCard(animalType,count));
             }
         }
+
+//        for (String animalType : animalTypes) {
+//            for (int count = 1; count <= numberOfEachType; count++) {
+//                deck.add(new AnimalCard(animalType,count));
+//            }
+//        }
 
         // Create PirateCards
         // Only 2 of each pirate card needed

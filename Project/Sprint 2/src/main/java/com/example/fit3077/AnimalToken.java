@@ -6,19 +6,22 @@ import javafx.stage.Stage;
 
 // Represents the token each player uses to navigate the game map.
 public class AnimalToken {
-    private final String type;
+
+    private final AnimalType animalType;
+
     private int position;
 
     private int stepTaken;
 
     private boolean isOut;
 
-    public AnimalToken(String type) {
-        this.type = type; this.isOut = false;
+    public AnimalToken(AnimalType animalType) {
+        this.animalType = animalType;
+        this.isOut = false;
     }
 
-    public String getType() {
-        return type;
+    public AnimalType getType() {
+        return animalType;
     }
 
     public int getStepTaken() {
@@ -31,7 +34,9 @@ public class AnimalToken {
 
     public void setIsOut(boolean out){
         isOut = out;
-    }    public void setStepTaken(int stepTaken) {
+    }
+
+    public void setStepTaken(int stepTaken) {
         this.stepTaken = stepTaken;
     }
 
@@ -44,7 +49,7 @@ public class AnimalToken {
     }
 
     public Image getTokenImage() {
-        String imageName = type.toLowerCase() + "token.png";
+        String imageName = animalType.toString().toLowerCase() + "token.png";
         String pathName = "images/" + imageName;
         return new Image(getClass().getResourceAsStream(pathName));
     }

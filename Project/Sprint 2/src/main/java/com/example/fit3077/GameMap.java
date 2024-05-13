@@ -17,15 +17,16 @@ public class GameMap {
     }
 
     private void initializeHabitats() {
-        List<String> allAnimals = Arrays.asList("fish", "pufferfish", "dragon", "octopus");
+//        List<String> allAnimals = Arrays.asList("fish", "pufferfish", "dragon", "octopus");
         int numHabitats = 8; // Total number of habitats
         int cardsPerHabitat = 3; // Cards per habitat
 
         // Generate a list to hold all the required AnimalCards
         List<AnimalCard> allCards = new ArrayList<>();
-        for (String animal : allAnimals) {
+
+        for (AnimalType animalType: AnimalType.values()) {
             for (int i = 0; i < 6; i++) {
-                allCards.add(new AnimalCard(animal, 0)); // Add an AnimalCard with a count of 1
+                allCards.add(new AnimalCard(animalType, 0)); // Add an AnimalCard with a count of 1
             }
         }
 
@@ -39,12 +40,19 @@ public class GameMap {
     }
 
     private void initializeAnimalCaves() {
-        String[] animalTypes = new String[]{"fish", "pufferfish", "dragon", "octopus"};
-        for (int i = 0; i < animalTypes.length; i++) {
-            // Assuming each type of animal starts at the beginning of each quarter in a circular arrangement
-            int startingLocation = (habitats.size() / animalTypes.length) * i;
-            animalCaves.add(new AnimalCave(animalTypes[i], startingLocation));
+        int i = 0;
+        for (AnimalType animalType: AnimalType.values()) {
+            int startingLocation = (habitats.size() / AnimalType.values().length) * i;
+            animalCaves.add(new AnimalCave(animalType, startingLocation));
+            i++;
         }
+
+//        String[] animalTypes = new String[]{"fish", "pufferfish", "dragon", "octopus"};
+//        for (int i = 0; i < animalTypes.length; i++) {
+//            // Assuming each type of animal starts at the beginning of each quarter in a circular arrangement
+//            int startingLocation = (habitats.size() / animalTypes.length) * i;
+//            animalCaves.add(new AnimalCave(animalTypes[i], startingLocation));
+//        }
     }
 
     public Habitat getHabitat(int index) {

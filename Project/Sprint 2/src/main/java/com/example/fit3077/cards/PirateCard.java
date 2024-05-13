@@ -6,9 +6,9 @@ import javafx.scene.image.Image;
 
 public class PirateCard extends Card {
 
-    public PirateCard(int count) {
-        super.type = "piratecard";
-        super.count = count; // Ensure this is within the range [1, 2] for PirateCard
+    public PirateCard(int stepCount) {
+//        super.cardType = "piratecard";
+        super.stepCount = stepCount; // Ensure this is within the range [1, 2] for PirateCard
     }
 
     @Override
@@ -20,7 +20,7 @@ public class PirateCard extends Card {
 
     @Override
     public Image getImage() {
-        String imageName = "piratecard" + count + ".png";
+        String imageName = "piratecard" + stepCount + ".png";
         String pathName = "images/" + imageName;
         return new Image(getClass().getResourceAsStream(pathName));
     }

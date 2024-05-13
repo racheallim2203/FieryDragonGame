@@ -85,7 +85,7 @@ public class FieryDragonGameController implements Initializable {
 
     private GameMap gameMap;
 
-    private final String[] animalPositions = new String[24]; // Assuming 24 positions available on the game board
+    private final AnimalType[] animalPositions = new AnimalType[24]; // Assuming 24 positions available on the game board
 
     private final Map<String, ImageView> tokenViews = new HashMap<>(); // Stores token views by animal type
 
@@ -107,7 +107,7 @@ public class FieryDragonGameController implements Initializable {
 
             // Set the current player to the initial state and update UI
             resetPlayer();
-            updateCurrentPlayerDisplay("Fish");
+            updateCurrentPlayerDisplay(AnimalType.FISH);
 
             System.out.println("Game started.");
         });
@@ -126,7 +126,6 @@ public class FieryDragonGameController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         gameMap = new GameMap(); // Initialize gameMap which sets up the habitats
         startGame();
-
     }
 
     private void initializeDeck() {
@@ -137,18 +136,25 @@ public class FieryDragonGameController implements Initializable {
         cardsInGame = new ArrayList<>();
 
         // Deal cards from the shuffled deck to the game
+//        for (int i = 0; i < decks.getChildren().size(); i++) {
+//            Card cardDealt = deck.dealTopCard();
+//            if (cardDealt != null) { // Ensure that a card was dealt
+//                // If the card type is "piratecard", create a PirateCard; otherwise, create an AnimalCard
+//                if ("piratecard".equals(cardDealt.getCardType())) {
+//                    cardsInGame.add(new PirateCard(cardDealt.getCount()));
+//                } else {
+//                    cardsInGame.add(new AnimalCard(cardDealt.getType(), cardDealt.getCount()));
+//                }
+//            }
+//        }
+
         for (int i = 0; i < decks.getChildren().size(); i++) {
-            Card cardDealt = deck.dealTopCard();
+            Card cardDealt = deck.dealTopCard();                    // IDK WHATS THIS
             if (cardDealt != null) { // Ensure that a card was dealt
-                // If the card type is "piratecard", create a PirateCard; otherwise, create an AnimalCard
-                if ("piratecard".equals(cardDealt.getType())) {
-                    cardsInGame.add(new PirateCard(cardDealt.getCount()));
-                } else {
-                    cardsInGame.add(new AnimalCard(cardDealt.getType(), cardDealt.getCount()));
-                }
+                cardsInGame.add(cardDealt);
             }
         }
-//        Collections.shuffle(cardsInGame);
+
         System.out.println(cardsInGame);
 
     }
@@ -165,9 +171,17 @@ public class FieryDragonGameController implements Initializable {
         // Iterate over the shuffled deck and the imageView IDs together
         for (int i = 0; i < shuffledDeck.size(); i++) {
             Card card = shuffledDeck.get(i);
-            String cardType = card.getType();
+//            String cardType = card.getType();
             int count = card.getCount();
-            String cardFileName = cardType.toLowerCase() + count + ".png"; // Construct the file name based on type and count
+            String cardFileName = "";
+
+            if (AnimalCard.class.isInstance(card)){
+                AnimalCard animalCard = (AnimalCard) card;               // TODO: downcast, can someone help me to modify it?
+                cardFileName = animalCard.getAnimalType().toString().toLowerCase() + count + ".png";
+            } else {
+                cardFileName = "piratecard" + count + ".png"; // Construct the file name based on type and count
+            }
+
 
             Image cardImage;
             try {
@@ -277,7 +291,7 @@ public class FieryDragonGameController implements Initializable {
 
             for (int i = 0; i < numTokens; i++) {
                 AnimalCave cave = gameMap.getAnimalCaves().get(i);
-                String tokenType = cave.getType();
+                AnimalType tokenType = cave.getType();
                 Image tokenImage = new Image(getClass().getResourceAsStream("images/" + tokenType + "token.png"));
                 ImageView tokenView = new ImageView(tokenImage);
                 tokenView.setFitWidth(50);
@@ -295,7 +309,7 @@ public class FieryDragonGameController implements Initializable {
 
                 // Add the ImageView to the boardcards Pane.
                 boardcards.getChildren().add(tokenView);
-                tokenViews.put(tokenType, tokenView); // Store the view by animal type in a map for easy access.
+                tokenViews.put(String.valueOf(tokenType), tokenView); // Store the view by animal type in a map for easy access.
             }
         });
     }
@@ -327,8 +341,8 @@ public class FieryDragonGameController implements Initializable {
 
         if (imageView != null && cardsInGame.size() > indexOfCard) {
             Card card = cardsInGame.get(indexOfCard);
-            String flippedCard = card.getType() + card.getCount();
-            System.out.println("Flipped card: " + flippedCard);
+//            String flippedCard = card.getType() + card.getCount();
+//            System.out.println("Flipped card: " + flippedCard);
 
             Image image = card.getImage();
             if (image != null) {
@@ -348,7 +362,7 @@ public class FieryDragonGameController implements Initializable {
         int currentPlayerPosition = currentPlayer.getPosition();
 //          String currentAnimalTypeAtPosition = animalPositions[currentPlayerPosition];
 
-        String currentAnimalTypeAtPosition;
+        AnimalType currentAnimalTypeAtPosition;
         if (currentPlayer.getAnimalToken().getStepTaken() == 0){
             currentAnimalTypeAtPosition = currentPlayer.getAnimalToken().getType();
         }
@@ -364,7 +378,7 @@ public class FieryDragonGameController implements Initializable {
         if (card instanceof AnimalCard) {
             AnimalCard animalCard = (AnimalCard) card;
             // Check if the card type matches the animal at the current player's position
-            if (animalCard.getAnimalType().equalsIgnoreCase(currentAnimalTypeAtPosition)) {
+            if (animalCard.getAnimalType().equals(currentAnimalTypeAtPosition)) {
                 // Apply card effect which includes moving the player forward
                 animalCard.applyMovement(currentPlayer, gameMap, animalCard);
                 instructions.setText(" moves " + animalCard.getCount() + " steps forward");
@@ -414,13 +428,13 @@ public class FieryDragonGameController implements Initializable {
         System.out.println("Game board updated.");
     }
 
-    private void updateCurrentPlayerDisplay(String animalType) {
-        currentPlayer.setText(animalType + "'s turn");
+    private void updateCurrentPlayerDisplay(AnimalType animalType) {
+        currentPlayer.setText(animalType.toString().toLowerCase() + "'s turn");
     }
 
     public Player getCurrentPlayer() {
         if (inPlayPlayer == null) {
-            inPlayPlayer = new Player(new AnimalToken("pufferfish")); // Initial setup
+            inPlayPlayer = new Player(new AnimalToken(AnimalType.PUFFERFISH)); // Initial setup
 
         }
         return inPlayPlayer;

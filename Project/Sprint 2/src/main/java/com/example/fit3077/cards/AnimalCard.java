@@ -1,14 +1,17 @@
 package com.example.fit3077.cards;
+import com.example.fit3077.AnimalType;
 import com.example.fit3077.GameMap;
 import com.example.fit3077.Player;
 import javafx.scene.image.Image;
 
 public class AnimalCard extends Card {
-    private final String animalType; // Type of the animal on the card
+//    private final String animalType; // Type of the animal on the card
 
-    public AnimalCard(String animalType, int count) {
-        super.type = animalType;
-        super.count = count;
+    private final AnimalType animalType;
+
+    public AnimalCard(AnimalType animalType, int stepCount) {
+//        super.type = animalType;      // doesn't make sense to override the Card's type as it only can be "animal" or "pirate"
+        super.stepCount = stepCount;
         this.animalType = animalType;
     }
 
@@ -21,18 +24,18 @@ public class AnimalCard extends Card {
 
     @Override
     public Image getImage() {
-        String imageName = animalType.toLowerCase() + count + ".png";
+        String imageName = animalType.toString().toLowerCase() + stepCount + ".png";
         String pathName = "images/" + imageName;
         return new Image(getClass().getResourceAsStream(pathName));
     }
     @Override
     public Image getHabitatImage() {
-        String imageName = animalType.toLowerCase() + ".png";
+        String imageName = animalType.toString().toLowerCase() + ".png";
         String pathName = "images/" + imageName;
         return new Image(getClass().getResourceAsStream(pathName));
     }
 
-    public String getAnimalType() {
+    public AnimalType getAnimalType() {
         return animalType;
     }
 
