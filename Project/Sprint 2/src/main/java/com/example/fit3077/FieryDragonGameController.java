@@ -371,7 +371,7 @@ public class FieryDragonGameController implements Initializable {
                 instructions.setText("No match found, turn ends.");
             }
         } else if (card instanceof PirateCard) {
-            if (currentPlayer.getAnimalToken().getStepTaken() == 0) {
+            if (currentPlayer.getAnimalToken().getStepTaken() == 0 && !currentPlayer.getAnimalToken().getIsOut()) {
                 instructions.setText("No match found, turn ends.");
             } else {
                 PirateCard pirateCard = (PirateCard) card;
@@ -395,7 +395,7 @@ public class FieryDragonGameController implements Initializable {
             double paneCenterY = boardcards.getHeight() / 2;
             int position = currentPlayer.getPosition();
 
-            if (currentPlayer.getAnimalToken().getStepTaken() != 0){
+            if (currentPlayer.getAnimalToken().getStepTaken() != 0 || currentPlayer.getAnimalToken().getIsOut()){
                 double tokenRadius = radius + 30;
 
                 //24 is the size of total number of animals in the list to form a gameboard
@@ -418,7 +418,7 @@ public class FieryDragonGameController implements Initializable {
 
     public Player getCurrentPlayer() {
         if (inPlayPlayer == null) {
-            inPlayPlayer = new Player(new AnimalToken("pufferfish", 0)); // Initial setup
+            inPlayPlayer = new Player(new AnimalToken("pufferfish")); // Initial setup
 
         }
         return inPlayPlayer;

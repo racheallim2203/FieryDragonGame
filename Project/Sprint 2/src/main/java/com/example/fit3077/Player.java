@@ -41,6 +41,11 @@ public class Player {
         System.out.println("Current Position: " + this.position);
         System.out.println("Steps to Move: " + steps);
         int stepTaken = this.getAnimalToken().getStepTaken();
+
+        if (stepTaken == 0 && !this.getAnimalToken().getIsOut()){
+            this.getAnimalToken().setIsOut(true);
+        }
+
         this.getAnimalToken().setStepTaken(stepTaken + steps);
         // Adding totalHabitats ensures that the index remains positive, also works perfectly for positive steps
         // Set the new position
@@ -61,5 +66,6 @@ public class Player {
     public void resetPosition() {
         setInitialPosition();;
         this.getAnimalToken().setStepTaken(0);
+        this.getAnimalToken().setIsOut(false);
     }
 }

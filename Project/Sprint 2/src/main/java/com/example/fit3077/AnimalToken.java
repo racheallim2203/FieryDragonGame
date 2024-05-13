@@ -11,9 +11,10 @@ public class AnimalToken {
 
     private int stepTaken;
 
-    public AnimalToken(String type, int position) {
-        this.type = type;
-        this.position = position;
+    private boolean isOut;
+
+    public AnimalToken(String type) {
+        this.type = type; this.isOut = false;
     }
 
     public String getType() {
@@ -24,7 +25,13 @@ public class AnimalToken {
         return stepTaken;
     }
 
-    public void setStepTaken(int stepTaken) {
+    public boolean getIsOut(){
+        return isOut;
+    }
+
+    public void setIsOut(boolean out){
+        isOut = out;
+    }    public void setStepTaken(int stepTaken) {
         this.stepTaken = stepTaken;
     }
 
