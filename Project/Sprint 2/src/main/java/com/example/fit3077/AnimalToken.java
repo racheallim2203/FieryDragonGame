@@ -9,6 +9,8 @@ public class AnimalToken {
     private final String type;
     private int position;
 
+    private int stepTaken;
+
     public AnimalToken(String type, int position) {
         this.type = type;
         this.position = position;
@@ -16,6 +18,14 @@ public class AnimalToken {
 
     public String getType() {
         return type;
+    }
+
+    public int getStepTaken() {
+        return stepTaken;
+    }
+
+    public void setStepTaken(int stepTaken) {
+        this.stepTaken = stepTaken;
     }
 
     public int getPosition() {
