@@ -5,4 +5,6 @@ module com.example.fit3077 {
 
     opens com.example.fit3077 to javafx.fxml;
     exports com.example.fit3077;
+    exports com.example.fit3077.cards;
+    opens com.example.fit3077.cards to javafx.fxml;
 }

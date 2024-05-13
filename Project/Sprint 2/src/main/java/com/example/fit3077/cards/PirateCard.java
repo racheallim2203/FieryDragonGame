@@ -1,8 +1,8 @@
-package com.example.fit3077;
+package com.example.fit3077.cards;
 
-import javafx.application.Application;
+import com.example.fit3077.GameMap;
+import com.example.fit3077.Player;
 import javafx.scene.image.Image;
-import javafx.stage.Stage;
 
 public class PirateCard extends Card {
 
@@ -12,7 +12,7 @@ public class PirateCard extends Card {
     }
 
     @Override
-    public void applyEffect(Player currentPlayer, GameMap gameMap, Card card) {
+    public void applyMovement(Player currentPlayer, GameMap gameMap, Card card) {
         // Apply the effect with a negative count to move backwards
         int backwardSteps = -card.getCount(); // Make the steps negative here
         currentPlayer.moveToken(backwardSteps, gameMap);

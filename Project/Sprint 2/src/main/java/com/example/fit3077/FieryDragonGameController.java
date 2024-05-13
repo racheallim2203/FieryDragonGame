@@ -1,9 +1,11 @@
 package com.example.fit3077;
 
+import com.example.fit3077.cards.AnimalCard;
+import com.example.fit3077.cards.Card;
+import com.example.fit3077.cards.PirateCard;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.control.Label;
@@ -364,7 +366,7 @@ public class FieryDragonGameController implements Initializable {
             // Check if the card type matches the animal at the current player's position
             if (animalCard.getAnimalType().equalsIgnoreCase(currentAnimalTypeAtPosition)) {
                 // Apply card effect which includes moving the player forward
-                animalCard.applyEffect(currentPlayer, gameMap, animalCard);
+                animalCard.applyMovement(currentPlayer, gameMap, animalCard);
                 instructions.setText(" moves " + animalCard.getCount() + " steps forward");
                 System.out.println(currentPlayer.getAnimalToken().getType() + " moves " + animalCard.getCount() + " steps forward to position " + currentPlayer.getPosition());
             } else {
@@ -375,7 +377,7 @@ public class FieryDragonGameController implements Initializable {
                 instructions.setText("No match found, turn ends.");
             } else {
                 PirateCard pirateCard = (PirateCard) card;
-                pirateCard.applyEffect(currentPlayer, gameMap, pirateCard);
+                pirateCard.applyMovement(currentPlayer, gameMap, pirateCard);
                 instructions.setText(" moves " + pirateCard.getCount() + " steps backward");
                 System.out.println(currentPlayer.getAnimalToken().getType() + " moves " + pirateCard.getCount() + " steps backward to position " + currentPlayer.getPosition());
             }

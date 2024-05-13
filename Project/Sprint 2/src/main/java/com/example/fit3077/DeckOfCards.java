@@ -1,11 +1,11 @@
 package com.example.fit3077;
 
-import javafx.application.Application;
-import javafx.stage.Stage;
+import com.example.fit3077.cards.AnimalCard;
+import com.example.fit3077.cards.Card;
+import com.example.fit3077.cards.PirateCard;
 
 import java.util.ArrayList;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 

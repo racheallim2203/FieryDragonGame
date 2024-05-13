@@ -1,8 +1,10 @@
-package com.example.fit3077;
+package com.example.fit3077.cards;
 
+import com.example.fit3077.GameMap;
+import com.example.fit3077.Player;
 import javafx.scene.image.Image;
 
-public abstract class Card implements Effect {
+public abstract class Card implements Movement {
     protected String type; // This can be "animal" or "pirate"
     protected int count;
 
@@ -24,7 +26,7 @@ public abstract class Card implements Effect {
 
     // This method needs to be implemented in subclasses
     @Override
-    public abstract void applyEffect(Player player, GameMap gameMap, Card card);
+    public abstract void applyMovement(Player player, GameMap gameMap, Card card);
 
     // This method will return an Image that represents the Card
     public Image getImage() {

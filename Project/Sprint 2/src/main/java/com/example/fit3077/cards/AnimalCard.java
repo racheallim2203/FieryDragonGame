@@ -1,5 +1,8 @@
-package com.example.fit3077;
+package com.example.fit3077.cards;
+import com.example.fit3077.GameMap;
+import com.example.fit3077.Player;
 import javafx.scene.image.Image;
+
 public class AnimalCard extends Card {
     private final String animalType; // Type of the animal on the card
 
@@ -11,7 +14,7 @@ public class AnimalCard extends Card {
 
 
     @Override
-    public void applyEffect(Player currentPlayer, GameMap gameMap, Card card) {
+    public void applyMovement(Player currentPlayer, GameMap gameMap, Card card) {
         int forwardSteps = card.getCount();
         currentPlayer.moveToken(forwardSteps, gameMap);
     }
