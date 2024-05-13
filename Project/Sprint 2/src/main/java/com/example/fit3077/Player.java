@@ -53,6 +53,11 @@ public class Player {
         System.out.println("New Position: " + this.position);
     }
 
+    public void moveTokenToCave(GameMap gameMap) {
+        List<AnimalCave> caves = gameMap.getAnimalCaves();
+        // no idea
+    }
+
 
     public int getPosition() {
         return position;

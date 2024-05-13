@@ -40,18 +40,21 @@ public class GameMap {
     }
 
     private void initializeAnimalCaves() {
+        System.out.println("Initialize animal caves");
         int i = 0;
+
+        // WHAT IS STARTING LOCATION? WHAT IS THAT USE FOR? THE OUTPUT: 0 - 2 - 4 - 6
         for (AnimalType animalType: AnimalType.values()) {
             int startingLocation = (habitats.size() / AnimalType.values().length) * i;
             animalCaves.add(new AnimalCave(animalType, startingLocation));
             i++;
         }
 
-//        String[] animalTypes = new String[]{"fish", "pufferfish", "dragon", "octopus"};
-//        for (int i = 0; i < animalTypes.length; i++) {
-//            // Assuming each type of animal starts at the beginning of each quarter in a circular arrangement
-//            int startingLocation = (habitats.size() / animalTypes.length) * i;
-//            animalCaves.add(new AnimalCave(animalTypes[i], startingLocation));
+        // sam's code
+//        for (AnimalType animalType: AnimalType.values()) {
+//
+//            animalCaves.add(new AnimalCave(animalType, startingLocation));
+//            i++;
 //        }
     }
 

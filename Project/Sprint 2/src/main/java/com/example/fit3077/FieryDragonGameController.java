@@ -199,7 +199,7 @@ public class FieryDragonGameController implements Initializable {
 
             // Add the ImageView to the container
             decks.getChildren().add(cardImageView);
-            System.out.println(decks.getChildren().size());
+//            System.out.println(decks.getChildren().size());
 
 
         }
@@ -252,6 +252,7 @@ public class FieryDragonGameController implements Initializable {
         // Now call the method to display animals in a circle
         arrangeAnimalsInCircle();
     }
+
     private void arrangeAnimalTokens() {
         double paneCenterX = boardcards.getWidth() / 2;
         double paneCenterY = boardcards.getHeight() / 2;
@@ -347,7 +348,7 @@ public class FieryDragonGameController implements Initializable {
             Image image = card.getImage();
             if (image != null) {
                 imageView.setImage(image); // Set the card image to show its face
-                processCardEffect(card);   // Process the effect of the card
+                processCardMovement(card);   // Process the effect of the card
             } else {
                 System.err.println("Card image is null.");
             }
@@ -357,7 +358,7 @@ public class FieryDragonGameController implements Initializable {
     }
 
 
-    private void processCardEffect(Card card) {
+    private void processCardMovement(Card card) {
         Player currentPlayer = getCurrentPlayer();
         int currentPlayerPosition = currentPlayer.getPosition();
 //          String currentAnimalTypeAtPosition = animalPositions[currentPlayerPosition];
@@ -376,19 +377,42 @@ public class FieryDragonGameController implements Initializable {
         System.out.println("Animal at current position: " + currentAnimalTypeAtPosition);
 
         if (card instanceof AnimalCard) {
+
             AnimalCard animalCard = (AnimalCard) card;
+
             // Check if the card type matches the animal at the current player's position
             if (animalCard.getAnimalType().equals(currentAnimalTypeAtPosition)) {
-                // Apply card effect which includes moving the player forward
+
+//                // Apply card effect which includes moving the player forward
                 animalCard.applyMovement(currentPlayer, gameMap, animalCard);
                 instructions.setText(" moves " + animalCard.getCount() + " steps forward");
                 System.out.println(currentPlayer.getAnimalToken().getType() + " moves " + animalCard.getCount() + " steps forward to position " + currentPlayer.getPosition());
+
+
+                // check if it reaches its cave - hvn tested, feel free to comment (sam)
+                /*
+                if (currentPlayer.getAnimalToken().getStepTaken() + animalCard.getCount() == 24) {
+                    System.out.println("WINNNNNNNNN");
+                    currentPlayer.moveTokenToCave(gameMap);
+
+                } else {
+
+                    // Apply card effect which includes moving the player forward
+                    animalCard.applyMovement(currentPlayer, gameMap, animalCard);
+                    instructions.setText(" moves " + animalCard.getCount() + " steps forward");
+                    System.out.println(currentPlayer.getAnimalToken().getType() + " moves " + animalCard.getCount() + " steps forward to position " + currentPlayer.getPosition());
+                }
+                */
+
             } else {
                 instructions.setText("No match found, turn ends.");
             }
+
         } else if (card instanceof PirateCard) {
+
             if (currentPlayer.getAnimalToken().getStepTaken() == 0 && !currentPlayer.getAnimalToken().getIsOut()) {
                 instructions.setText("No match found, turn ends.");
+
             } else {
                 PirateCard pirateCard = (PirateCard) card;
                 pirateCard.applyMovement(currentPlayer, gameMap, pirateCard);
