@@ -21,13 +21,9 @@ public class PirateCard extends Card {
     @Override
     public Image getImage() {
         String imageName = "piratecard" + stepCount + ".png";
-        String pathName = "images/" + imageName;
+        String pathName = "/com/example/fit3077/images/" + imageName;
         return new Image(getClass().getResourceAsStream(pathName));
     }
 
-//    @Override
-//    public Image getHabitatImage() {
-//        return null;
-//    }
 }
 

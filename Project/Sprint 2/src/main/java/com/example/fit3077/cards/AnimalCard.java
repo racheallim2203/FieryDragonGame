@@ -1,4 +1,5 @@
 package com.example.fit3077.cards;
+
 import com.example.fit3077.AnimalType;
 import com.example.fit3077.GameMap;
 import com.example.fit3077.Player;
@@ -10,7 +11,7 @@ public class AnimalCard extends Card {
     private final AnimalType animalType;
 
     public AnimalCard(AnimalType animalType, int stepCount) {
-//        super.type = animalType;      // doesn't make sense to override the Card's type as it only can be "animal" or "pirate"
+//        super.type = animalType;      // sam - doesn't make sense to override the Card's type as it only can be "animal" or "pirate"
         super.stepCount = stepCount;
         this.animalType = animalType;
     }
@@ -24,9 +25,11 @@ public class AnimalCard extends Card {
 
     @Override
     public Image getImage() {
+
         String imageName = animalType.toString().toLowerCase() + stepCount + ".png";
-        String pathName = "images/" + imageName;
+        String pathName = "/com/example/fit3077/images/" + imageName;
         return new Image(getClass().getResourceAsStream(pathName));
+
     }
 
     public AnimalType getAnimalType() {

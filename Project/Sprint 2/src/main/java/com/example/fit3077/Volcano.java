@@ -1,8 +1,5 @@
 package com.example.fit3077;
 
-import com.example.fit3077.cards.AnimalCard;
-
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 

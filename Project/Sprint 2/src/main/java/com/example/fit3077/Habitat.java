@@ -5,7 +5,6 @@ import javafx.scene.image.Image;
 
 import java.util.ArrayList;
 import java.util.*;
-import java.util.List;
 
 public class Habitat {
     private AnimalType animalType;
@@ -34,7 +33,6 @@ public class Habitat {
     }
 
     public Image getHabitatImage() {
-        System.out.println("images/" + animalType.toString().toLowerCase() + ".png");
         String imageName = animalType.toString().toLowerCase() + ".png";
         String pathName = "images/" + imageName;
 
