@@ -328,8 +328,6 @@ public class FieryDragonGameController implements Initializable {
 
         if (imageView != null && cardsInGame.size() > indexOfCard) {
             Card card = cardsInGame.get(indexOfCard);
-//            String flippedCard = card.getType() + card.getCount();
-//            System.out.println("Flipped card: " + flippedCard);
 
             Image image = card.getImage();
             if (image != null) {
