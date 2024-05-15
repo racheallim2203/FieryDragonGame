@@ -47,6 +47,6 @@ public abstract class Card implements Movement {
         return new Image(Card.class.getResourceAsStream("/images/uncoveredcards.png"));
     }
 
-    public abstract Image getHabitatImage();
+//    public abstract Image getHabitatImage();
 }
 

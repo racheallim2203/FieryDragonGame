@@ -1,41 +1,39 @@
 package com.example.fit3077;
 
-import com.example.fit3077.cards.AnimalCard;
-
 import java.util.*;
 
 public class GameMap {
-    private final List<Habitat> habitats;
+    private final List<Volcano> volcanoList;
     private final List<AnimalCave> animalCaves;
 
 
     public GameMap() {
-        this.habitats = new ArrayList<>();
-        this.animalCaves = new ArrayList<>();
+        this.volcanoList = new ArrayList<Volcano>();
+        this.animalCaves = new ArrayList<AnimalCave>();
         initializeHabitats();
         initializeAnimalCaves();
     }
 
     private void initializeHabitats() {
-//        List<String> allAnimals = Arrays.asList("fish", "pufferfish", "dragon", "octopus");
-        int numHabitats = 8; // Total number of habitats
-        int cardsPerHabitat = 3; // Cards per habitat
+        int numOfVolcanoCard = 8; // Total number of habitats
+        int numOfHabitatsForEachVolcanoCard = 3; // Volcano cards per habitat
 
         // Generate a list to hold all the required AnimalCards
-        List<AnimalCard> allCards = new ArrayList<>();
+        List<Habitat> habitatsList = new ArrayList<>();
 
         for (AnimalType animalType: AnimalType.values()) {
             for (int i = 0; i < 6; i++) {
-                allCards.add(new AnimalCard(animalType, 0)); // Add an AnimalCard with a count of 1
+                Habitat habitat = new Habitat(animalType);
+                habitatsList.add(habitat);
             }
         }
 
-        Collections.shuffle(allCards); // Shuffle the complete set of cards
+        Collections.shuffle(habitatsList); // Shuffle the complete set of habitats list
 
         // Distribute the cards into habitats
-        for (int i = 0; i < numHabitats; i++) {
-            List<AnimalCard> habitatCards = allCards.subList(i * cardsPerHabitat, (i + 1) * cardsPerHabitat);
-            this.habitats.add(new Habitat(new ArrayList<>(habitatCards)));
+        for (int i = 0; i < numOfVolcanoCard; i++) {
+            List<Habitat> volcanoCards = habitatsList.subList(i * numOfHabitatsForEachVolcanoCard, (i + 1) * numOfHabitatsForEachVolcanoCard);
+            this.volcanoList.add(new Volcano(volcanoCards));
         }
     }
 
@@ -45,7 +43,7 @@ public class GameMap {
 
         // WHAT IS STARTING LOCATION? WHAT IS THAT USE FOR? THE OUTPUT: 0 - 2 - 4 - 6
         for (AnimalType animalType: AnimalType.values()) {
-            int startingLocation = (habitats.size() / AnimalType.values().length) * i;
+            int startingLocation = (volcanoList.size() / AnimalType.values().length) * i;
             animalCaves.add(new AnimalCave(animalType, startingLocation));
             i++;
         }
@@ -58,12 +56,12 @@ public class GameMap {
 //        }
     }
 
-    public Habitat getHabitat(int index) {
-        return habitats.get(index % habitats.size());
+    public Volcano getVolcano(int index) {
+        return volcanoList.get(index % volcanoList.size());
     }
 
-    public List<Habitat> getHabitats() {
-        return habitats;
+    public List<Volcano> getVolcanoList() {
+        return volcanoList;
     }
 
     public List<AnimalCave> getAnimalCaves() {
@@ -72,6 +70,6 @@ public class GameMap {
 
     @Override
     public String toString() {
-        return "GameMap{" + "habitats=" + habitats + ", animalCaves=" + animalCaves + '}';
+        return "GameMap{" + "volcanoList=" + volcanoList + ", animalCaves=" + animalCaves + '}';
     }
 }

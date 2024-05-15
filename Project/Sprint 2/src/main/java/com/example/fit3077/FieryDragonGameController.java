@@ -78,6 +78,7 @@ public class FieryDragonGameController implements Initializable {
     @FXML
     private ImageView pufferfish3;
 
+
     private ArrayList<Card> cardsInGame;
     private Player inPlayPlayer;
 
@@ -135,28 +136,14 @@ public class FieryDragonGameController implements Initializable {
         // Initialize the list to hold the cards in play
         cardsInGame = new ArrayList<>();
 
-        // Deal cards from the shuffled deck to the game
-//        for (int i = 0; i < decks.getChildren().size(); i++) {
-//            Card cardDealt = deck.dealTopCard();
-//            if (cardDealt != null) { // Ensure that a card was dealt
-//                // If the card type is "piratecard", create a PirateCard; otherwise, create an AnimalCard
-//                if ("piratecard".equals(cardDealt.getCardType())) {
-//                    cardsInGame.add(new PirateCard(cardDealt.getCount()));
-//                } else {
-//                    cardsInGame.add(new AnimalCard(cardDealt.getType(), cardDealt.getCount()));
-//                }
-//            }
-//        }
-
         for (int i = 0; i < decks.getChildren().size(); i++) {
-            Card cardDealt = deck.dealTopCard();                    // IDK WHATS THIS
+            Card cardDealt = deck.dealTopCard();                    // sam - IDK WHATS THIS
             if (cardDealt != null) { // Ensure that a card was dealt
                 cardsInGame.add(cardDealt);
             }
         }
 
         System.out.println(cardsInGame);
-
     }
 
 
@@ -171,7 +158,6 @@ public class FieryDragonGameController implements Initializable {
         // Iterate over the shuffled deck and the imageView IDs together
         for (int i = 0; i < shuffledDeck.size(); i++) {
             Card card = shuffledDeck.get(i);
-//            String cardType = card.getType();
             int count = card.getCount();
             String cardFileName = "";
 
@@ -212,20 +198,20 @@ public class FieryDragonGameController implements Initializable {
      */
     private void arrangeAnimalsInCircle() {
         // Shuffle each habitat's animal cards and the list of habitats
-        gameMap.getHabitats().forEach(Habitat::shuffle);
-        Collections.shuffle(gameMap.getHabitats());
+        gameMap.getVolcanoList().forEach(Volcano::shuffle);
+        Collections.shuffle(gameMap.getVolcanoList());
 
         Platform.runLater(() -> {
             boardcards.getChildren().clear();
             double paneCenterX = boardcards.getWidth() / 2;
             double paneCenterY = boardcards.getHeight() / 2;
-            int totalAnimals = gameMap.getHabitats().stream().mapToInt(h -> h.getCards().size()).sum();
+            int totalAnimals = gameMap.getVolcanoList().stream().mapToInt(h -> h.getVolcanoCards().size()).sum();
             int animalIndex = 0;
 
-            for (Habitat habitat : gameMap.getHabitats()) {
-                for (AnimalCard card : habitat.getCards()) {
-                    Image animalImage = card.getHabitatImage();
-                    ImageView imageView = new ImageView(animalImage);
+            for (Volcano volcanoCard : gameMap.getVolcanoList()) {
+                for (Habitat habitat : volcanoCard.getVolcanoCards()) {
+                    Image habitatImage = habitat.getHabitatImage();
+                    ImageView imageView = new ImageView(habitatImage);
                     imageView.setFitWidth(50);
                     imageView.setFitHeight(50);
                     imageView.setPreserveRatio(true);
@@ -238,7 +224,7 @@ public class FieryDragonGameController implements Initializable {
                     imageView.setLayoutY(paneCenterY + yOffset - imageView.getFitHeight() / 2);
 
                     boardcards.getChildren().add(imageView);
-                    animalPositions[animalIndex % animalPositions.length] = card.getAnimalType();
+                    animalPositions[animalIndex % animalPositions.length] = habitat.getAnimalType();
                     animalIndex++;
                 }
             }
@@ -248,7 +234,7 @@ public class FieryDragonGameController implements Initializable {
 
     private void shuffleAndDisplayAnimals() {
         // Shuffle the habitats to get a new random arrangement of the animals
-        Collections.shuffle(gameMap.getHabitats());
+        Collections.shuffle(gameMap.getVolcanoList());
         // Now call the method to display animals in a circle
         arrangeAnimalsInCircle();
     }
@@ -388,8 +374,7 @@ public class FieryDragonGameController implements Initializable {
                 instructions.setText(" moves " + animalCard.getCount() + " steps forward");
                 System.out.println(currentPlayer.getAnimalToken().getType() + " moves " + animalCard.getCount() + " steps forward to position " + currentPlayer.getPosition());
 
-
-                // check if it reaches its cave - hvn tested, feel free to comment (sam)
+                // SAM - check if it reaches its cave - hvn tested, feel free to comment
                 /*
                 if (currentPlayer.getAnimalToken().getStepTaken() + animalCard.getCount() == 24) {
                     System.out.println("WINNNNNNNNN");

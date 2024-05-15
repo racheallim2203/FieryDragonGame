@@ -36,8 +36,8 @@ public class Player {
 
     // adjusts the player's position on the game board based on a number of steps to move, which can be positive or negative
     public void moveToken(int steps, GameMap gameMap) {
-        List<Habitat> habitats = gameMap.getHabitats();
-        int totalAnimals = habitats.stream().mapToInt(h -> h.getCards().size()).sum();
+        List<Volcano> habitats = gameMap.getVolcanoList();
+        int totalAnimals = habitats.stream().mapToInt(h -> h.getVolcanoCards().size()).sum();
         System.out.println("Current Position: " + this.position);
         System.out.println("Steps to Move: " + steps);
         int stepTaken = this.getAnimalToken().getStepTaken();
