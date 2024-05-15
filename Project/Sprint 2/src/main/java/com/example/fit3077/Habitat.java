@@ -1,24 +1,31 @@
 package com.example.fit3077;
 
 import com.example.fit3077.cards.AnimalCard;
+import javafx.scene.image.Image;
 
 import java.util.ArrayList;
 import java.util.*;
 import java.util.List;
 
 public class Habitat {
-    private final List<AnimalCard> cards;
+    private AnimalType animalType;
+    private ArrayList<AnimalCard> animalCards;
 
-    public Habitat(List<AnimalCard> cards) {
-        this.cards = new ArrayList<>(cards);
+    public Habitat(AnimalType animalType){
+        this.animalType = animalType;
+        this.animalCards = new ArrayList<>();
     }
 
-    public List<AnimalCard> getCards() {
-        return cards;
+    public AnimalType getAnimalType(){
+        return animalType;
     }
 
-    public boolean containsAnimal(String animalType) {
-        for (AnimalCard card : cards) {
+    public ArrayList<AnimalCard> getAnimalCards() {
+        return animalCards;
+    }
+
+    public boolean containsAnimal(AnimalType animalType) {
+        for (AnimalCard card : animalCards) {
             if (card.getAnimalType().equals(animalType)) {
                 return true;
             }
@@ -26,8 +33,15 @@ public class Habitat {
         return false;
     }
 
-    public void shuffle() {
-        Collections.shuffle(cards);
+    public Image getHabitatImage() {
+        System.out.println("images/" + animalType.toString().toLowerCase() + ".png");
+        String imageName = animalType.toString().toLowerCase() + ".png";
+        String pathName = "images/" + imageName;
+
+        return new Image(getClass().getResourceAsStream(pathName));
     }
 
+    public void shuffle() {
+        Collections.shuffle(animalCards);
+    }
 }

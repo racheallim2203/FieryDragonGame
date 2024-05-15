@@ -29,15 +29,6 @@ public class AnimalCard extends Card {
         return new Image(getClass().getResourceAsStream(pathName));
     }
 
-    @Override
-    public Image getHabitatImage() {
-        System.out.println("images/" + animalType.toString().toLowerCase() + ".png");
-        String imageName = animalType.toString().toLowerCase() + ".png";
-        String pathName = "images/" + imageName;
-
-        return new Image(getClass().getResourceAsStream(pathName));
-    }
-
     public AnimalType getAnimalType() {
         return animalType;
     }

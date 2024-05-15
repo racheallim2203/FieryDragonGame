@@ -25,9 +25,9 @@ public class PirateCard extends Card {
         return new Image(getClass().getResourceAsStream(pathName));
     }
 
-    @Override
-    public Image getHabitatImage() {
-        return null;
-    }
+//    @Override
+//    public Image getHabitatImage() {
+//        return null;
+//    }
 }
 
