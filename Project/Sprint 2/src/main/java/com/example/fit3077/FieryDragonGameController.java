@@ -6,11 +6,12 @@ import com.example.fit3077.cards.PirateCard;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.image.Image;
-import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.*;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 
 import java.net.URL;
 import java.util.*;
@@ -77,6 +78,12 @@ public class FieryDragonGameController implements Initializable {
     @FXML
     private ImageView pufferfish3;
 
+    @FXML
+    private ImageView winner;
+
+    @FXML
+    private Pane winbg;
+
 
     private ArrayList<Card> cardsInGame;
     private Player inPlayPlayer;
@@ -92,6 +99,8 @@ public class FieryDragonGameController implements Initializable {
     @FXML
     void startGame() {
         System.out.println("Restart Game");
+
+        winbg.setVisible(false);
 
         // Reset all game data and UI components to their initial state
         getCurrentPlayer().resetPosition();
@@ -298,6 +307,7 @@ public class FieryDragonGameController implements Initializable {
                 AnimalType currentPlayerTokenAnimalType = getCurrentPlayer().getAnimalToken().getType();
                 System.out.println("Cave's type is: " + tokenType);
                 System.out.println("Current Player's type is " + currentPlayerTokenAnimalType);
+
                 if (currentPlayerTokenAnimalType == tokenType){
                     System.out.println("Match!!");
                     getCurrentPlayer().getAnimalToken().setInitialLayoutX(tokenInitialLayoutX);
@@ -383,27 +393,17 @@ public class FieryDragonGameController implements Initializable {
             // Check if the card type matches the animal at the current player's position
             if (animalCard.getAnimalType().equals(currentAnimalTypeAtPosition)) {
 
-//                // Apply card effect which includes moving the player forward
+                // Apply card effect which includes moving the player forward
                 animalCard.applyMovement(currentPlayer, gameMap, animalCard);
                 instructions.setText(" moves " + animalCard.getCount() + " steps forward");
                 System.out.println(currentPlayer.getAnimalToken().getType() + " moves " + animalCard.getCount() + " steps forward to position " + currentPlayer.getPosition());
 
-
-
                 // SAM - check if it reaches its cave - hvn tested, feel free to comment
-                /*
-                if (currentPlayer.getAnimalToken().getStepTaken() + animalCard.getCount() == 24) {
+                if (currentPlayer.getAnimalToken().getStepTaken() == 26) {
                     System.out.println("WINNNNNNNNN");
-                    currentPlayer.moveTokenToCave(gameMap);
+                    showWin();
 
-                } else {
-
-                    // Apply card effect which includes moving the player forward
-                    animalCard.applyMovement(currentPlayer, gameMap, animalCard);
-                    instructions.setText(" moves " + animalCard.getCount() + " steps forward");
-                    System.out.println(currentPlayer.getAnimalToken().getType() + " moves " + animalCard.getCount() + " steps forward to position " + currentPlayer.getPosition());
                 }
-                */
 
             } else {
                 instructions.setText("No match found, turn ends.");
@@ -461,7 +461,7 @@ public class FieryDragonGameController implements Initializable {
 
         }
 
-        System.out.println("Game board updated.");
+        System.out.println("Game board updated.\n");
     }
 
     private void updateCurrentPlayerDisplay(AnimalType animalType) {
@@ -475,6 +475,23 @@ public class FieryDragonGameController implements Initializable {
         }
         return inPlayPlayer;
     }
+
+    private void showWin(){
+        System.out.println("YA LETS GO");
+
+        winbg.setVisible(true);
+
+        BackgroundFill backgroundFill = new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY);
+        Background background = new Background(backgroundFill);
+        winbg.setBackground(background);
+
+        String animal = getCurrentPlayer().getAnimalToken().getType().toString().toLowerCase();
+        String imageName = animal + "token.png";
+        String pathName = "images/" + imageName;
+        winner.setImage(new Image(getClass().getResourceAsStream(pathName)));
+        System.out.println("pathName:" + pathName);
+    }
+
 }
 
 

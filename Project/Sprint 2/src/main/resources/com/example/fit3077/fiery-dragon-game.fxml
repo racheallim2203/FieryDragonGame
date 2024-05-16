@@ -71,9 +71,19 @@
             </FlowPane>
          </children>
       </VBox>
-      <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="499.0" prefWidth="600.0">
+      <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="499.0" prefWidth="600.0" AnchorPane.bottomAnchor="101.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <Pane fx:id="boardcards" prefHeight="522.0" prefWidth="615.0" StackPane.alignment="CENTER" />
       </StackPane>
       <FlowPane fx:id="decks" layoutX="212.0" layoutY="156.0" prefHeight="240.0" prefWidth="234.0" />
+      <Pane id="winbg" fx:id="winbg" prefHeight="300.0" prefWidth="300.0" AnchorPane.bottomAnchor="240.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="150.0">
+         <children>
+            <Label alignment="CENTER" prefHeight="51.0" prefWidth="300.0" text="WINNER IS ..." textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="48.0" />
+               </font>
+            </Label>
+            <ImageView fx:id="winner" fitHeight="154.0" fitWidth="152.0" layoutX="74.0" layoutY="51.0" pickOnBounds="true" preserveRatio="true" />
+         </children>
+      </Pane>
    </children>
 </AnchorPane>

@@ -5,8 +5,7 @@ import java.util.List;
 public class Player {
     private final AnimalToken animalToken; //  represents the which animal token is taken by the player
     private int position; //stores the player's current position on the game board.
-
-
+    
     // initializes a new Player object with an AnimalToken and sets the initial position to
     public Player(AnimalToken animalToken) {
         this.animalToken = animalToken; //
@@ -42,7 +41,7 @@ public class Player {
         System.out.println("Steps to Move: " + steps);
 
         int stepTaken = this.getAnimalToken().getStepTaken();
-        if (stepTaken == 0 && !this.getAnimalToken().getIsOut()){
+        if (stepTaken == 0 && !this.getAnimalToken().getIsOut()) {
             this.getAnimalToken().setIsOut(true);
         }
 
@@ -54,11 +53,6 @@ public class Player {
         // Set the new position
         this.position = (this.position + steps + totalAnimals) % totalAnimals;
         System.out.println("New Position: " + this.position);
-    }
-
-    public void moveTokenToCave(GameMap gameMap) {
-        List<AnimalCave> caves = gameMap.getAnimalCaves();
-        // no idea
     }
 
 
