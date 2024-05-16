@@ -3,6 +3,7 @@ package com.example.fit3077;
 import java.util.*;
 
 public class GameMap {
+    private final int numberOfStepToWin = 26;
     private final List<Volcano> volcanoList;
     private final List<AnimalCave> animalCaves;
 
@@ -12,6 +13,10 @@ public class GameMap {
         this.animalCaves = new ArrayList<AnimalCave>();
         initializeHabitats();
         initializeAnimalCaves();
+    }
+
+    public int getNumberOfStepToWin() {
+        return numberOfStepToWin;
     }
 
     private void initializeHabitats() {

@@ -15,9 +15,14 @@ public class AnimalToken {
 
     private boolean isOut;
 
+    // attributes to record the location of token at cave
+    private double initialLayoutX;
+    private double initialLayoutY;
+
     public AnimalToken(AnimalType animalType) {
         this.animalType = animalType;
         this.isOut = false;
+        this.stepTaken = 0;
     }
 
     public AnimalType getType() {
@@ -46,6 +51,22 @@ public class AnimalToken {
 
     public void setPosition(int position) {
         this.position = position;
+    }
+
+    public double getInitialLayoutX() {
+        return initialLayoutX;
+    }
+
+    public void setInitialLayoutX(double initialLayoutX) {
+        this.initialLayoutX = initialLayoutX;
+    }
+
+    public double getInitialLayoutY() {
+        return initialLayoutY;
+    }
+
+    public void setInitialLayoutY(double initialLayoutY) {
+        this.initialLayoutY = initialLayoutY;
     }
 
     public Image getTokenImage() {

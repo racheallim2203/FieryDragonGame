@@ -15,17 +15,17 @@ public class Player {
 
     private void setInitialPosition() {
         switch (animalToken.getType()) {
-            case DRAGON:
+            case FISH:
                 this.position = -1;
                 break;
-            case FISH:
+            case PUFFERFISH:
                 this.position = 5;
                 break;
-            case PUFFERFISH:
-                this.position = 17;
+            case DRAGON:
+                this.position = 11;
                 break;
             case OCTOPUS:
-                this.position = 11;
+                this.position = 17;
                 break;
             default:
                 this.position = -1;
@@ -40,13 +40,16 @@ public class Player {
         int totalAnimals = habitats.stream().mapToInt(h -> h.getVolcanoCards().size()).sum();
         System.out.println("Current Position: " + this.position);
         System.out.println("Steps to Move: " + steps);
-        int stepTaken = this.getAnimalToken().getStepTaken();
 
+        int stepTaken = this.getAnimalToken().getStepTaken();
         if (stepTaken == 0 && !this.getAnimalToken().getIsOut()){
             this.getAnimalToken().setIsOut(true);
         }
 
+        System.out.println("player step taken before move: " + stepTaken);
         this.getAnimalToken().setStepTaken(stepTaken + steps);
+        System.out.println("player step taken after move: " + this.getAnimalToken().getStepTaken());
+
         // Adding totalHabitats ensures that the index remains positive, also works perfectly for positive steps
         // Set the new position
         this.position = (this.position + steps + totalAnimals) % totalAnimals;

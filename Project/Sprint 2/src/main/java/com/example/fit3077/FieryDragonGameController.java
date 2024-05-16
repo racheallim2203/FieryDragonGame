@@ -16,7 +16,6 @@ import java.net.URL;
 import java.util.*;
 
 public class FieryDragonGameController implements Initializable {
-
     @FXML
     private Pane boardcards;
 
@@ -250,8 +249,8 @@ public class FieryDragonGameController implements Initializable {
         for (int i = 0; i < numTokens; i++) {
             AnimalCave cave = gameMap.getAnimalCaves().get(i);
             ImageView tokenView = new ImageView(cave.getTokenImage());
-            tokenView.setFitWidth(50); // Width of the token
-            tokenView.setFitHeight(50); // Height of the token
+            tokenView.setFitWidth(60); // Width of the token
+            tokenView.setFitHeight(60); // Height of the token
             tokenView.setPreserveRatio(true);
 
             // Calculate the angle for this token's position on the circle
@@ -291,8 +290,25 @@ public class FieryDragonGameController implements Initializable {
                 double yOffset = tokenRadius * Math.sin(angle);
 
                 // Set the layout X and Y based on the calculated offsets.
-                tokenView.setLayoutX(paneCenterX + xOffset - tokenView.getFitWidth() / 2);
-                tokenView.setLayoutY(paneCenterY + yOffset - tokenView.getFitHeight() / 2);
+                double tokenInitialLayoutX = paneCenterX + xOffset - tokenView.getFitWidth() / 2;
+                double tokenInitialLayoutY = paneCenterY + yOffset - tokenView.getFitHeight() / 2;
+
+                // Jeh Guan - save the location data of cave in animal token (one player only)
+                // notes: this part should need to be modified for multiple player
+                AnimalType currentPlayerTokenAnimalType = getCurrentPlayer().getAnimalToken().getType();
+                System.out.println("Cave's type is: " + tokenType);
+                System.out.println("Current Player's type is " + currentPlayerTokenAnimalType);
+                if (currentPlayerTokenAnimalType == tokenType){
+                    System.out.println("Match!!");
+                    getCurrentPlayer().getAnimalToken().setInitialLayoutX(tokenInitialLayoutX);
+                    getCurrentPlayer().getAnimalToken().setInitialLayoutY(tokenInitialLayoutY);
+                }
+                else {
+                    System.out.println("Not match!!!");
+                }
+
+                tokenView.setLayoutX(tokenInitialLayoutX);
+                tokenView.setLayoutY(tokenInitialLayoutY);
 
                 // Add the ImageView to the boardcards Pane.
                 boardcards.getChildren().add(tokenView);
@@ -356,9 +372,9 @@ public class FieryDragonGameController implements Initializable {
 
         }
 
-        System.out.println("Current player: " + currentPlayer.getAnimalToken().getType());
-        System.out.println("Current position: " + currentPlayerPosition);
-        System.out.println("Animal at current position: " + currentAnimalTypeAtPosition);
+        System.out.println("Current player's token type: " + currentPlayer.getAnimalToken().getType());
+        System.out.println("Current player position: " + currentPlayerPosition);
+        System.out.println("Animal type of habitat at current position: " + currentAnimalTypeAtPosition);
 
         if (card instanceof AnimalCard) {
 
@@ -371,6 +387,8 @@ public class FieryDragonGameController implements Initializable {
                 animalCard.applyMovement(currentPlayer, gameMap, animalCard);
                 instructions.setText(" moves " + animalCard.getCount() + " steps forward");
                 System.out.println(currentPlayer.getAnimalToken().getType() + " moves " + animalCard.getCount() + " steps forward to position " + currentPlayer.getPosition());
+
+
 
                 // SAM - check if it reaches its cave - hvn tested, feel free to comment
                 /*
@@ -415,20 +433,31 @@ public class FieryDragonGameController implements Initializable {
         ImageView tokenView = tokenViews.get(token.getType()); // Retrieve the token's ImageView
 //        System.out.println("Token View is null");
         if (tokenView != null) {
-            double paneCenterX = boardcards.getWidth() / 2;
-            double paneCenterY = boardcards.getHeight() / 2;
-            int position = currentPlayer.getPosition();
-            if (currentPlayer.getAnimalToken().getStepTaken() != 0 || currentPlayer.getAnimalToken().getIsOut()){
-                double tokenRadius = radius + 30;
 
-                //24 is the size of total number of animals in the list to form a gameboard
-                double angle = Math.toRadians(360.0 * position / 24);
-                double xOffset = tokenRadius * Math.cos(angle);
-                double yOffset = tokenRadius * Math.sin(angle);
-
-                tokenView.setLayoutX(paneCenterX + xOffset - tokenView.getFitWidth() / 2);
-                tokenView.setLayoutY(paneCenterY + yOffset - tokenView.getFitHeight() / 2);
+            int currentStepTaken = token.getStepTaken();
+            System.out.println("Player stepTaken after flip card: " + currentStepTaken);
+            if (currentStepTaken == gameMap.getNumberOfStepToWin()){
+                tokenView.setLayoutX(token.getInitialLayoutX());
+                tokenView.setLayoutY(token.getInitialLayoutY());
             }
+            else {
+                double paneCenterX = boardcards.getWidth() / 2;
+                double paneCenterY = boardcards.getHeight() / 2;
+                int position = currentPlayer.getPosition();
+                if (currentPlayer.getAnimalToken().getStepTaken() != 0 || currentPlayer.getAnimalToken().getIsOut()){
+                    double tokenRadius = radius + 30;
+
+                    //24 is the size of total number of animals in the list to form a gameboard
+                    double angle = Math.toRadians(360.0 * position / 24);
+                    double xOffset = tokenRadius * Math.cos(angle);
+                    double yOffset = tokenRadius * Math.sin(angle);
+
+                    tokenView.setLayoutX(paneCenterX + xOffset - tokenView.getFitWidth() / 2);
+                    tokenView.setLayoutY(paneCenterY + yOffset - tokenView.getFitHeight() / 2);
+                }
+
+            }
+
 
         }
 

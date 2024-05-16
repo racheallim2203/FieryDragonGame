@@ -20,7 +20,17 @@ public class AnimalCard extends Card {
     @Override
     public void applyMovement(Player currentPlayer, GameMap gameMap, Card card) {
         int forwardSteps = card.getCount();
-        currentPlayer.moveToken(forwardSteps, gameMap);
+
+        // Jeh Guan - check if the token's stepTaken will exceed the total step that should be taken to win the game if it is moved
+        int currentStepTaken = currentPlayer.getAnimalToken().getStepTaken();
+        if ((currentStepTaken + forwardSteps) <= gameMap.getNumberOfStepToWin()){
+            System.out.println("Token can be moved");
+            currentPlayer.moveToken(forwardSteps, gameMap);
+        }
+        else {
+            System.out.println("Token can't be moved as the stepTaken will exceed " + gameMap.getNumberOfStepToWin());
+        }
+
     }
 
     @Override
