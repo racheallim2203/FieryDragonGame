@@ -15,16 +15,16 @@ public class Player {
 
     private void setInitialPosition() {
         switch (animalToken.getType()) {
-            case FISH:
+            case DRAGON:
                 this.position = -1;
                 break;
-            case PUFFERFISH:
+            case FISH:
                 this.position = 5;
                 break;
-            case OCTOPUS:
+            case PUFFERFISH:
                 this.position = 17;
                 break;
-            case DRAGON:
+            case OCTOPUS:
                 this.position = 11;
                 break;
             default:

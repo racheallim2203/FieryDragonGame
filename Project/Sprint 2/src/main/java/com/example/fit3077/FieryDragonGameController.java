@@ -88,7 +88,7 @@ public class FieryDragonGameController implements Initializable {
 
     private final AnimalType[] animalPositions = new AnimalType[24]; // Assuming 24 positions available on the game board
 
-    private final Map<String, ImageView> tokenViews = new HashMap<>(); // Stores token views by animal type
+    private final Map<AnimalType, ImageView> tokenViews = new HashMap<>();// Stores token views by animal type
 
     @FXML
     void startGame() {
@@ -296,7 +296,7 @@ public class FieryDragonGameController implements Initializable {
 
                 // Add the ImageView to the boardcards Pane.
                 boardcards.getChildren().add(tokenView);
-                tokenViews.put(String.valueOf(tokenType), tokenView); // Store the view by animal type in a map for easy access.
+                tokenViews.put(tokenType, tokenView); // Store the view by animal type in a map for easy access.
             }
         });
     }
@@ -409,15 +409,15 @@ public class FieryDragonGameController implements Initializable {
     }
 
     private void updateGameBoard() {
+
         Player currentPlayer = getCurrentPlayer();
         AnimalToken token = currentPlayer.getAnimalToken();
         ImageView tokenView = tokenViews.get(token.getType()); // Retrieve the token's ImageView
-
+//        System.out.println("Token View is null");
         if (tokenView != null) {
             double paneCenterX = boardcards.getWidth() / 2;
             double paneCenterY = boardcards.getHeight() / 2;
             int position = currentPlayer.getPosition();
-
             if (currentPlayer.getAnimalToken().getStepTaken() != 0 || currentPlayer.getAnimalToken().getIsOut()){
                 double tokenRadius = radius + 30;
 
@@ -441,7 +441,7 @@ public class FieryDragonGameController implements Initializable {
 
     public Player getCurrentPlayer() {
         if (inPlayPlayer == null) {
-            inPlayPlayer = new Player(new AnimalToken(AnimalType.PUFFERFISH)); // Initial setup
+            inPlayPlayer = new Player(new AnimalToken(AnimalType.FISH)); // Initial setup
 
         }
         return inPlayPlayer;
