@@ -3,6 +3,7 @@ package com.example.fit3077;
 import com.example.fit3077.cards.AnimalCard;
 import com.example.fit3077.cards.Card;
 import com.example.fit3077.cards.PirateCard;
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,6 +13,7 @@ import javafx.scene.layout.*;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 
 import java.net.URL;
 import java.util.*;
@@ -87,6 +89,7 @@ public class FieryDragonGameController implements Initializable {
 
     private ArrayList<Card> cardsInGame;
     private Player inPlayPlayer;
+    private List<Player> playerList;    // list of all players in the game
 
     private final double radius = 180; // Adjust as needed for your layout
 
@@ -101,6 +104,10 @@ public class FieryDragonGameController implements Initializable {
         System.out.println("Restart Game");
 
         winbg.setVisible(false);
+
+        // set players
+        playerList = setPlayers();
+        nextPlayer();   // set first player
 
         // Reset all game data and UI components to their initial state
         getCurrentPlayer().resetPosition();
@@ -406,24 +413,73 @@ public class FieryDragonGameController implements Initializable {
                 }
 
             } else {
+                // wait for 2 seconds to allow players to understand game state and display instruction text
+                PauseTransition pause = new PauseTransition(Duration.seconds(2));
+
                 instructions.setText("No match found, turn ends.");
+
+                pause.setOnFinished(event -> {
+                    // change player turns and flip unfolded cards back
+                    nextPlayer();
+                    flipCardsBack();
+
+                });
+                pause.play();
+
+
             }
 
         } else if (card instanceof PirateCard) {
 
             if (currentPlayer.getAnimalToken().getStepTaken() == 0 && !currentPlayer.getAnimalToken().getIsOut()) {
+                // wait for 2 seconds to allow players to understand game state and display instruction text
+                PauseTransition pause = new PauseTransition(Duration.seconds(2));
+
                 instructions.setText("No match found, turn ends.");
+
+                pause.setOnFinished(event -> {
+                    // change player turns and flip unfolded cards back
+                    nextPlayer();
+                    flipCardsBack();
+
+                });
+                pause.play();
 
             } else {
                 PirateCard pirateCard = (PirateCard) card;
-                pirateCard.applyMovement(currentPlayer, gameMap, pirateCard);
+
+                // wait for 2 seconds to allow players to understand game state and display instruction text
+                PauseTransition pause = new PauseTransition(Duration.seconds(2));
+
                 instructions.setText(" moves " + pirateCard.getCount() + " steps backward");
+                pirateCard.applyMovement(currentPlayer, gameMap, pirateCard);
+
+                pause.setOnFinished(event -> {
+                    // change player turns and flip unfolded cards back
+                    nextPlayer();
+                    flipCardsBack();
+
+                });
+                pause.play();
+
                 System.out.println(currentPlayer.getAnimalToken().getType() + " moves " + pirateCard.getCount() + " steps backward to position " + currentPlayer.getPosition());
             }
         }
 
         // Optionally, after processing the card effect, update the UI or game state
         updateGameBoard();
+    }
+
+    private void flipCardsBack(){
+        // Iterate through the deck and flip over any uncovered cards
+        for (int i = 0; i < decks.getChildren().size(); i++) {
+            ImageView imageView = (ImageView) decks.getChildren().get(i);
+            // Check if the card is currently uncovered (i.e., showing its face)
+            if (imageView.getImage() != null) {
+                // Flip the card back over to cover it
+                imageView.setImage(new Image(getClass().getResourceAsStream("images/coveredcard.png")));
+            }
+        }
     }
 
     private void updateGameBoard() {
@@ -468,11 +524,29 @@ public class FieryDragonGameController implements Initializable {
         currentPlayer.setText(animalType.toString().toLowerCase() + "'s turn");
     }
 
-    public Player getCurrentPlayer() {
-        if (inPlayPlayer == null) {
-            inPlayPlayer = new Player(new AnimalToken(AnimalType.FISH)); // Initial setup
+    public List<Player> setPlayers(){
+        List<Player> players = new ArrayList<>();
 
+        // create list of players
+        players.add(new Player(new AnimalToken(AnimalType.FISH), 0));
+        players.add(new Player(new AnimalToken(AnimalType.PUFFERFISH), 1));
+        players.add(new Player(new AnimalToken(AnimalType.OCTOPUS), 2));
+        players.add(new Player(new AnimalToken(AnimalType.DRAGON), 3));
+
+        return players;
+    }
+
+    public void nextPlayer(){
+        if (inPlayPlayer == null || inPlayPlayer.getPlayerID()+1 == playerList.size()){
+            inPlayPlayer = playerList.get(0);
+        } else {
+            inPlayPlayer = playerList.get(inPlayPlayer.getPlayerID() + 1);
         }
+
+        updateCurrentPlayerDisplay(inPlayPlayer.getAnimalToken().getType());
+    }
+
+    public Player getCurrentPlayer() {
         return inPlayPlayer;
     }
 
