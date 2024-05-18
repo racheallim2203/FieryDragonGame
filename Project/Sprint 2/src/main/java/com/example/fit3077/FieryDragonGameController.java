@@ -542,6 +542,8 @@ public class FieryDragonGameController implements Initializable {
         } else {
             inPlayPlayer = playerList.get(inPlayPlayer.getPlayerID() + 1);
         }
+
+        updateCurrentPlayerDisplay(inPlayPlayer.getAnimalToken().getType());
     }
 
     public Player getCurrentPlayer() {
