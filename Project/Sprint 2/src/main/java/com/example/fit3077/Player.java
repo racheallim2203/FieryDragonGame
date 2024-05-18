@@ -5,10 +5,12 @@ import java.util.List;
 public class Player {
     private final AnimalToken animalToken; //  represents the which animal token is taken by the player
     private int position; //stores the player's current position on the game board.
+    private int playerID; // to track player turns
     
     // initializes a new Player object with an AnimalToken and sets the initial position to
-    public Player(AnimalToken animalToken) {
+    public Player(AnimalToken animalToken, int playerID) {
         this.animalToken = animalToken; //
+        this.playerID = playerID;
         setInitialPosition();
     }
 
@@ -63,6 +65,8 @@ public class Player {
     public AnimalToken getAnimalToken() {
         return animalToken;
     }
+
+    public int getPlayerID() { return playerID; }
 
 
     public void resetPosition() {
