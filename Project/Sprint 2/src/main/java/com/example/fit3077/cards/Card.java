@@ -7,7 +7,15 @@ import javafx.scene.image.Image;
 public abstract class Card implements Movement {
 //    protected String cardType; // This can be "animal" or "pirate"
     protected int stepCount;
+    private boolean isFlipped;
 
+    public boolean isFlipped() {
+        return isFlipped;
+    }
+
+    public void setFlipped(boolean flipped) {
+        isFlipped = flipped;
+    }
 //    public String getType() {
 //        return cardType;
 //    }

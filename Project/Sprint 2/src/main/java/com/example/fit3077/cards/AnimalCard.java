@@ -14,6 +14,7 @@ public class AnimalCard extends Card {
 //        super.type = animalType;      // sam - doesn't make sense to override the Card's type as it only can be "animal" or "pirate"
         super.stepCount = stepCount;
         this.animalType = animalType;
+        setFlipped(false);
     }
 
 
