@@ -48,16 +48,16 @@ public class DeckOfCards {
         Collections.shuffle(deck);
     }
 
-    /**
-     * This method will return the top card from the deck.
-     * If the deck is empty, it will return null.
-     */
-    public Card dealTopCard() {
-        if (deck.size()>0)
-            return deck.remove(0);
-        else
-            return null;
-    }
+//    /**
+//     * This method will return the top card from the deck.
+//     * If the deck is empty, it will return null.
+//     */
+//    public Card dealTopCard() {
+//        if (deck.size()>0)
+//            return deck.remove(0);
+//        else
+//            return null;
+//    }
 
     /**
      * This returns the number of cards left in the deck

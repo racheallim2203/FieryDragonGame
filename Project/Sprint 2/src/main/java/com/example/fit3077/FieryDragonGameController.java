@@ -103,7 +103,7 @@ public class FieryDragonGameController implements Initializable {
     void startGame() {
         System.out.println("Restart Game");
 
-        winbg.setVisible(false);
+        winbg.setVisible(false); // Hide the win background if visible from a previous game.
 
         // set players
         playerList = setPlayers();
@@ -115,11 +115,10 @@ public class FieryDragonGameController implements Initializable {
 
         // UI and game logic initialization
         Platform.runLater(() -> {
-            shuffleAndDisplayAnimals();
-            initializeTokenViews();
-            displayShuffledDeck();
-            initializeDeck();
-            initializeImageView();
+            shuffleAndDisplayAnimals(); // Shuffle animal positions and display on the board.
+            initializeTokenViews(); // Set up visual representation of player tokens
+            displayShuffledDeck(); // Display the shuffled deck of cards.
+            initializeImageView(); // Initialize card images for interaction.
 
             // Set the current player to the initial state and update UI
             resetPlayer();
@@ -144,22 +143,23 @@ public class FieryDragonGameController implements Initializable {
         startGame();
     }
 
-    private void initializeDeck() {
-        DeckOfCards deck = new DeckOfCards();
-        deck.shuffle(); // Shuffle the deck
-
-        // Initialize the list to hold the cards in play
-        cardsInGame = new ArrayList<>();
-
-        for (int i = 0; i < decks.getChildren().size(); i++) {
-            Card cardDealt = deck.dealTopCard();                    // sam - IDK WHATS THIS
-            if (cardDealt != null) { // Ensure that a card was dealt
-                cardsInGame.add(cardDealt);
-            }
-        }
-
-        System.out.println(cardsInGame);
-    }
+//    private void initializeDeck() {
+//        DeckOfCards deck = new DeckOfCards();
+//        deck.shuffle(); // Shuffle the deck
+//
+//        // Initialize the list to hold the cards in play
+//        cardsInGame = new ArrayList<>();
+//
+//        // First check if there are any cards left in the deck (deck.size() > 0).
+//        for (int i = 0; i < decks.getChildren().size(); i++) {
+//            Card cardDealt = deck.dealTopCard();                    // sam - IDK WHATS THIS
+//            if (cardDealt != null) { // Ensure that a card was dealt
+//                cardsInGame.add(cardDealt);
+//            }
+//        }
+//
+//        System.out.println("Card in game:" + cardsInGame);
+//    }
 
 
     private void displayShuffledDeck() {
@@ -168,11 +168,11 @@ public class FieryDragonGameController implements Initializable {
         DeckOfCards deck = new DeckOfCards();
         deck.shuffle();
         // Retrieve the shuffled list of cards
-        List<Card> shuffledDeck = deck.getCards();
+        cardsInGame = new ArrayList<>(deck.getCards()); // Store the shuffled cards in the member variable.
 
         // Iterate over the shuffled deck and the imageView IDs together
-        for (int i = 0; i < shuffledDeck.size(); i++) {
-            Card card = shuffledDeck.get(i);
+        for (int i = 0; i < cardsInGame.size(); i++) {
+            Card card = cardsInGame.get(i);
             int count = card.getCount();
             String cardFileName = "";
 
