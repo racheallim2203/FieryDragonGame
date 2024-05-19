@@ -356,21 +356,24 @@ public class FieryDragonGameController implements Initializable {
     }
 
     private void flipCard(int indexOfCard) {
-        System.out.println("Flipping card at index " + indexOfCard);
-        ImageView imageView = (ImageView) decks.getChildren().get(indexOfCard);
+        if (!cardsInGame.get(indexOfCard).isFlipped()){
+            cardsInGame.get(indexOfCard).setFlipped(true);
+            System.out.println("Flipping card at index " + indexOfCard);
+            ImageView imageView = (ImageView) decks.getChildren().get(indexOfCard);
 
-        if (imageView != null && cardsInGame.size() > indexOfCard) {
-            Card card = cardsInGame.get(indexOfCard);
+            if (imageView != null && cardsInGame.size() > indexOfCard) {
+                Card card = cardsInGame.get(indexOfCard);
 
-            Image image = card.getImage();
-            if (image != null) {
-                imageView.setImage(image); // Set the card image to show its face
-                processCardMovement(card);   // Process the effect of the card
+                Image image = card.getImage();
+                if (image != null) {
+                    imageView.setImage(image); // Set the card image to show its face
+                    processCardMovement(card);   // Process the effect of the card
+                } else {
+                    System.err.println("Card image is null.");
+                }
             } else {
-                System.err.println("Card image is null.");
+                System.err.println("ImageView is null or index is out of bounds.");
             }
-        } else {
-            System.err.println("ImageView is null or index is out of bounds.");
         }
     }
 
@@ -473,6 +476,7 @@ public class FieryDragonGameController implements Initializable {
     private void flipCardsBack(){
         // Iterate through the deck and flip over any uncovered cards
         for (int i = 0; i < decks.getChildren().size(); i++) {
+            cardsInGame.get(i).setFlipped(false);
             ImageView imageView = (ImageView) decks.getChildren().get(i);
             // Check if the card is currently uncovered (i.e., showing its face)
             if (imageView.getImage() != null) {

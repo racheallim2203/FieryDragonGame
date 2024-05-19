@@ -9,6 +9,7 @@ public class PirateCard extends Card {
     public PirateCard(int stepCount) {
 //        super.cardType = "piratecard";
         super.stepCount = stepCount; // Ensure this is within the range [1, 2] for PirateCard
+        setFlipped(false);
     }
 
     @Override
