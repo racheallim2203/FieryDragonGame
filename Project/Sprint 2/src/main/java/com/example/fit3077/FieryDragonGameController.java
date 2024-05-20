@@ -397,12 +397,12 @@ public class FieryDragonGameController{ //implements Initializable
             // Check if the card type matches the animal at the current player's position
             if (card.matchesType(currentAnimalTypeAtPosition)) {
 
-                int newPosition = (currentPlayerPosition+animalCard.getCount()) % animalPositions.length ;
+                int newPosition = (currentPlayerPosition+card.getCount()) % animalPositions.length ;
                 if (!gameMap.getHabitats().get(newPosition).isContainAnimalToken()){
                     // Apply card effect which includes moving the player forward
-                    animalCard.applyMovement(currentPlayer, gameMap, animalCard);
-                    instructions.setText(" moves " + animalCard.getCount() + " steps forward");
-                    System.out.println(currentPlayer.getAnimalToken().getType() + " moves " + animalCard.getCount() + " steps forward to position " + currentPlayer.getPosition());
+                    card.applyMovement(currentPlayer, gameMap);
+                    instructions.setText(" moves " + card.getCount() + " steps forward");
+                    System.out.println(currentPlayer.getAnimalToken().getType() + " moves " + card.getCount() + " steps forward to position " + currentPlayer.getPosition());
 
                     // SAM - check if it reaches its cave - hvn tested, feel free to comment
                     if (currentPlayer.getAnimalToken().getStepTaken() == 26) {
@@ -461,7 +461,7 @@ public class FieryDragonGameController{ //implements Initializable
 
             } else {
 
-                int newPosition = (currentPlayerPosition+pirateCard.getCount()) % animalPositions.length;
+                int newPosition = (currentPlayerPosition+card.getCount()) % animalPositions.length;
                 if (!gameMap.getHabitats().get(newPosition).isContainAnimalToken()){
                     // wait for 2 seconds to allow players to understand game state and display instruction text
                     PauseTransition pause = new PauseTransition(Duration.seconds(2));
@@ -480,7 +480,7 @@ public class FieryDragonGameController{ //implements Initializable
 //                });
 //                pause.play();
 
-                    System.out.println(currentPlayer.getAnimalToken().getType() + " moves " + pirateCard.getCount() + " steps backward to position " + currentPlayer.getPosition());
+                    System.out.println(currentPlayer.getAnimalToken().getType() + " moves " + card.getCount() + " steps backward to position " + currentPlayer.getPosition());
                 }
                 else {
                     // wait for 2 seconds to allow players to understand game state and display instruction text
