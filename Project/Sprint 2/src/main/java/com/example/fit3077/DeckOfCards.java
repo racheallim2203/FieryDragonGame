@@ -19,21 +19,16 @@ public class DeckOfCards {
         // Create AnimalCards - loop enumeration (Animal Type)
         for (AnimalType animalType: AnimalType.values()) {
             for (int count = 1; count <= numberOfEachType; count++) {
-                deck.add(new AnimalCard(animalType,count));
+                deck.add(new AnimalCard(animalType,count, CardType.animalCard));
             }
         }
 
-//        for (String animalType : animalTypes) {
-//            for (int count = 1; count <= numberOfEachType; count++) {
-//                deck.add(new AnimalCard(animalType,count));
-//            }
-//        }
 
         // Create PirateCards
         // Only 2 of each pirate card needed
         for (int i = 0; i < 2; i++) {
-            deck.add(new PirateCard(1)); // Pirate card with 1 pirate
-            deck.add(new PirateCard(2)); // Pirate card with 2 pirates
+            deck.add(new PirateCard(1, CardType.pirateCard)); // Pirate card with 1 pirate
+            deck.add(new PirateCard(2, CardType.pirateCard)); // Pirate card with 2 pirates
         }
 
         // Debug: Print the number of cards in the deck after creation

@@ -158,14 +158,7 @@ public class FieryDragonGameController{ //implements Initializable
             Card card = cardsInGame.get(i);
             int count = card.getCount();
             String cardFileName = "";
-
-            if (AnimalCard.class.isInstance(card)){
-                AnimalCard animalCard = (AnimalCard) card;               // TODO: downcast, can someone help me to modify it?
-                cardFileName = animalCard.getAnimalType().toString().toLowerCase() + count + ".png";
-            } else {
-                cardFileName = "piratecard" + count + ".png"; // Construct the file name based on type and count
-            }
-
+            cardFileName = card.getImageFileName();
 
             Image cardImage;
             try {
@@ -397,12 +390,12 @@ public class FieryDragonGameController{ //implements Initializable
         System.out.println("Current player position: " + currentPlayerPosition);
         System.out.println("Animal type of habitat at current position: " + currentAnimalTypeAtPosition);
 
-        if (card instanceof AnimalCard) {
+        if (card.getCardType() == CardType.animalCard) {
 
-            AnimalCard animalCard = (AnimalCard) card;
+//            AnimalCard animalCard = (AnimalCard) card;
 
             // Check if the card type matches the animal at the current player's position
-            if (animalCard.getAnimalType().equals(currentAnimalTypeAtPosition)) {
+            if (card.matchesType(currentAnimalTypeAtPosition)) {
 
                 int newPosition = (currentPlayerPosition+animalCard.getCount()) % animalPositions.length ;
                 if (!gameMap.getHabitats().get(newPosition).isContainAnimalToken()){
@@ -450,7 +443,7 @@ public class FieryDragonGameController{ //implements Initializable
 
             }
 
-        } else if (card instanceof PirateCard) {
+        } else if (card.getCardType() == CardType.pirateCard) {
 
             if (currentPlayer.getAnimalToken().getStepTaken() == 0 && !currentPlayer.getAnimalToken().getIsOut()) {
                 // wait for 2 seconds to allow players to understand game state and display instruction text
@@ -467,15 +460,16 @@ public class FieryDragonGameController{ //implements Initializable
                 pause.play();
 
             } else {
-                PirateCard pirateCard = (PirateCard) card;
 
                 int newPosition = (currentPlayerPosition+pirateCard.getCount()) % animalPositions.length;
                 if (!gameMap.getHabitats().get(newPosition).isContainAnimalToken()){
                     // wait for 2 seconds to allow players to understand game state and display instruction text
                     PauseTransition pause = new PauseTransition(Duration.seconds(2));
 
-                    instructions.setText(" moves " + pirateCard.getCount() + " steps backward");
-                    pirateCard.applyMovement(currentPlayer, gameMap, pirateCard);
+//                    instructions.setText(" moves " + pirateCard.getCount() + " steps backward");
+//                    pirateCard.applyMovement(currentPlayer, gameMap, pirateCard);
+                instructions.setText(" moves " + card.getCount() + " steps backward");
+                card.applyMovement(currentPlayer, gameMap);
 
                     // Jeh Guan - pirate card should not end the player's turn based on the basic game rule
 //                pause.setOnFinished(event -> {

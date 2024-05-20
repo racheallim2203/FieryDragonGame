@@ -1,6 +1,7 @@
 package com.example.fit3077.cards;
 
 import com.example.fit3077.AnimalType;
+import com.example.fit3077.CardType;
 import com.example.fit3077.GameMap;
 import com.example.fit3077.Player;
 import javafx.scene.image.Image;
@@ -10,8 +11,9 @@ public class AnimalCard extends Card {
 
     private final AnimalType animalType;
 
-    public AnimalCard(AnimalType animalType, int stepCount) {
+    public AnimalCard(AnimalType animalType, int stepCount, CardType cardType) {
 //        super.type = animalType;      // sam - doesn't make sense to override the Card's type as it only can be "animal" or "pirate"
+        super(cardType);
         super.stepCount = stepCount;
         this.animalType = animalType;
         setFlipped(false);
@@ -19,8 +21,8 @@ public class AnimalCard extends Card {
 
 
     @Override
-    public void applyMovement(Player currentPlayer, GameMap gameMap, Card card) {
-        int forwardSteps = card.getCount();
+    public void applyMovement(Player currentPlayer, GameMap gameMap) {
+        int forwardSteps = this.getCount();
 
         // Jeh Guan - check if the token's stepTaken will exceed the total step that should be taken to win the game if it is moved
         int currentStepTaken = currentPlayer.getAnimalToken().getStepTaken();
@@ -43,9 +45,21 @@ public class AnimalCard extends Card {
 
     }
 
+    @Override
+    public boolean matchesType(AnimalType animalType) {
+        return this.animalType.equals(animalType);
+    }
+
     public AnimalType getAnimalType() {
         return animalType;
     }
+
+    @Override
+    public String getImageFileName() {
+        return animalType.toString().toLowerCase() + stepCount + ".png";
+    }
+
+
 
 }
 
