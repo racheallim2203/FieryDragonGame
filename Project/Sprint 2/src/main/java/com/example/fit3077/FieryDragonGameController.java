@@ -282,7 +282,7 @@ public class FieryDragonGameController{ //implements Initializable
             for (int i = 0; i < numTokens; i++) {
                 AnimalCave cave = gameMap.getAnimalCaves().get(i);
                 AnimalType tokenType = cave.getType();
-                Image tokenImage = new Image(getClass().getResourceAsStream("images/" + tokenType + "token.png"));
+                Image tokenImage = new Image(getClass().getResourceAsStream("images/" + tokenType.toString().toLowerCase() + "token.png"));
                 ImageView tokenView = new ImageView(tokenImage);
                 tokenView.setFitWidth(50);
                 tokenView.setFitHeight(50);
@@ -412,10 +412,14 @@ public class FieryDragonGameController{ //implements Initializable
                     }
                 }
                 else {
+                    for (int i = 0; i < decks.getChildren().size(); i++) {
+                        cardsInGame.get(i).setFlipped(true);
+                    }
+
                     // wait for 2 seconds to allow players to understand game state and display instruction text
                     PauseTransition pause = new PauseTransition(Duration.seconds(2));
 
-                    instructions.setText("Token can't move, destination occupied.");
+                    instructions.setText("Token can't move, occupied.");
 
                     pause.setOnFinished(event -> {
                         // change player turns and flip unfolded cards back
@@ -427,6 +431,10 @@ public class FieryDragonGameController{ //implements Initializable
                 }
 
             } else {
+                for (int i = 0; i < decks.getChildren().size(); i++) {
+                    cardsInGame.get(i).setFlipped(true);
+                }
+
                 // wait for 2 seconds to allow players to understand game state and display instruction text
                 PauseTransition pause = new PauseTransition(Duration.seconds(2));
 
@@ -446,6 +454,11 @@ public class FieryDragonGameController{ //implements Initializable
         } else if (card.getCardType() == CardType.pirateCard) {
 
             if (currentPlayer.getAnimalToken().getStepTaken() == 0 && !currentPlayer.getAnimalToken().getIsOut()) {
+
+                for (int i = 0; i < decks.getChildren().size(); i++) {
+                    cardsInGame.get(i).setFlipped(true);
+                }
+
                 // wait for 2 seconds to allow players to understand game state and display instruction text
                 PauseTransition pause = new PauseTransition(Duration.seconds(2));
 
@@ -461,7 +474,7 @@ public class FieryDragonGameController{ //implements Initializable
 
             } else {
 
-                int newPosition = (currentPlayerPosition+ (-card.getCount())) % animalPositions.length;
+                    int newPosition = ((currentPlayerPosition+ (-card.getCount())) + animalPositions.length) % animalPositions.length;
                 if (!gameMap.getHabitats().get(newPosition).isContainAnimalToken()){
                     // wait for 2 seconds to allow players to understand game state and display instruction text
                     PauseTransition pause = new PauseTransition(Duration.seconds(2));
@@ -483,6 +496,10 @@ public class FieryDragonGameController{ //implements Initializable
                     System.out.println(currentPlayer.getAnimalToken().getType() + " moves " + card.getCount() + " steps backward to position " + currentPlayer.getPosition());
                 }
                 else {
+                    for (int i = 0; i < decks.getChildren().size(); i++) {
+                        cardsInGame.get(i).setFlipped(true);
+                    }
+
                     // wait for 2 seconds to allow players to understand game state and display instruction text
                     PauseTransition pause = new PauseTransition(Duration.seconds(2));
 
@@ -510,7 +527,7 @@ public class FieryDragonGameController{ //implements Initializable
             // Check if the card is currently uncovered (i.e., showing its face)
             if (imageView.getImage() != null) {
                 // Flip the card back over to cover it
-                imageView.setImage(new Image(getClass().getResourceAsStream("images/coveredcard.png")));
+//                imageView.setImage(new Image(getClass().getResourceAsStream("images/coveredcard.png")));
             }
         }
     }
