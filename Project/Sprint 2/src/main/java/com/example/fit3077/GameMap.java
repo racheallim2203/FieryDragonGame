@@ -6,11 +6,14 @@ public class GameMap {
     private final int numberOfStepToWin = 26;
     private final List<Volcano> volcanoList;
     private final List<AnimalCave> animalCaves;
+    private List<Habitat> habitats;
 
 
     public GameMap(int numberOfPlayers) {
         this.volcanoList = VolcanoList.getInstance();
         this.animalCaves = new ArrayList<AnimalCave>();
+        this.habitats = new ArrayList<Habitat>();
+        setUpHabitats();
         initializeAnimalCaves(numberOfPlayers);
     }
 
@@ -57,5 +60,17 @@ public class GameMap {
     @Override
     public String toString() {
         return "GameMap{" + "volcanoList=" + volcanoList + ", animalCaves=" + animalCaves + '}';
+    }
+
+    public void setUpHabitats(){
+        for (Volcano volcanoCard : volcanoList) {
+            for (Habitat habitat : volcanoCard.getVolcanoCards()) {
+                habitats.add(habitat);
+            }
+        }
+    }
+
+    public List<Habitat> getHabitats() {
+        return habitats;
     }
 }

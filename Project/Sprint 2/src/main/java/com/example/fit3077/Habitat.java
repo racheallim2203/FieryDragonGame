@@ -9,10 +9,12 @@ import java.util.*;
 public class Habitat {
     private AnimalType animalType;
     private ArrayList<AnimalCard> animalCards;
+    private boolean containAnimalToken;
 
     public Habitat(AnimalType animalType){
         this.animalType = animalType;
         this.animalCards = new ArrayList<>();
+        setContainAnimalToken(false);
     }
 
     public AnimalType getAnimalType(){
@@ -23,14 +25,22 @@ public class Habitat {
         return animalCards;
     }
 
-    public boolean containsAnimal(AnimalType animalType) {
-        for (AnimalCard card : animalCards) {
-            if (card.getAnimalType().equals(animalType)) {
-                return true;
-            }
-        }
-        return false;
+    public boolean isContainAnimalToken() {
+        return containAnimalToken;
     }
+
+    public void setContainAnimalToken(boolean containAnimalToken) {
+        this.containAnimalToken = containAnimalToken;
+    }
+
+    //    public boolean containsAnimal(AnimalType animalType) {
+//        for (AnimalCard card : animalCards) {
+//            if (card.getAnimalType().equals(animalType)) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
     public Image getHabitatImage() {
         String imageName = animalType.toString().toLowerCase() + ".png";

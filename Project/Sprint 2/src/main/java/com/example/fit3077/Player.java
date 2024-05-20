@@ -42,6 +42,10 @@ public class Player {
         System.out.println("Current Position: " + this.position);
         System.out.println("Steps to Move: " + steps);
 
+        if(this.getAnimalToken().getIsOut()){
+            gameMap.getHabitats().get(this.position).setContainAnimalToken(false);
+        }
+
         int stepTaken = this.getAnimalToken().getStepTaken();
         if (stepTaken == 0 && !this.getAnimalToken().getIsOut()) {
             this.getAnimalToken().setIsOut(true);
@@ -55,6 +59,9 @@ public class Player {
         // Set the new position
         this.position = (this.position + steps + totalAnimals) % totalAnimals;
         System.out.println("New Position: " + this.position);
+
+        gameMap.getHabitats().get(this.position).setContainAnimalToken(true);
+
     }
 
 
