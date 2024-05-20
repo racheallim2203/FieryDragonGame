@@ -461,7 +461,7 @@ public class FieryDragonGameController{ //implements Initializable
 
             } else {
 
-                int newPosition = (currentPlayerPosition+card.getCount()) % animalPositions.length;
+                int newPosition = (currentPlayerPosition+ (-card.getCount())) % animalPositions.length;
                 if (!gameMap.getHabitats().get(newPosition).isContainAnimalToken()){
                     // wait for 2 seconds to allow players to understand game state and display instruction text
                     PauseTransition pause = new PauseTransition(Duration.seconds(2));
