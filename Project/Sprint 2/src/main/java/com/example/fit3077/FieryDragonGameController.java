@@ -352,7 +352,7 @@ public class FieryDragonGameController{ //implements Initializable
 
     private void flipCard(int indexOfCard) {
         if (!cardsInGame.get(indexOfCard).isFlipped()){
-//            cardsInGame.get(indexOfCard).setFlipped(true);
+            cardsInGame.get(indexOfCard).setFlipped(true);
             System.out.println("Flipping card at index " + indexOfCard);
             ImageView imageView = (ImageView) decks.getChildren().get(indexOfCard);
 
@@ -480,19 +480,9 @@ public class FieryDragonGameController{ //implements Initializable
                     // wait for 2 seconds to allow players to understand game state and display instruction text
                     PauseTransition pause = new PauseTransition(Duration.seconds(2));
 
-//                    instructions.setText(" moves " + pirateCard.getCount() + " steps backward");
-//                    pirateCard.applyMovement(currentPlayer, gameMap, pirateCard);
                 instructions.setText(" moves " + card.getCount() + " steps backward");
                 card.applyMovement(currentPlayer, gameMap);
 
-                    // Jeh Guan - pirate card should not end the player's turn based on the basic game rule
-//                pause.setOnFinished(event -> {
-//                    // change player turns and flip unfolded cards back
-//                    nextPlayer();
-//                    flipCardsBack();
-//
-//                });
-//                pause.play();
 
                     System.out.println(currentPlayer.getAnimalToken().getType() + " moves " + card.getCount() + " steps backward to position " + currentPlayer.getPosition());
                 }
@@ -528,7 +518,7 @@ public class FieryDragonGameController{ //implements Initializable
             // Check if the card is currently uncovered (i.e., showing its face)
             if (imageView.getImage() != null) {
                 // Flip the card back over to cover it
-//                imageView.setImage(new Image(getClass().getResourceAsStream("images/coveredcard.png")));
+                imageView.setImage(new Image(getClass().getResourceAsStream("images/coveredcard.png")));
             }
         }
     }
