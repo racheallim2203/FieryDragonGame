@@ -1,3 +1,3 @@
 Manifest-Version: 1.0
-Main-Class: com.example.fit3077.MainExe
+Main-Class: com.example.fit3077.Main1
 
