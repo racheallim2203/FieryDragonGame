@@ -8,11 +8,11 @@ public class GameMap {
     private final List<AnimalCave> animalCaves;
 
 
-    public GameMap() {
+    public GameMap(int numberOfPlayers) {
         this.volcanoList = new ArrayList<Volcano>();
         this.animalCaves = new ArrayList<AnimalCave>();
         initializeHabitats();
-        initializeAnimalCaves();
+        initializeAnimalCaves(numberOfPlayers);
     }
 
     public int getNumberOfStepToWin() {
@@ -42,15 +42,34 @@ public class GameMap {
         }
     }
 
-    private void initializeAnimalCaves() {
+    private void initializeAnimalCaves(int numberOfCaves) {
         System.out.println("Initialize animal caves");
+
         int i = 0;
 
+
         // WHAT IS STARTING LOCATION? WHAT IS THAT USE FOR? THE OUTPUT: 0 - 2 - 4 - 6
-        for (AnimalType animalType: AnimalType.values()) {
-            int startingLocation = (volcanoList.size() / AnimalType.values().length) * i;
-            animalCaves.add(new AnimalCave(animalType, startingLocation));
-            i++;
+//        for (AnimalType animalType: AnimalType.values()) {
+//            if (i < numberOfCaves){
+//            int startingLocation = (volcanoList.size() / AnimalType.values().length) * i;
+//            animalCaves.add(new AnimalCave(animalType, startingLocation));
+//            i++;
+//        }
+        if (numberOfCaves == 2){
+            animalCaves.add(new AnimalCave(AnimalType.FISH, -1));
+            animalCaves.add(new AnimalCave(AnimalType.DRAGON, 11));
+        }
+        else {
+            for (AnimalType animalType: AnimalType.values()) {
+                if (i < numberOfCaves){
+                    int startingLocation = (volcanoList.size() / AnimalType.values().length) * i;
+                    animalCaves.add(new AnimalCave(animalType, startingLocation));
+                    i++;
+                }
+                else {
+                    break;
+                }
+            }
         }
 
         // sam's code

@@ -6,7 +6,6 @@ import com.example.fit3077.cards.PirateCard;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
@@ -15,10 +14,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
-import java.net.URL;
 import java.util.*;
 
-public class FieryDragonGameController implements Initializable {
+public class FieryDragonGameController{ //implements Initializable
     @FXML
     private Pane boardcards;
 
@@ -99,6 +97,12 @@ public class FieryDragonGameController implements Initializable {
 
     private final Map<AnimalType, ImageView> tokenViews = new HashMap<>();// Stores token views by animal type
 
+    private int userInput;
+
+    public void setUserInput(int userInput) {
+        this.userInput = userInput;
+    }
+
     @FXML
     void startGame() {
         System.out.println("Restart Game");
@@ -106,7 +110,7 @@ public class FieryDragonGameController implements Initializable {
         winbg.setVisible(false); // Hide the win background if visible from a previous game.
 
         // set players
-        playerList = setPlayers();
+        playerList = setPlayers(userInput);
         nextPlayer();   // set first player
 
         // Reset all game data and UI components to their initial state
@@ -137,9 +141,14 @@ public class FieryDragonGameController implements Initializable {
         updateGameBoard();
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        gameMap = new GameMap(); // Initialize gameMap which sets up the habitats
+//    @Override
+//    public void initialize(URL url, ResourceBundle resourceBundle) {
+//        gameMap = new GameMap(); // Initialize gameMap which sets up the habitats
+//        startGame();
+//    }
+
+    public void initializeGame() {
+        gameMap = new GameMap(userInput); // Initialize gameMap which sets up the habitats
         startGame();
     }
 
@@ -243,7 +252,7 @@ public class FieryDragonGameController implements Initializable {
                     animalIndex++;
                 }
             }
-            arrangeAnimalTokens(); // Call to arrange tokens after animals are set
+            initialiseCaveView(); // Call to arrange tokens after animals are set
         });
     }
 
@@ -254,13 +263,19 @@ public class FieryDragonGameController implements Initializable {
         arrangeAnimalsInCircle();
     }
 
-    private void arrangeAnimalTokens() {
+    private void initialiseCaveView() {
         double paneCenterX = boardcards.getWidth() / 2;
         double paneCenterY = boardcards.getHeight() / 2;
         double tokenRadius = radius + 60; // Increase radius by 40 units to place tokens outside the habitat circle
 
+        double angleIncrement;
         int numTokens = gameMap.getAnimalCaves().size();
-        double angleIncrement = 360.0 / numTokens;
+        if (gameMap.getAnimalCaves().size() == 3){
+            angleIncrement = 360.0 / 4;
+        }
+        else {
+            angleIncrement = 360.0 / numTokens;
+        }
 
         for (int i = 0; i < numTokens; i++) {
             AnimalCave cave = gameMap.getAnimalCaves().get(i);
@@ -288,8 +303,14 @@ public class FieryDragonGameController implements Initializable {
             double paneCenterY = boardcards.getHeight() / 2;
             double tokenRadius = radius + 60; // Adjust the radius to position tokens correctly.
 
+            double angleIncrement;
             int numTokens = gameMap.getAnimalCaves().size();
-            double angleIncrement = 360.0 / numTokens; // Calculate the angle increment based on the number of tokens.
+            if (gameMap.getAnimalCaves().size() == 3){
+                angleIncrement = 360.0 / 4;
+            }
+            else {
+                angleIncrement = 360.0 / numTokens; // Calculate the angle increment based on the number of tokens.
+            }
 
             for (int i = 0; i < numTokens; i++) {
                 AnimalCave cave = gameMap.getAnimalCaves().get(i);
@@ -319,6 +340,11 @@ public class FieryDragonGameController implements Initializable {
                     System.out.println("Match!!");
                     getCurrentPlayer().getAnimalToken().setInitialLayoutX(tokenInitialLayoutX);
                     getCurrentPlayer().getAnimalToken().setInitialLayoutY(tokenInitialLayoutY);
+                    if(currentPlayerTokenAnimalType == AnimalType.DRAGON){
+                        System.out.println("dragon initial x: " + tokenInitialLayoutX);
+                        System.out.println("dragon initial y: " + tokenInitialLayoutY);
+
+                    }
                 }
                 else {
                     System.out.println("Not match!!!");
@@ -330,6 +356,8 @@ public class FieryDragonGameController implements Initializable {
                 // Add the ImageView to the boardcards Pane.
                 boardcards.getChildren().add(tokenView);
                 tokenViews.put(tokenType, tokenView); // Store the view by animal type in a map for easy access.
+
+                nextPlayer();
             }
         });
     }
@@ -457,13 +485,14 @@ public class FieryDragonGameController implements Initializable {
                 instructions.setText(" moves " + pirateCard.getCount() + " steps backward");
                 pirateCard.applyMovement(currentPlayer, gameMap, pirateCard);
 
-                pause.setOnFinished(event -> {
-                    // change player turns and flip unfolded cards back
-                    nextPlayer();
-                    flipCardsBack();
-
-                });
-                pause.play();
+                // Jeh Guan - pirate card should not end the player's turn based on the basic game rule
+//                pause.setOnFinished(event -> {
+//                    // change player turns and flip unfolded cards back
+//                    nextPlayer();
+//                    flipCardsBack();
+//
+//                });
+//                pause.play();
 
                 System.out.println(currentPlayer.getAnimalToken().getType() + " moves " + pirateCard.getCount() + " steps backward to position " + currentPlayer.getPosition());
             }
@@ -497,6 +526,9 @@ public class FieryDragonGameController implements Initializable {
             int currentStepTaken = token.getStepTaken();
             System.out.println("Player stepTaken after flip card: " + currentStepTaken);
             if (currentStepTaken == gameMap.getNumberOfStepToWin()){
+                System.out.println("dragon cave x: " + token.getInitialLayoutX());
+                System.out.println("dragon cave y: " + token.getInitialLayoutY());
+
                 tokenView.setLayoutX(token.getInitialLayoutX());
                 tokenView.setLayoutY(token.getInitialLayoutY());
             }
@@ -528,15 +560,23 @@ public class FieryDragonGameController implements Initializable {
         currentPlayer.setText(animalType.toString().toLowerCase() + "'s turn");
     }
 
-    public List<Player> setPlayers(){
+    public List<Player> setPlayers(int numberOfPlayer){
         List<Player> players = new ArrayList<>();
 
-        // create list of players
-        players.add(new Player(new AnimalToken(AnimalType.FISH), 0));
-        players.add(new Player(new AnimalToken(AnimalType.PUFFERFISH), 1));
-        players.add(new Player(new AnimalToken(AnimalType.OCTOPUS), 2));
-        players.add(new Player(new AnimalToken(AnimalType.DRAGON), 3));
-
+        if(numberOfPlayer == 2){
+            players.add(new Player(new AnimalToken(AnimalType.FISH), 0));
+            players.add(new Player(new AnimalToken(AnimalType.DRAGON), 1));
+        }
+        else {
+            // create list of players
+            players.add(new Player(new AnimalToken(AnimalType.FISH), 0));
+            players.add(new Player(new AnimalToken(AnimalType.PUFFERFISH), 1));
+            players.add(new Player(new AnimalToken(AnimalType.DRAGON), 2));
+            players.add(new Player(new AnimalToken(AnimalType.OCTOPUS), 3));
+            for (int j = players.size()-1; j >= numberOfPlayer; j--){
+                players.remove(j);
+            }
+        }
         return players;
     }
 
