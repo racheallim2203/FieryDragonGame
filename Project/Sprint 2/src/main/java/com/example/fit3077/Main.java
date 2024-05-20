@@ -40,9 +40,9 @@ public class Main extends Application {
 
         // Fix the window size (Prevent resizing)
         stage.setMinWidth(620);
-        stage.setMinHeight(620);
+        stage.setMinHeight(670);
         stage.setMaxWidth(620);
-        stage.setMaxHeight(620);
+        stage.setMaxHeight(670);
 
         // Try to load the icon
         try {

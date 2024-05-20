@@ -352,7 +352,7 @@ public class FieryDragonGameController{ //implements Initializable
 
     private void flipCard(int indexOfCard) {
         if (!cardsInGame.get(indexOfCard).isFlipped()){
-            cardsInGame.get(indexOfCard).setFlipped(true);
+//            cardsInGame.get(indexOfCard).setFlipped(true);
             System.out.println("Flipping card at index " + indexOfCard);
             ImageView imageView = (ImageView) decks.getChildren().get(indexOfCard);
 
@@ -379,7 +379,8 @@ public class FieryDragonGameController{ //implements Initializable
 //          String currentAnimalTypeAtPosition = animalPositions[currentPlayerPosition];
 
         AnimalType currentAnimalTypeAtPosition;
-        if (currentPlayer.getAnimalToken().getStepTaken() == 0){
+        if (currentPlayer.getAnimalToken().getStepTaken() == 0 && !currentPlayer.getAnimalToken().getIsOut()){
+            System.out.println("in the cave!!");
             currentAnimalTypeAtPosition = currentPlayer.getAnimalToken().getType();
         }
         else {
@@ -396,9 +397,9 @@ public class FieryDragonGameController{ //implements Initializable
 
             // Check if the card type matches the animal at the current player's position
             if (card.matchesType(currentAnimalTypeAtPosition)) {
-
+                int predictStepTaken = currentPlayer.getAnimalToken().getStepTaken() + card.getCount();
                 int newPosition = (currentPlayerPosition+card.getCount()) % animalPositions.length ;
-                if (!gameMap.getHabitats().get(newPosition).isContainAnimalToken()){
+                if (!gameMap.getHabitats().get(newPosition).isContainAnimalToken() || predictStepTaken == 26){
                     // Apply card effect which includes moving the player forward
                     card.applyMovement(currentPlayer, gameMap);
                     instructions.setText(" moves " + card.getCount() + " steps forward");
@@ -503,7 +504,7 @@ public class FieryDragonGameController{ //implements Initializable
                     // wait for 2 seconds to allow players to understand game state and display instruction text
                     PauseTransition pause = new PauseTransition(Duration.seconds(2));
 
-                    instructions.setText("Token can't move, destination occupied.");
+                    instructions.setText("Token can't move, occupied.");
 
                     pause.setOnFinished(event -> {
                         // change player turns and flip unfolded cards back
@@ -605,6 +606,7 @@ public class FieryDragonGameController{ //implements Initializable
         }
 
         updateCurrentPlayerDisplay(inPlayPlayer.getAnimalToken().getType());
+        instructions.setText("-");
     }
 
     public Player getCurrentPlayer() {

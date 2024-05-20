@@ -1,5 +1,7 @@
 package com.example.fit3077;
 
+import com.example.fit3077.cards.AnimalCard;
+
 import java.util.*;
 
 public class GameMap {
@@ -73,4 +75,6 @@ public class GameMap {
     public List<Habitat> getHabitats() {
         return habitats;
     }
+
+
 }
