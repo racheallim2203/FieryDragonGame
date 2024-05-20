@@ -132,7 +132,6 @@ public class FieryDragonGameController{ //implements Initializable
         });
     }
 
-
     private void resetPlayer() {
         // Get the current player and reset their position
         Player currentPlayer = getCurrentPlayer();
@@ -141,35 +140,10 @@ public class FieryDragonGameController{ //implements Initializable
         updateGameBoard();
     }
 
-//    @Override
-//    public void initialize(URL url, ResourceBundle resourceBundle) {
-//        gameMap = new GameMap(); // Initialize gameMap which sets up the habitats
-//        startGame();
-//    }
-
     public void initializeGame() {
         gameMap = new GameMap(userInput); // Initialize gameMap which sets up the habitats
         startGame();
     }
-
-//    private void initializeDeck() {
-//        DeckOfCards deck = new DeckOfCards();
-//        deck.shuffle(); // Shuffle the deck
-//
-//        // Initialize the list to hold the cards in play
-//        cardsInGame = new ArrayList<>();
-//
-//        // First check if there are any cards left in the deck (deck.size() > 0).
-//        for (int i = 0; i < decks.getChildren().size(); i++) {
-//            Card cardDealt = deck.dealTopCard();                    // sam - IDK WHATS THIS
-//            if (cardDealt != null) { // Ensure that a card was dealt
-//                cardsInGame.add(cardDealt);
-//            }
-//        }
-//
-//        System.out.println("Card in game:" + cardsInGame);
-//    }
-
 
     private void displayShuffledDeck() {
         decks.getChildren().clear(); // Clear existing children to avoid duplicates
