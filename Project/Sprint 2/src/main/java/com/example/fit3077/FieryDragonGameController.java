@@ -1,12 +1,11 @@
 package com.example.fit3077;
 
-import com.example.fit3077.cards.AnimalCard;
 import com.example.fit3077.cards.Card;
-import com.example.fit3077.cards.PirateCard;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.control.Label;
@@ -17,11 +16,22 @@ import javafx.util.Duration;
 import java.util.*;
 
 public class FieryDragonGameController{ //implements Initializable
+
+    @FXML
+    private Button startTutorial;
+
     @FXML
     private Pane boardcards;
 
     @FXML
     private Label instructions;
+
+    @FXML
+    private Button backToGame;
+
+    @FXML
+    private Label tutorialMode;
+
 
     @FXML
     private FlowPane cardsDeck;
@@ -46,6 +56,9 @@ public class FieryDragonGameController{ //implements Initializable
     private ImageView fish1;
 
     @FXML
+    private Label steps;
+
+    @FXML
     private ImageView fish2;
 
     @FXML
@@ -62,6 +75,7 @@ public class FieryDragonGameController{ //implements Initializable
 
     @FXML
     private ImageView octopus3;
+
 
     @FXML
     private ImageView piratecard1;
@@ -84,6 +98,20 @@ public class FieryDragonGameController{ //implements Initializable
     @FXML
     private Pane winbg;
 
+    @FXML
+    private Label tutorial;
+
+    @FXML
+    private GridPane gridPane;
+
+    @FXML
+    private Label tutorialCards;
+
+    @FXML
+    private HBox hBox;
+
+    @FXML
+    private FlowPane tutorialPanel;
 
     private ArrayList<Card> cardsInGame;
     private Player inPlayPlayer;
@@ -103,14 +131,51 @@ public class FieryDragonGameController{ //implements Initializable
         this.userInput = userInput;
     }
 
+    private boolean inTutorialMode = false;
+
+    // TUTORIAL MODE
+    @FXML
+    void startTutorial() {
+        inTutorialMode = true;
+        System.out.println("Starting Tutorial");
+        tutorialMode.setStyle("-fx-font-size: 19px; -fx-font-weight: bold;");
+        tutorialMode.setText("You are currently in Tutorial Mode!");
+        steps.setText("Welcome to Fiery Dragon Game Tutorial");
+        tutorialPanel.setVisible(true);
+        // Hide GridPane and HBox during tutorial
+        gridPane.setVisible(false);
+        hBox.setVisible(false);
+        setTutorialPlayer(1);
+        startGame();  // Start the game in tutorial mode
+
+    }
+
+    public void setTutorialPlayer(int numberOfPlayer){
+        playerList.clear(); // Clear any existing players in the list
+        // Since it's a tutorial, we add only a fish regardless of the number passed to the method
+        playerList.add(new Player(new AnimalToken(AnimalType.FISH), 0));
+    }
+
+    @FXML
+    void backToGame() {
+        inTutorialMode = false;
+        initializeGame();
+
+    }
+
     @FXML
     void startGame() {
         System.out.println("Restart Game");
 
         winbg.setVisible(false); // Hide the win background if visible from a previous game.
+        // Show GridPane and HBox if not in tutorial mode
+        hBox.setVisible(!inTutorialMode);
+        gridPane.setVisible(!inTutorialMode);
 
-        // set players
-        playerList = setPlayers(userInput);
+        if (!inTutorialMode) {
+            // Set players based on userInput only if not in tutorial mode
+            playerList = setPlayers(userInput);
+        }
         nextPlayer();   // set first player
 
         // Reset all game data and UI components to their initial state
@@ -128,9 +193,15 @@ public class FieryDragonGameController{ //implements Initializable
             resetPlayer();
             updateCurrentPlayerDisplay(AnimalType.FISH);
 
+            if (inTutorialMode) {
+                steps.setText("You are in tutorial mode! Let's start by flipping a card!");
+            }
+
             System.out.println("Game started.");
         });
     }
+
+
 
     private void resetPlayer() {
         // Get the current player and reset their position
@@ -142,6 +213,7 @@ public class FieryDragonGameController{ //implements Initializable
 
     public void initializeGame() {
         gameMap = new GameMap(userInput); // Initialize gameMap which sets up the habitats
+        tutorialPanel.setVisible(false);
         startGame();
     }
 
@@ -363,6 +435,7 @@ public class FieryDragonGameController{ //implements Initializable
                 if (image != null) {
                     imageView.setImage(image); // Set the card image to show its face
                     processCardMovement(card);   // Process the effect of the card
+
                 } else {
                     System.err.println("Card image is null.");
                 }
@@ -371,6 +444,7 @@ public class FieryDragonGameController{ //implements Initializable
             }
         }
     }
+
 
 
     private void processCardMovement(Card card) {
@@ -403,11 +477,18 @@ public class FieryDragonGameController{ //implements Initializable
                     // Apply card effect which includes moving the player forward
                     card.applyMovement(currentPlayer, gameMap);
                     instructions.setText(" moves " + card.getCount() + " steps forward");
-                    System.out.println(currentPlayer.getAnimalToken().getType() + " moves " + card.getCount() + " steps forward to position " + currentPlayer.getPosition());
+                    System.out.println(currentAnimalTypeAtPosition + " moves " + card.getCount() + " steps forward to position " + currentPlayer.getPosition());
+
+                    if (inTutorialMode) {
+                        tutorialMode.setText("NICE! You move " + card.getCount() + " steps forward");
+                        steps.setText("GOOD JOB! You successfully flipped a card that matches the animal you are on! The number of animals in the card shows how many steps you can move forward. Its still your turn. Flip another card!");
+                    }
 
                     // SAM - check if it reaches its cave - hvn tested, feel free to comment
                     if (currentPlayer.getAnimalToken().getStepTaken() == 26) {
                         System.out.println("WINNNNNNNNN");
+                        tutorialMode.setText("CONGRATS! You won!");
+                        steps.setText("WOHOO! You have successfully reached back your cave after one round! Its time to start the real game NOW :D");
                         showWin();
 
                     }
@@ -421,7 +502,9 @@ public class FieryDragonGameController{ //implements Initializable
                     PauseTransition pause = new PauseTransition(Duration.seconds(2));
 
                     instructions.setText("Token can't move, occupied.");
-
+                    if (inTutorialMode) {
+                        tutorial.setText("Sometimes, spaces are occupied, and tokens can't move there.");
+                    }
                     pause.setOnFinished(event -> {
                         // change player turns and flip unfolded cards back
                         nextPlayer();
@@ -440,6 +523,10 @@ public class FieryDragonGameController{ //implements Initializable
                 PauseTransition pause = new PauseTransition(Duration.seconds(2));
 
                 instructions.setText("No match found, turn ends.");
+                if (inTutorialMode) {
+                    tutorialMode.setText("Flipped card doesn't match to" + " " + currentAnimalTypeAtPosition);
+                    steps.setText("Better Memory next time! You did not get the cards correct to continue moving forward! Look for" + " " + currentAnimalTypeAtPosition + " Card. FLIP AGAIN!");
+                }
 
                 pause.setOnFinished(event -> {
                     // change player turns and flip unfolded cards back
@@ -464,6 +551,9 @@ public class FieryDragonGameController{ //implements Initializable
                 PauseTransition pause = new PauseTransition(Duration.seconds(2));
 
                 instructions.setText("No match found, turn ends.");
+                if (inTutorialMode) {
+                    tutorialMode.setText("Pirate Card no effect because you are not out of cave!");
+                }
 
                 pause.setOnFinished(event -> {
                     // change player turns and flip unfolded cards back
@@ -482,7 +572,10 @@ public class FieryDragonGameController{ //implements Initializable
 
                 instructions.setText(" moves " + card.getCount() + " steps backward");
                 card.applyMovement(currentPlayer, gameMap);
-
+                    if (inTutorialMode) {
+                        tutorialMode.setText("OPPS! You move " + card.getCount() + " steps backward");
+                        steps.setText("AISH! You flipped the pirate card that you should avoid! The number of pirates in the card shows how many steps you should move backward. Its still your turn. Flip another card!");
+                    }
 
                     System.out.println(currentPlayer.getAnimalToken().getType() + " moves " + card.getCount() + " steps backward to position " + currentPlayer.getPosition());
                 }
