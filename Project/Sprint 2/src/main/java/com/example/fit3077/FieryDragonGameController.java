@@ -508,7 +508,7 @@ public class FieryDragonGameController{ //implements Initializable
                     updateGameBoard();
 
                     if (inTutorialMode) {
-                        tutorial.setText("OOF! You reach a habitat occupied by another player. You are able to send them back home!!");
+                        tutorialMode.setText("OOF! You reach a habitat occupied by another player. You are able to send them back home!!");
                     }
                     pause.setOnFinished(event -> {
                         // change player turns and flip unfolded cards back
@@ -593,6 +593,9 @@ public class FieryDragonGameController{ //implements Initializable
                     // wait for 2 seconds to allow players to understand game state and display instruction text
                     PauseTransition pause = new PauseTransition(Duration.seconds(2));
 
+                    // RAC - Sending token back home
+                    card.applyMovement(currentPlayer, gameMap);
+                    sendTokenHome(newPosition);
 
                     pause.setOnFinished(event -> {
                         // change player turns and flip unfolded cards back
@@ -698,14 +701,17 @@ public class FieryDragonGameController{ //implements Initializable
     }
 
     public void nextPlayer(){
-        if (inPlayPlayer == null || inPlayPlayer.getPlayerID()+1 == playerList.size()){
-            inPlayPlayer = playerList.get(0);
+        if (!inTutorialMode) {
+            if (inPlayPlayer == null || inPlayPlayer.getPlayerID() + 1 >= playerList.size()) {
+                inPlayPlayer = playerList.get(0);
+            } else {
+                inPlayPlayer = playerList.get(inPlayPlayer.getPlayerID() + 1);
+            }
         } else {
-            inPlayPlayer = playerList.get(inPlayPlayer.getPlayerID() + 1);
+            // In tutorial mode, always set to the single tutorial player
+            inPlayPlayer = playerList.get(0);
         }
-
         updateCurrentPlayerDisplay(inPlayPlayer.getAnimalToken().getType());
-        instructions.setText("-");
     }
 
     public Player getCurrentPlayer() {
