@@ -8,10 +8,16 @@ public class Player {
     private int playerID; // to track player turns
     
     // initializes a new Player object with an AnimalToken and sets the initial position to
-    public Player(AnimalToken animalToken, int playerID) {
-        this.animalToken = animalToken; //
+    public Player(AnimalToken animalToken, int playerID, int initialPosition, boolean isStatic) {
+        this.animalToken = animalToken;
         this.playerID = playerID;
-        setInitialPosition();
+        if (isStatic) {
+            this.position = initialPosition;
+            this.animalToken.setIsOut(true);
+            this.animalToken.setStepTaken(1);
+        } else {
+            setInitialPosition();
+        }
     }
 
     private void setInitialPosition() {

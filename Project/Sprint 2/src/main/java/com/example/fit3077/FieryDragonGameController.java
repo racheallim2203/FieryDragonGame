@@ -145,15 +145,24 @@ public class FieryDragonGameController{ //implements Initializable
         // Hide GridPane and HBox during tutorial
         gridPane.setVisible(false);
         hBox.setVisible(false);
-        setTutorialPlayer(1);
+        setTutorialPlayer(4);
         startGame();  // Start the game in tutorial mode
 
     }
 
     public void setTutorialPlayer(int numberOfPlayer){
         playerList.clear(); // Clear any existing players in the list
-        // Since it's a tutorial, we add only a fish regardless of the number passed to the method
-        playerList.add(new Player(new AnimalToken(AnimalType.FISH), 0));
+        // Add the movable FISH
+        playerList.add(new Player(new AnimalToken(AnimalType.FISH), 0, -1, false)); // FISH can move from the start position
+
+        // Add static tokens with their fixed positions
+        playerList.add(new Player(new AnimalToken(AnimalType.PUFFERFISH), 1, 8, true));
+        playerList.add(new Player(new AnimalToken(AnimalType.DRAGON), 2, 15, true));
+        playerList.add(new Player(new AnimalToken(AnimalType.OCTOPUS), 3, 20, true));
+
+        // Update the game board to reflect these positions
+        updateGameBoard();
+
     }
 
     @FXML
@@ -194,7 +203,7 @@ public class FieryDragonGameController{ //implements Initializable
             updateCurrentPlayerDisplay(AnimalType.FISH);
 
             if (inTutorialMode) {
-                steps.setText("You are in tutorial mode! Let's start by flipping a card!");
+                steps.setText("You are in tutorial mode! Let's start by flipping a card! CLICK ON A CARD in the deck");
             }
 
             System.out.println("Game started.");
@@ -450,7 +459,7 @@ public class FieryDragonGameController{ //implements Initializable
     private void processCardMovement(Card card) {
         Player currentPlayer = getCurrentPlayer();
         int currentPlayerPosition = currentPlayer.getPosition();
-//          String currentAnimalTypeAtPosition = animalPositions[currentPlayerPosition];
+        boolean conflictResolved = false; // To show tutorialText when token being sent back home
 
         AnimalType currentAnimalTypeAtPosition;
         if (currentPlayer.getAnimalToken().getStepTaken() == 0 && !currentPlayer.getAnimalToken().getIsOut()){
@@ -465,6 +474,7 @@ public class FieryDragonGameController{ //implements Initializable
         System.out.println("Current player position: " + currentPlayerPosition);
         System.out.println("Animal type of habitat at current position: " + currentAnimalTypeAtPosition);
 
+
         if (card.getCardType() == CardType.animalCard) {
 
 //            AnimalCard animalCard = (AnimalCard) card;
@@ -473,7 +483,22 @@ public class FieryDragonGameController{ //implements Initializable
             if (card.matchesType(currentAnimalTypeAtPosition)) {
                 int predictStepTaken = currentPlayer.getAnimalToken().getStepTaken() + card.getCount();
                 int newPosition = (currentPlayerPosition+card.getCount()) % animalPositions.length ;
-                if (!gameMap.getHabitats().get(newPosition).isContainAnimalToken() || predictStepTaken == 26){
+
+                // TO SEND CURRENT FIXED OTHER PLAYERS TOKEN BACK HOME IF REACHES THEIR HABITAT
+                if (inTutorialMode) {
+                    for (Player other : playerList) {
+                        if (other != currentPlayer && other.getPosition() == newPosition) {
+                            tutorialMode.setText("Good Job! You got to send" + " "  + other.getAnimalToken().getType() +" back home!");
+                            steps.setText("OOF! You reach a habitat occupied by another player. You are able to send them back home!! FLIP AGAIN");
+                            System.out.println(other.getAnimalToken().getType() + " found at the new position: " + newPosition + " and sent home.");
+                            other.resetPosition();
+                            updateGameBoard();
+                            conflictResolved = true;
+                            break;
+                        }
+                    }
+                }
+                if (!conflictResolved && !gameMap.getHabitats().get(newPosition).isContainAnimalToken() || predictStepTaken == 26){
                     // Apply card effect which includes moving the player forward
                     card.applyMovement(currentPlayer, gameMap);
                     instructions.setText(" moves " + card.getCount() + " steps forward");
@@ -546,6 +571,7 @@ public class FieryDragonGameController{ //implements Initializable
 
         } else if (card.getCardType() == CardType.pirateCard) {
 
+
             if (currentPlayer.getAnimalToken().getStepTaken() == 0 && !currentPlayer.getAnimalToken().getIsOut()) {
 
                 for (int i = 0; i < decks.getChildren().size(); i++) {
@@ -570,9 +596,23 @@ public class FieryDragonGameController{ //implements Initializable
                 pause.play();
 
             } else {
+                int newPosition = ((currentPlayerPosition+ (-card.getCount())) + animalPositions.length) % animalPositions.length;
+                // TO SEND CURRENT FIXED OTHER PLAYERS TOKEN BACK HOME IF REACHES THEIR HABITAT
+                if (inTutorialMode) {
+                    for (Player other : playerList) {
+                        if (other != currentPlayer && other.getPosition() == newPosition) {
+                            tutorialMode.setText("Good Job! You got to send" + " "  + other.getAnimalToken().getType() +" back home!");
+                            steps.setText("OOF! You reach a habitat occupied by another player. You are able to send them back home! FLIP AGAIN!!");
+                            System.out.println(other.getAnimalToken().getType() + " found at the new position: " + newPosition + " and sent home.");
+                            other.resetPosition();
+                            updateGameBoard();
+                            conflictResolved = true;
+                            break;
+                        }
+                    }
+                }
 
-                    int newPosition = ((currentPlayerPosition+ (-card.getCount())) + animalPositions.length) % animalPositions.length;
-                if (!gameMap.getHabitats().get(newPosition).isContainAnimalToken()){
+                if (!conflictResolved &&!gameMap.getHabitats().get(newPosition).isContainAnimalToken()){
                     // wait for 2 seconds to allow players to understand game state and display instruction text
                     PauseTransition pause = new PauseTransition(Duration.seconds(2));
 
@@ -684,15 +724,15 @@ public class FieryDragonGameController{ //implements Initializable
         List<Player> players = new ArrayList<>();
 
         if(numberOfPlayer == 2){
-            players.add(new Player(new AnimalToken(AnimalType.FISH), 0));
-            players.add(new Player(new AnimalToken(AnimalType.DRAGON), 1));
+            players.add(new Player(new AnimalToken(AnimalType.FISH), 0, -1, false));
+            players.add(new Player(new AnimalToken(AnimalType.DRAGON), 1, 11, false));
         }
         else {
             // create list of players
-            players.add(new Player(new AnimalToken(AnimalType.FISH), 0));
-            players.add(new Player(new AnimalToken(AnimalType.PUFFERFISH), 1));
-            players.add(new Player(new AnimalToken(AnimalType.DRAGON), 2));
-            players.add(new Player(new AnimalToken(AnimalType.OCTOPUS), 3));
+            players.add(new Player(new AnimalToken(AnimalType.FISH), 0, -1, false));
+            players.add(new Player(new AnimalToken(AnimalType.PUFFERFISH), 1, 5, false));
+            players.add(new Player(new AnimalToken(AnimalType.DRAGON), 2, 11, false));
+            players.add(new Player(new AnimalToken(AnimalType.OCTOPUS), 3, 17, false));
             for (int j = players.size()-1; j >= numberOfPlayer; j--){
                 players.remove(j);
             }
