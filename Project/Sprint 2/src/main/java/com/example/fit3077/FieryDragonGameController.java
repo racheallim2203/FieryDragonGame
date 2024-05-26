@@ -501,9 +501,14 @@ public class FieryDragonGameController{ //implements Initializable
                     // wait for 2 seconds to allow players to understand game state and display instruction text
                     PauseTransition pause = new PauseTransition(Duration.seconds(2));
 
-                    instructions.setText("Token can't move, occupied.");
+                    instructions.setText("Token sent back home");
+                    // RAC - Sending token back home
+                    card.applyMovement(currentPlayer, gameMap);
+                    sendTokenHome(newPosition);
+                    updateGameBoard();
+
                     if (inTutorialMode) {
-                        tutorial.setText("Sometimes, spaces are occupied, and tokens can't move there.");
+                        tutorial.setText("OOF! You reach a habitat occupied by another player. You are able to send them back home!!");
                     }
                     pause.setOnFinished(event -> {
                         // change player turns and flip unfolded cards back
@@ -553,6 +558,7 @@ public class FieryDragonGameController{ //implements Initializable
                 instructions.setText("No match found, turn ends.");
                 if (inTutorialMode) {
                     tutorialMode.setText("Pirate Card no effect because you are not out of cave!");
+                    steps.setText("Better Memory next time! You did not get the cards correct to continue moving forward! Look for" + " " + currentAnimalTypeAtPosition + " Card. FLIP AGAIN!");
                 }
 
                 pause.setOnFinished(event -> {
@@ -587,7 +593,6 @@ public class FieryDragonGameController{ //implements Initializable
                     // wait for 2 seconds to allow players to understand game state and display instruction text
                     PauseTransition pause = new PauseTransition(Duration.seconds(2));
 
-                    instructions.setText("Token can't move, occupied.");
 
                     pause.setOnFinished(event -> {
                         // change player turns and flip unfolded cards back
@@ -603,6 +608,20 @@ public class FieryDragonGameController{ //implements Initializable
         updateGameBoard();
     }
 
+    // RAC- To send current player at position back home
+    private void sendTokenHome(int position) {
+        // Find and reset the player whose token is at the given position
+        for (Player player : playerList) {
+            if (player.getPosition() == position && player != getCurrentPlayer()) {
+                player.resetPosition();  // Reset to start position
+                gameMap.getHabitats().get(position).setContainAnimalToken(false);
+                System.out.println(player.getAnimalToken().getType() + " token " + "Sent home");
+                break;
+            }
+        }
+    }
+
+
     private void flipCardsBack(){
         // Iterate through the deck and flip over any uncovered cards
         for (int i = 0; i < decks.getChildren().size(); i++) {
@@ -617,44 +636,41 @@ public class FieryDragonGameController{ //implements Initializable
     }
 
     private void updateGameBoard() {
+        double paneCenterX = boardcards.getWidth() / 2;
+        double paneCenterY = boardcards.getHeight() / 2;
+        double tokenRadius = radius + 30;
 
-        Player currentPlayer = getCurrentPlayer();
-        AnimalToken token = currentPlayer.getAnimalToken();
-        ImageView tokenView = tokenViews.get(token.getType()); // Retrieve the token's ImageView
-//        System.out.println("Token View is null");
-        if (tokenView != null) {
+        // Iterate through all players to update each token's position based on current game state
+        for (Player player : playerList) {
+            AnimalToken token = player.getAnimalToken();
+            ImageView tokenView = tokenViews.get(token.getType());
 
-            int currentStepTaken = token.getStepTaken();
-            System.out.println("Player stepTaken after flip card: " + currentStepTaken);
-            if (currentStepTaken == gameMap.getNumberOfStepToWin()){
-                System.out.println("dragon cave x: " + token.getInitialLayoutX());
-                System.out.println("dragon cave y: " + token.getInitialLayoutY());
+            if (tokenView != null) {
+                if (token.getStepTaken() == gameMap.getNumberOfStepToWin()) {
+                    // Token reaches its final destination
+                    System.out.println(token.getType() + " reaches the win position at x: " + token.getInitialLayoutX() + ", y: " + token.getInitialLayoutY());
+                    tokenView.setLayoutX(token.getInitialLayoutX());
+                    tokenView.setLayoutY(token.getInitialLayoutY());
+                } else {
+                    int position = player.getPosition();
+                    if (token.getStepTaken() == 0 && !token.getIsOut()) {
+                        // If the token is not out, place it at its starting position
+                        tokenView.setLayoutX(token.getInitialLayoutX());
+                        tokenView.setLayoutY(token.getInitialLayoutY());
+                    } else {
+                        // Update the position on the game board for tokens that are out
+                        double angle = Math.toRadians(360.0 * position / 24); // Assuming 24 positions on the board
+                        double xOffset = tokenRadius * Math.cos(angle);
+                        double yOffset = tokenRadius * Math.sin(angle);
 
-                tokenView.setLayoutX(token.getInitialLayoutX());
-                tokenView.setLayoutY(token.getInitialLayoutY());
-            }
-            else {
-                double paneCenterX = boardcards.getWidth() / 2;
-                double paneCenterY = boardcards.getHeight() / 2;
-                int position = currentPlayer.getPosition();
-                if (currentPlayer.getAnimalToken().getStepTaken() != 0 || currentPlayer.getAnimalToken().getIsOut()){
-                    double tokenRadius = radius + 30;
-
-                    //24 is the size of total number of animals in the list to form a gameboard
-                    double angle = Math.toRadians(360.0 * position / 24);
-                    double xOffset = tokenRadius * Math.cos(angle);
-                    double yOffset = tokenRadius * Math.sin(angle);
-
-                    tokenView.setLayoutX(paneCenterX + xOffset - tokenView.getFitWidth() / 2);
-                    tokenView.setLayoutY(paneCenterY + yOffset - tokenView.getFitHeight() / 2);
+                        tokenView.setLayoutX(paneCenterX + xOffset - tokenView.getFitWidth() / 2);
+                        tokenView.setLayoutY(paneCenterY + yOffset - tokenView.getFitHeight() / 2);
+                    }
                 }
-
             }
-
-
         }
 
-        System.out.println("Game board updated.\n");
+        System.out.println("Game board updated.");
     }
 
     private void updateCurrentPlayerDisplay(AnimalType animalType) {
