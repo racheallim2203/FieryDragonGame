@@ -148,7 +148,6 @@ public class FieryDragonGameController{ //implements Initializable
         // Hide GridPane and HBox during tutorial
         gridPane.setVisible(false);
         hBox.setVisible(false);
-        setTutorialPlayer(4);
         // Update the game board to reflect these positions
         updateGameBoard();
         startGame();  // Start the game in tutorial mode
@@ -182,9 +181,13 @@ public class FieryDragonGameController{ //implements Initializable
         hBox.setVisible(!inTutorialMode);
         gridPane.setVisible(!inTutorialMode);
         indicator.setVisible(false);
+        backToGame.setVisible(inTutorialMode);
 
+        // Initialize or re-initialize player list based on the mode
         if (!inTutorialMode) {
             playerList = setPlayers(userInput);
+        } else {
+            setTutorialPlayer(4); // Ensure tutorial players are set if in tutorial mode
         }
         nextPlayer();   // set first player
 
@@ -216,15 +219,20 @@ public class FieryDragonGameController{ //implements Initializable
     private void resetPlayer() {
         // Get the current player and reset their position
         Player currentPlayer = getCurrentPlayer();
+//        currentPlayer.resetPosition();
+//        // Update the game board to reflect the reset state
+//        updateGameBoard();
+        currentPlayer.getAnimalToken().setStepTaken(0);
+        currentPlayer.getAnimalToken().setIsOut(false);
         currentPlayer.resetPosition();
-        // Update the game board to reflect the reset state
-        updateGameBoard();
+        updateGameBoard(); // Reflect the reset state on the game board
     }
 
     public void initializeGame() {
         gameMap = new GameMap(userInput); // Initialize gameMap which sets up the habitats
         tutorialPanel.setVisible(false);
         startGame();
+
     }
 
     private void displayShuffledDeck() {
@@ -347,7 +355,6 @@ public class FieryDragonGameController{ //implements Initializable
 
     private void initializeTokenViews() {
         Platform.runLater(() -> {
-
             double paneCenterX = boardcards.getWidth() / 2;
             double paneCenterY = boardcards.getHeight() / 2;
             double tokenRadius = radius + 60; // Adjust the radius to position tokens correctly.
@@ -460,6 +467,7 @@ public class FieryDragonGameController{ //implements Initializable
 
     private void processCardMovement(Card card) {
         Player currentPlayer = getCurrentPlayer();
+        System.out.println("Before card move: Player - " + currentPlayer.getAnimalToken().getType() + ", StepTaken - " + currentPlayer.getAnimalToken().getStepTaken() + ", IsOut - " + currentPlayer.getAnimalToken().getIsOut());
         int currentPlayerPosition = currentPlayer.getPosition();
         boolean conflictResolved = false; // To show tutorialText when token being sent back home
 
@@ -644,6 +652,7 @@ public class FieryDragonGameController{ //implements Initializable
                 }
             }
         }
+        System.out.println("After card move: Player - " + currentPlayer.getAnimalToken().getType() + ", StepTaken - " + currentPlayer.getAnimalToken().getStepTaken() + ", IsOut - " + currentPlayer.getAnimalToken().getIsOut());
 
         // Optionally, after processing the card effect, update the UI or game state
         updateGameBoard();
@@ -696,6 +705,7 @@ public class FieryDragonGameController{ //implements Initializable
                     int position = player.getPosition();
                     if (token.getStepTaken() == 0 && !token.getIsOut()) {
                         // If the token is not out, place it at its starting position
+                        System.out.println("Updating position for " + token.getType() + ": InitialX=" + token.getInitialLayoutX() + ", InitialY=" + token.getInitialLayoutY() + ", StepTaken=" + token.getStepTaken() + ", IsOut=" + token.getIsOut());
                         tokenView.setLayoutX(token.getInitialLayoutX());
                         tokenView.setLayoutY(token.getInitialLayoutY());
                     } else {
