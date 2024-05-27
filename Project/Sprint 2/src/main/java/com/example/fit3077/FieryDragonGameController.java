@@ -24,6 +24,9 @@ public class FieryDragonGameController{ //implements Initializable
     private Pane boardcards;
 
     @FXML
+    private FlowPane indicator;
+
+    @FXML
     private Label instructions;
 
     @FXML
@@ -146,6 +149,8 @@ public class FieryDragonGameController{ //implements Initializable
         gridPane.setVisible(false);
         hBox.setVisible(false);
         setTutorialPlayer(4);
+        // Update the game board to reflect these positions
+        updateGameBoard();
         startGame();  // Start the game in tutorial mode
 
     }
@@ -159,10 +164,6 @@ public class FieryDragonGameController{ //implements Initializable
         playerList.add(new Player(new AnimalToken(AnimalType.PUFFERFISH), 1, 8, true));
         playerList.add(new Player(new AnimalToken(AnimalType.DRAGON), 2, 15, true));
         playerList.add(new Player(new AnimalToken(AnimalType.OCTOPUS), 3, 20, true));
-
-        // Update the game board to reflect these positions
-        updateGameBoard();
-
     }
 
     @FXML
@@ -180,9 +181,9 @@ public class FieryDragonGameController{ //implements Initializable
         // Show GridPane and HBox if not in tutorial mode
         hBox.setVisible(!inTutorialMode);
         gridPane.setVisible(!inTutorialMode);
+        indicator.setVisible(false);
 
         if (!inTutorialMode) {
-            // Set players based on userInput only if not in tutorial mode
             playerList = setPlayers(userInput);
         }
         nextPlayer();   // set first player
@@ -432,6 +433,7 @@ public class FieryDragonGameController{ //implements Initializable
     }
 
     private void flipCard(int indexOfCard) {
+        indicator.setVisible(inTutorialMode);
         if (!cardsInGame.get(indexOfCard).isFlipped()){
             cardsInGame.get(indexOfCard).setFlipped(true);
             System.out.println("Flipping card at index " + indexOfCard);
@@ -531,10 +533,6 @@ public class FieryDragonGameController{ //implements Initializable
                     card.applyMovement(currentPlayer, gameMap);
                     sendTokenHome(newPosition);
                     updateGameBoard();
-
-                    if (inTutorialMode) {
-                        tutorialMode.setText("OOF! You reach a habitat occupied by another player. You are able to send them back home!!");
-                    }
                     pause.setOnFinished(event -> {
                         // change player turns and flip unfolded cards back
                         nextPlayer();
