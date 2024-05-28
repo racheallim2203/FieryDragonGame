@@ -189,10 +189,11 @@ public class FieryDragonGameController{ //implements Initializable
         } else {
             setTutorialPlayer(4); // Ensure tutorial players are set if in tutorial mode
         }
+        inPlayPlayer = null;
         nextPlayer();   // set first player
 
         // Reset all game data and UI components to their initial state
-        getCurrentPlayer().resetPosition();
+//        getCurrentPlayer().resetPosition();
         instructions.setText("-");
 
         // UI and game logic initialization
@@ -203,8 +204,8 @@ public class FieryDragonGameController{ //implements Initializable
             initializeImageView(); // Initialize card images for interaction.
 
             // Set the current player to the initial state and update UI
-            resetPlayer();
-            updateCurrentPlayerDisplay(AnimalType.FISH);
+//            resetPlayer();
+//            updateCurrentPlayerDisplay(AnimalType.FISH);
 
             if (inTutorialMode) {
                 steps.setText("You are in tutorial mode! Let's start by flipping a card! CLICK ON A CARD in the deck");
@@ -232,7 +233,6 @@ public class FieryDragonGameController{ //implements Initializable
         gameMap = new GameMap(userInput); // Initialize gameMap which sets up the habitats
         tutorialPanel.setVisible(false);
         startGame();
-
     }
 
     private void displayShuffledDeck() {

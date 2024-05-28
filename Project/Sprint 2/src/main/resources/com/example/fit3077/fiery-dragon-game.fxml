@@ -12,8 +12,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="710.0" prefWidth="600.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.fit3077.FieryDragonGameController">
@@ -27,188 +25,180 @@
             </ImageView>
          </children>
       </FlowPane>
-      <VBox depthTest="ENABLE" layoutX="-6.666666666666667" prefHeight="656.0" prefWidth="611.0" AnchorPane.bottomAnchor="-30.0" AnchorPane.leftAnchor="-7.0" AnchorPane.rightAnchor="-4.0" AnchorPane.topAnchor="10.0">
+      <FlowPane fx:id="gameBoard" alignment="CENTER" prefHeight="477.0" prefWidth="611.0">
          <children>
-            <FlowPane fx:id="gameBoard" alignment="CENTER" prefHeight="477.0" prefWidth="611.0">
+            <ImageView fitHeight="477.0" fitWidth="477.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/gameboard.png" />
+               </image>
+            </ImageView>
+            <GridPane fx:id="gridPane" prefHeight="51.0" prefWidth="333.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="320.0" minWidth="10.0" prefWidth="135.99998982747397" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="302.00000953674316" minWidth="0.0" prefWidth="197.3333435058594" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints fx:id="player" maxHeight="54.3333740234375" minHeight="10.0" prefHeight="37.33331298828125" vgrow="SOMETIMES" />
+                  <RowConstraints fx:id="tutorialHide" maxHeight="55.0" minHeight="10.0" prefHeight="24.000020345052086" vgrow="SOMETIMES" />
+               </rowConstraints>
                <children>
-                  <ImageView fitHeight="477.0" fitWidth="477.0" pickOnBounds="true" preserveRatio="true">
+                  <Label prefHeight="27.0" prefWidth="101.0" text=" Player:">
+                     <font>
+                        <Font name="Arial Bold" size="18.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets top="30.0" />
+                     </GridPane.margin>
+                     <padding>
+                        <Insets top="30.0" />
+                     </padding>
+                  </Label>
+                  <Label text=" Instructions:" GridPane.rowIndex="1">
+                     <font>
+                        <Font name="Arial Bold" size="18.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets top="30.0" />
+                     </GridPane.margin>
+                     <padding>
+                        <Insets top="30.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="currentPlayer" prefHeight="57.0" prefWidth="227.0" text="0" GridPane.columnIndex="1">
+                     <font>
+                        <Font name="Arial Bold" size="18.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets top="30.0" />
+                     </GridPane.margin>
+                     <padding>
+                        <Insets top="30.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="instructions" prefHeight="57.0" prefWidth="212.0" text="0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <font>
+                        <Font name="Arial Bold" size="14.0" />
+                     </font>
+                     <GridPane.margin>
+                        <Insets top="30.0" />
+                     </GridPane.margin>
+                     <padding>
+                        <Insets top="30.0" />
+                     </padding>
+                  </Label>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </GridPane>
+            <HBox fx:id="hBox" prefHeight="35.0" prefWidth="255.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#startTutorial" prefHeight="51.0" prefWidth="133.0" text="Tutorial Mode">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Button>
+                  <Button mnemonicParsing="false" onAction="#startGame" prefHeight="51.0" prefWidth="137.0" text="Start Game">
+                     <font>
+                        <Font name="Arial Bold" size="17.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+      </FlowPane>
+      <Pane fx:id="boardcards" prefHeight="482.0" prefWidth="611.0" />
+      <FlowPane fx:id="tutorialPanel" layoutY="580.0" prefHeight="173.0" prefWidth="600.0">
+         <children>
+            <GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="81.0" prefWidth="269.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="320.0" minWidth="10.0" prefWidth="209.66665649414062" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="302.00000953674316" minWidth="0.0" prefWidth="59.66667683919272" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints maxHeight="90.0" minHeight="0.0" prefHeight="0.0" vgrow="SOMETIMES" /> <!-- Reduced prefHeight -->
+                  <RowConstraints maxHeight="90.0" minHeight="8.999996185302734" prefHeight="34.0" vgrow="SOMETIMES" /> <!-- Reduced prefHeight -->
+               </rowConstraints>
+               <children>
+                  <ImageView fitHeight="195.0" fitWidth="613.0">
                      <image>
-                        <Image url="@images/gameboard.png" />
+                        <Image url="@images/border.png" />
                      </image>
                   </ImageView>
-                  <GridPane fx:id="gridPane" prefHeight="51.0" prefWidth="333.0">
-                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="320.0" minWidth="10.0" prefWidth="135.99998982747397" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="302.00000953674316" minWidth="0.0" prefWidth="197.3333435058594" />
-                     </columnConstraints>
-                     <rowConstraints>
-                        <RowConstraints fx:id="player" maxHeight="54.3333740234375" minHeight="10.0" prefHeight="37.33331298828125" vgrow="SOMETIMES" />
-                        <RowConstraints fx:id="tutorialHide" maxHeight="55.0" minHeight="10.0" prefHeight="24.000020345052086" vgrow="SOMETIMES" />
-                     </rowConstraints>
-                     <children>
-                        <Label prefHeight="27.0" prefWidth="101.0" text=" Player:">
-                           <font>
-                              <Font name="Arial Bold" size="18.0" />
-                           </font>
-                           <GridPane.margin>
-                              <Insets top="30.0" />
-                           </GridPane.margin>
-                           <padding>
-                              <Insets top="30.0" />
-                           </padding>
-                        </Label>
-                        <Label text=" Instructions:" GridPane.rowIndex="1">
-                           <font>
-                              <Font name="Arial Bold" size="18.0" />
-                           </font>
-                           <GridPane.margin>
-                              <Insets top="30.0" />
-                           </GridPane.margin>
-                           <padding>
-                              <Insets top="30.0" />
-                           </padding>
-                        </Label>
-                        <Label fx:id="currentPlayer" prefHeight="57.0" prefWidth="227.0" text="0" GridPane.columnIndex="1">
-                           <font>
-                              <Font name="Arial Bold" size="18.0" />
-                           </font>
-                           <GridPane.margin>
-                              <Insets top="30.0" />
-                           </GridPane.margin>
-                           <padding>
-                              <Insets top="30.0" />
-                           </padding>
-                        </Label>
-                        <Label fx:id="instructions" prefHeight="57.0" prefWidth="212.0" text="0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                           <font>
-                              <Font name="Arial Bold" size="14.0" />
-                           </font>
-                           <GridPane.margin>
-                              <Insets top="30.0" />
-                           </GridPane.margin>
-                           <padding>
-                              <Insets top="30.0" />
-                           </padding>
-                        </Label>
-                     </children>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                  </GridPane>
-                  <HBox fx:id="hBox" prefHeight="35.0" prefWidth="255.0">
-                     <children>
-                        <Button mnemonicParsing="false" onAction="#startTutorial" prefHeight="51.0" prefWidth="133.0" text="Tutorial Mode">
-                           <font>
-                              <Font size="14.0" />
-                           </font></Button>
-                        <Button mnemonicParsing="false" onAction="#startGame" prefHeight="51.0" prefWidth="137.0" text="Start Game">
-                           <font>
-                              <Font name="Arial Bold" size="17.0" />
-                           </font>
-                        </Button>
-                     </children>
-                  </HBox>
-               </children>
-            </FlowPane>
-            <FlowPane fx:id="tutorialPanel" prefHeight="173.0" prefWidth="611.0">
-               <children>
-                  <GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="81.0" prefWidth="269.0">
-                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="320.0" minWidth="10.0" prefWidth="209.66665649414062" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="302.00000953674316" minWidth="0.0" prefWidth="59.66667683919272" />
-                     </columnConstraints>
-                     <rowConstraints>
-                        <RowConstraints maxHeight="90.0" minHeight="0.0" prefHeight="0.0" vgrow="SOMETIMES" /> <!-- Reduced prefHeight -->
-                        <RowConstraints maxHeight="90.0" minHeight="8.999996185302734" prefHeight="34.0" vgrow="SOMETIMES" /> <!-- Reduced prefHeight -->
-                     </rowConstraints>
-                     <children>
-                        <ImageView fitHeight="195.0" fitWidth="613.0">
-                           <image>
-                              <Image url="@images/border.png" />
-                           </image>
-                        </ImageView>
-                        <ImageView fitHeight="51.0" fitWidth="164.0" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.valignment="TOP" GridPane.vgrow="NEVER">
-                           <image>
-                              <Image url="@images/border2.png" />
-                           </image>
-                           <GridPane.margin>
-                              <Insets top="-65.0" />
-                           </GridPane.margin>
-                        </ImageView>
-                        <ImageView fitHeight="47.0" fitWidth="47.0">
-                           <image>
-                              <Image url="@images/fishtoken.png" />
-                           </image>
-                           <GridPane.margin>
-                              <Insets bottom="50.0" left="108.0" top="-50.0" />
-                           </GridPane.margin>
-                        </ImageView>
-         
-                                    <Label alignment="BASELINE_LEFT" cacheShape="false" centerShape="false" graphicTextGap="1.0" scaleShape="false" text="You are          !!" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-                           <padding>
-                              <Insets top="-50.0" />
-                           </padding>
-                           <GridPane.margin>
-                              <Insets top="-50.0" />
-                           </GridPane.margin>
-                           <font>
-                              <Font name="System Bold" size="18.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="tutorialMode" alignment="BASELINE_LEFT" graphicTextGap="1.0" prefHeight="76.0" prefWidth="193.0" text="  Instructions:" wrapText="true" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
-                           <GridPane.margin>
-                              <Insets left="25.0" top="-20.0" />
-                           </GridPane.margin>
-                           <padding>
-                              <Insets top="-30.0" />
-                           </padding>
-                           <font>
-                              <Font name="System Bold" size="10.0" />
-                           </font>
-                        </Label>
-                        <ImageView fitHeight="57.0" fitWidth="200.0">
-                           <image>
-                              <Image url="@images/border3.png" />
-                           </image>
-                           <GridPane.margin>
-                              <Insets left="380.0" top="-100.0" />
-                           </GridPane.margin>
-                        </ImageView>
-                     </children>
-                     <opaqueInsets>
-                        <Insets top="-100.0" />
-                     </opaqueInsets>
-                  </GridPane>
-                  <HBox fx:id="hBox1" prefHeight="116.0" prefWidth="340.0">
+                  <ImageView fitHeight="51.0" fitWidth="164.0" GridPane.halignment="CENTER" GridPane.hgrow="NEVER" GridPane.valignment="TOP" GridPane.vgrow="NEVER">
+                     <image>
+                        <Image url="@images/border2.png" />
+                     </image>
+                     <GridPane.margin>
+                        <Insets top="-65.0" />
+                     </GridPane.margin>
+                  </ImageView>
+                  <ImageView fitHeight="47.0" fitWidth="47.0">
+                     <image>
+                        <Image url="@images/fishtoken.png" />
+                     </image>
+                     <GridPane.margin>
+                        <Insets bottom="50.0" left="108.0" top="-50.0" />
+                     </GridPane.margin>
+                  </ImageView>
+   
+                                             <Label alignment="BASELINE_LEFT" cacheShape="false" centerShape="false" graphicTextGap="1.0" scaleShape="false" text="You are          !!" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                     <padding>
+                        <Insets top="-50.0" />
+                     </padding>
+                     <GridPane.margin>
+                        <Insets top="-50.0" />
+                     </GridPane.margin>
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="tutorialMode" alignment="BASELINE_LEFT" graphicTextGap="1.0" prefHeight="76.0" prefWidth="193.0" text="  Instructions:" wrapText="true" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                     <GridPane.margin>
+                        <Insets left="25.0" top="-20.0" />
+                     </GridPane.margin>
                      <padding>
                         <Insets top="-30.0" />
                      </padding>
-                     <children>
-                        <Label fx:id="steps" graphicTextGap="1.0" prefHeight="142.0" prefWidth="319.0" text="Steps:" wrapText="true">
-                           <font>
-                              <Font name="Arial Bold" size="12.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </Label>
-                     </children>
-                  </HBox>
+                     <font>
+                        <Font name="System Bold" size="10.0" />
+                     </font>
+                  </Label>
+                  <ImageView fitHeight="57.0" fitWidth="200.0">
+                     <image>
+                        <Image url="@images/border3.png" />
+                     </image>
+                     <GridPane.margin>
+                        <Insets left="380.0" top="-100.0" />
+                     </GridPane.margin>
+                  </ImageView>
                </children>
                <opaqueInsets>
-                  <Insets top="-30.0" />
+                  <Insets top="-100.0" />
                </opaqueInsets>
-            </FlowPane>
+            </GridPane>
+            <HBox fx:id="hBox1" prefHeight="116.0" prefWidth="340.0">
+               <padding>
+                  <Insets top="-30.0" />
+               </padding>
+               <children>
+                  <Label fx:id="steps" graphicTextGap="1.0" prefHeight="142.0" prefWidth="319.0" text="Steps:" wrapText="true">
+                     <font>
+                        <Font name="Arial Bold" size="12.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </Label>
+               </children>
+            </HBox>
          </children>
          <opaqueInsets>
             <Insets top="-30.0" />
          </opaqueInsets>
-      </VBox>
-      <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="601.0" prefWidth="600.0" AnchorPane.bottomAnchor="109.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <Pane fx:id="boardcards" prefHeight="562.0" prefWidth="600.0" StackPane.alignment="CENTER" />
-      </StackPane>
+      </FlowPane>
       <FlowPane fx:id="decks" layoutX="212.0" layoutY="156.0" prefHeight="240.0" prefWidth="234.0" />
-      <Pane id="winbg" fx:id="winbg" prefHeight="300.0" prefWidth="300.0" AnchorPane.bottomAnchor="240.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="150.0">
+      <Pane id="winbg" fx:id="winbg" layoutX="151.2" prefHeight="312.0" prefWidth="310.0" AnchorPane.bottomAnchor="315.0" AnchorPane.leftAnchor="151.0" AnchorPane.rightAnchor="151.0" AnchorPane.topAnchor="150.0">
          <children>
             <Label alignment="CENTER" prefHeight="51.0" prefWidth="300.0" text="WINNER IS ..." textAlignment="CENTER">
                <font>
