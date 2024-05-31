@@ -649,91 +649,17 @@ public class FieryDragonGameController{ //implements Initializable
         }
 
         if (card.getCardType() == CardType.swapCard) {
-            Player closestPlayer = null;
-            int closestDistance = Integer.MAX_VALUE;
-            int totalPositions = gameMap.getHabitats().size(); // Total number of positions on the board
-
-            // Find the closest player who is out of their cave
-            for (Player otherPlayer : playerList) {
-                if (otherPlayer != currentPlayer && otherPlayer.getAnimalToken().getIsOut()) {
-                    int forwardDistance = (otherPlayer.getPosition() - currentPlayer.getPosition() + totalPositions) % totalPositions;
-                    int backwardDistance = (currentPlayer.getPosition() - otherPlayer.getPosition() + totalPositions) % totalPositions;
-
-                    // Determine the smaller of the two possible distances
-                    int smallerDistance = Math.min(forwardDistance, backwardDistance);
-
-                    if (smallerDistance < closestDistance) {
-                        closestDistance = smallerDistance;
-                        closestPlayer = otherPlayer;
-                    }
-                }
-            }
+            int totalPositions = gameMap.getHabitats().size();
+            Player closestPlayer = findClosestPlayer(currentPlayer, playerList, totalPositions);
 
             if (closestPlayer != null) {
-                int tempPosition = currentPlayer.getPosition();
-                int newCurrentPlayerPosition = closestPlayer.getPosition();
-                int newClosestPlayerPosition = tempPosition;
-
-                // Calculate distance and direction to move each player
-                int currentPlayerStepChange = (newCurrentPlayerPosition - tempPosition + totalPositions) % totalPositions;
-                int closestPlayerStepChange = (newClosestPlayerPosition - closestPlayer.getPosition() + totalPositions) % totalPositions;
-
-                // Adjust for backward movement
-                if (currentPlayerStepChange > totalPositions / 2) { // It went the "long way" around, meaning backwards
-                    currentPlayerStepChange -= totalPositions;
-                }
-                if (closestPlayerStepChange > totalPositions / 2) { // Similarly for the other player
-                    closestPlayerStepChange -= totalPositions;
-                }
-
-                // Apply the calculated step changes
-                currentPlayer.moveToken(currentPlayerStepChange, gameMap);
-                closestPlayer.moveToken(closestPlayerStepChange, gameMap);
-
-                System.out.println("Swapped positions: " + currentPlayer.getAnimalToken().getType() +
-                        " (Player " + currentPlayer.getPlayerID() + ") with " +
-                        closestPlayer.getAnimalToken().getType() + " (Player " + closestPlayer.getPlayerID() + ")");
-
-                // Physically swap their positions on the board
-                currentPlayer.setPosition(newCurrentPlayerPosition);
-                closestPlayer.setPosition(newClosestPlayerPosition);
-
-                // Update game UI or state as needed
-                updateGameBoard();
-                if (inTutorialMode) {
-                    tutorialMode.setText("You swapped positions with " +
-                            closestPlayer.getAnimalToken().getType());
-                    steps.setText("You are now at " + closestPlayer.getAnimalToken().getType() + " Previous Spot" +
-                            ". FLIP CARD AGAIN!");
-                }
-
-                // Wait for 2 seconds to allow players to understand game state and display instruction text
-                PauseTransition pause = new PauseTransition(Duration.seconds(2));
-                pause.setOnFinished(event -> {
-                    // Change player turns and flip unfolded cards back
-                    nextPlayer();
-                    flipCardsBack();
-                });
-                pause.play();
-
-                System.out.println("After card move: Closest Player - " + closestPlayer.getAnimalToken().getType() + " StepTaken:" + closestPlayer.getAnimalToken().getStepTaken() );
-
-
+                swapPositions(currentPlayer, closestPlayer, totalPositions);
+                updateGameAfterSwap(currentPlayer, closestPlayer, inTutorialMode);
             } else {
                 System.out.println("No eligible player found to swap positions.");
                 instructions.setText("No player found to swap positions.");
-                for (int i = 0; i < decks.getChildren().size(); i++) {
-                    cardsInGame.get(i).setFlipped(true);
-                }
-                if (inTutorialMode) {
-                    tutorialMode.setText("No player found to swap positions!");
-                    steps.setText("AHH! No player found to swap positions! FLIP CARD AGAIN!");
-                }
-
-                // Wait for 2 seconds to allow players to understand game state and display instruction text
                 PauseTransition pause = new PauseTransition(Duration.seconds(2));
                 pause.setOnFinished(event -> {
-                    // Change player turns and flip unfolded cards back
                     nextPlayer();
                     flipCardsBack();
                 });
@@ -744,6 +670,80 @@ public class FieryDragonGameController{ //implements Initializable
 
         // Optionally, after processing the card effect, update the UI or game state
         updateGameBoard();
+    }
+
+
+    private Player findClosestPlayer(Player currentPlayer, List<Player> playerList, int totalPositions) {
+        Player closestPlayer = null;
+        int closestDistance = Integer.MAX_VALUE;
+
+        for (Player otherPlayer : playerList) {
+            if (otherPlayer != currentPlayer && otherPlayer.getAnimalToken().getIsOut()) {
+                int forwardDistance = (otherPlayer.getPosition() - currentPlayer.getPosition() + totalPositions) % totalPositions;
+                int backwardDistance = (currentPlayer.getPosition() - otherPlayer.getPosition() + totalPositions) % totalPositions;
+                int smallerDistance = Math.min(forwardDistance, backwardDistance);
+
+                if (smallerDistance < closestDistance) {
+                    closestDistance = smallerDistance;
+                    closestPlayer = otherPlayer;
+                }
+            }
+        }
+        return closestPlayer;
+    }
+
+    private void swapPositions(Player currentPlayer, Player closestPlayer, int totalPositions) {
+        // Retrieve initial positions in case they're needed for the swap
+        int currentPlayerInitialPosition = currentPlayer.getInitialPosition();
+        int closestPlayerInitialPosition = closestPlayer.getInitialPosition();
+
+        int tempPosition = currentPlayer.getPosition();
+        int newCurrentPlayerPosition = closestPlayer.getPosition();
+
+        // Calculate directional steps to move considering the game board is circular
+        int currentPlayerStepChange = (newCurrentPlayerPosition - tempPosition + totalPositions) % totalPositions;
+        int closestPlayerStepChange = (tempPosition - closestPlayer.getPosition() + totalPositions) % totalPositions;
+
+        // Shortest Path Calculation for wrapping around the board
+        if (currentPlayerStepChange > totalPositions / 2) {
+            currentPlayerStepChange -= totalPositions;
+        }
+        if (closestPlayerStepChange > totalPositions / 2) {
+            closestPlayerStepChange -= totalPositions;
+        }
+
+        // Perform the movement
+        currentPlayer.moveToken(currentPlayerStepChange, gameMap);
+        closestPlayer.moveToken(closestPlayerStepChange, gameMap);
+
+        // Set positions directly to handle cases where players should not move normally
+        if (!currentPlayer.getAnimalToken().getIsOut()) {
+            // Set closest player's position to current player's initial position
+            closestPlayer.setPosition(currentPlayerInitialPosition);
+            // Simulate that closest player is not out
+            closestPlayer.getAnimalToken().setIsOut(false);
+        } else {
+            // Normal position swap if both players are out
+            currentPlayer.setPosition(newCurrentPlayerPosition);
+            closestPlayer.setPosition(tempPosition);
+        }
+    }
+
+    private void updateGameAfterSwap(Player currentPlayer, Player closestPlayer, boolean inTutorialMode) {
+        updateGameBoard();
+        if (inTutorialMode) {
+            tutorialMode.setText("You swapped positions with " +
+                    closestPlayer.getAnimalToken().getType());
+            steps.setText("You are now at position " + closestPlayer.getAnimalToken().getType() +
+                    ". FLIP CARD AGAIN!");
+        }
+        PauseTransition pause = new PauseTransition(Duration.seconds(2));
+        pause.setOnFinished(event -> {
+            nextPlayer();
+            flipCardsBack();
+        });
+        pause.play();
+        System.out.println("After card move: Closest Player - " + closestPlayer.getAnimalToken().getType() + " StepTaken:" + closestPlayer.getAnimalToken().getStepTaken());
     }
 
     // RAC- To send current player at position back home
@@ -758,8 +758,6 @@ public class FieryDragonGameController{ //implements Initializable
             }
         }
     }
-
-
     private void flipCardsBack(){
         // Iterate through the deck and flip over any uncovered cards
         for (int i = 0; i < decks.getChildren().size(); i++) {
@@ -791,7 +789,7 @@ public class FieryDragonGameController{ //implements Initializable
                     tokenView.setLayoutY(token.getInitialLayoutY());
                 } else {
                     int position = player.getPosition();
-                    if (token.getStepTaken() == 0 && !token.getIsOut()) {
+                    if (!token.getIsOut()) {
                         // If the token is not out, place it at its starting position
                         System.out.println("Updating position for " + token.getType() + ": InitialX=" + token.getInitialLayoutX() + ", InitialY=" + token.getInitialLayoutY() + ", StepTaken=" + token.getStepTaken() + ", IsOut=" + token.getIsOut());
                         tokenView.setLayoutX(token.getInitialLayoutX());

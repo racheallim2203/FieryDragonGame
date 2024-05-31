@@ -20,25 +20,22 @@ public class Player {
         }
     }
 
-
     private void setInitialPosition() {
-        switch (animalToken.getType()) {
-            case FISH:
-                this.position = -1;
-                break;
-            case PUFFERFISH:
-                this.position = 5;
-                break;
-            case DRAGON:
-                this.position = 11;
-                break;
-            case OCTOPUS:
-                this.position = 17;
-                break;
-            default:
-                this.position = -1;
-                break;
-        }
+        this.position = getInitialPositionForType(animalToken.getType());
+    }
+
+    private int getInitialPositionForType(AnimalType type) {
+        return switch (type) {
+            case FISH -> -1;
+            case PUFFERFISH -> 5;
+            case DRAGON -> 11;
+            case OCTOPUS -> 17;
+            default -> -1;
+        };
+    }
+
+    public int getInitialPosition() {
+        return getInitialPositionForType(this.animalToken.getType());
     }
 
     // adjusts the player's position on the game board based on a number of steps to move, which can be positive or negative
