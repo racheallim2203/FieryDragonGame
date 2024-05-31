@@ -20,6 +20,7 @@ public class Player {
         }
     }
 
+
     private void setInitialPosition() {
         switch (animalToken.getType()) {
             case FISH:

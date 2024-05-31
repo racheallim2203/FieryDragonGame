@@ -1,6 +1,7 @@
 package com.example.fit3077;
 
 import com.example.fit3077.cards.AnimalCard;
+import com.example.fit3077.cards.BackToCaveCard;
 import com.example.fit3077.cards.Card;
 import com.example.fit3077.cards.PirateCard;
 
@@ -30,6 +31,11 @@ public class DeckOfCards {
             deck.add(new PirateCard(1, CardType.pirateCard)); // Pirate card with 1 pirate
             deck.add(new PirateCard(2, CardType.pirateCard)); // Pirate card with 2 pirates
         }
+
+        // Add BackToCaveCards
+        deck.add(new BackToCaveCard(CardType.backToCaveCard)); // Add two BackToCaveCards
+        deck.add(new BackToCaveCard(CardType.backToCaveCard));
+
 
         // Debug: Print the number of cards in the deck after creation
         System.out.println("Deck of Cards initialized with " + getNumOfCardsInDeck() + " cards.");
