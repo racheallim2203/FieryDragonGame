@@ -487,8 +487,6 @@ public class FieryDragonGameController{ //implements Initializable
 
         if (card.getCardType() == CardType.animalCard) {
 
-//            AnimalCard animalCard = (AnimalCard) card;
-
             // Check if the card type matches the animal at the current player's position
             if (card.matchesType(currentAnimalTypeAtPosition)) {
                 int predictStepTaken = currentPlayer.getAnimalToken().getStepTaken() + card.getCount();
@@ -718,6 +716,8 @@ public class FieryDragonGameController{ //implements Initializable
                     flipCardsBack();
                 });
                 pause.play();
+
+                System.out.println("After card move: Closest Player - " + closestPlayer.getAnimalToken().getType() + " StepTaken:" + closestPlayer.getAnimalToken().getStepTaken() );
 
 
             } else {
