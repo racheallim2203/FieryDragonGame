@@ -33,14 +33,6 @@ public class Habitat {
         this.containAnimalToken = containAnimalToken;
     }
 
-    //    public boolean containsAnimal(AnimalType animalType) {
-//        for (AnimalCard card : animalCards) {
-//            if (card.getAnimalType().equals(animalType)) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
 
     public Image getHabitatImage() {
         String imageName = animalType.toString().toLowerCase() + ".png";

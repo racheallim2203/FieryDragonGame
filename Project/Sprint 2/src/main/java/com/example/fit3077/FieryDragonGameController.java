@@ -469,9 +469,8 @@ public class FieryDragonGameController{ //implements Initializable
         Player currentPlayer = getCurrentPlayer();
         System.out.println("Before card move: Player - " + currentPlayer.getAnimalToken().getType() + ", StepTaken - " + currentPlayer.getAnimalToken().getStepTaken() + ", IsOut - " + currentPlayer.getAnimalToken().getIsOut());
         int currentPlayerPosition = currentPlayer.getPosition();
-        boolean conflictResolved = false; // To show tutorialText when token being sent back home
-
         AnimalType currentAnimalTypeAtPosition;
+
         if (currentPlayer.getAnimalToken().getStepTaken() == 0 && !currentPlayer.getAnimalToken().getIsOut()){
             System.out.println("in the cave!!");
             currentAnimalTypeAtPosition = currentPlayer.getAnimalToken().getType();
@@ -486,8 +485,6 @@ public class FieryDragonGameController{ //implements Initializable
 
 
         if (card.getCardType() == CardType.animalCard) {
-
-
             // Check if the card type matches the animal at the current player's position
             if (card.matchesType(currentAnimalTypeAtPosition)) {
                 int predictStepTaken = currentPlayer.getAnimalToken().getStepTaken() + card.getCount();
@@ -502,12 +499,12 @@ public class FieryDragonGameController{ //implements Initializable
                             System.out.println(other.getAnimalToken().getType() + " found at the new position: " + newPosition + " and sent home.");
                             other.resetPosition();
                             updateGameBoard();
-                            conflictResolved = true;
                             break;
                         }
                     }
                 }
-                if (!conflictResolved && !gameMap.getHabitats().get(newPosition).isContainAnimalToken() || predictStepTaken == 26){
+
+                if ((!gameMap.getHabitats().get(newPosition).isContainAnimalToken()) || predictStepTaken == 26){
                     // Apply card effect which includes moving the player forward
                     card.applyMovement(currentPlayer, gameMap);
                     instructions.setText(" moves " + card.getCount() + " steps forward");
@@ -601,21 +598,18 @@ public class FieryDragonGameController{ //implements Initializable
             } else {
                 int newPosition = ((currentPlayerPosition+ (-card.getCount())) + animalPositions.length) % animalPositions.length;
                 // TO SEND CURRENT FIXED OTHER PLAYERS TOKEN BACK HOME IF REACHES THEIR HABITAT
-                if (inTutorialMode) {
                     for (Player other : playerList) {
                         if (other != currentPlayer && other.getPosition() == newPosition) {
-                            tutorialMode.setText("Good Job! You got to send" + " "  + other.getAnimalToken().getType() +" back home!");
+                            tutorialMode.setText("Good Job! You got to send" + " " + other.getAnimalToken().getType() + " back home!");
                             steps.setText("OOF! You reach a habitat occupied by another player. You are able to send them back home! FLIP AGAIN!!");
                             System.out.println(other.getAnimalToken().getType() + " found at the new position: " + newPosition + " and sent home.");
                             other.resetPosition();
                             updateGameBoard();
-                            conflictResolved = true;
                             break;
                         }
                     }
-                }
 
-                if (!conflictResolved &&!gameMap.getHabitats().get(newPosition).isContainAnimalToken()){
+                if (!gameMap.getHabitats().get(newPosition).isContainAnimalToken()){
                     // wait for 2 seconds to allow players to understand game state and display instruction text
                     PauseTransition pause = new PauseTransition(Duration.seconds(2));
 
