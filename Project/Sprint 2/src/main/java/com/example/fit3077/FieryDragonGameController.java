@@ -487,6 +487,7 @@ public class FieryDragonGameController{ //implements Initializable
 
         if (card.getCardType() == CardType.animalCard) {
 
+
             // Check if the card type matches the animal at the current player's position
             if (card.matchesType(currentAnimalTypeAtPosition)) {
                 int predictStepTaken = currentPlayer.getAnimalToken().getStepTaken() + card.getCount();
