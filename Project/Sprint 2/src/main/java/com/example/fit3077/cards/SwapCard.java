@@ -15,6 +15,7 @@ public class SwapCard extends Card {
 
     @Override
     public void applyMovement(Player currentPlayer, GameMap gameMap) {
+
     }
 
     @Override

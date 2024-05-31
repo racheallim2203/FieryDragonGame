@@ -33,6 +33,8 @@ public class DeckOfCards {
         // Add SwapCards
         deck.add(new SwapCard(CardType.swapCard)); // Add two SwapCards
         deck.add(new SwapCard(CardType.swapCard));
+        deck.add(new SwapCard(CardType.swapCard));
+        deck.add(new SwapCard(CardType.swapCard));
 
 
         // Debug: Print the number of cards in the deck after creation

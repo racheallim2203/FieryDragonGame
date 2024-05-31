@@ -186,13 +186,14 @@ public class FieryDragonGameController{ //implements Initializable
         // Initialize or re-initialize player list based on the mode
         if (!inTutorialMode) {
             playerList = setPlayers(userInput);
-        } else{
+        } else {
             setTutorialPlayer(4); // Ensure tutorial players are set if in tutorial mode
         }
+        inPlayPlayer = null;
         nextPlayer();   // set first player
 
         // Reset all game data and UI components to their initial state
-        getCurrentPlayer().resetPosition();
+//        getCurrentPlayer().resetPosition();
         instructions.setText("-");
 
         // UI and game logic initialization
@@ -203,8 +204,8 @@ public class FieryDragonGameController{ //implements Initializable
             initializeImageView(); // Initialize card images for interaction.
 
             // Set the current player to the initial state and update UI
-            resetPlayer();
-            updateCurrentPlayerDisplay(AnimalType.FISH);
+//            resetPlayer();
+//            updateCurrentPlayerDisplay(AnimalType.FISH);
 
             if (inTutorialMode) {
                 steps.setText("You are in tutorial mode! Let's start by flipping a card! CLICK ON A CARD in the deck");
@@ -232,7 +233,6 @@ public class FieryDragonGameController{ //implements Initializable
         gameMap = new GameMap(userInput); // Initialize gameMap which sets up the habitats
         tutorialPanel.setVisible(false);
         startGame();
-
     }
 
     private void displayShuffledDeck() {
@@ -576,8 +576,6 @@ public class FieryDragonGameController{ //implements Initializable
             }
 
         } else if (card.getCardType() == CardType.pirateCard) {
-
-
             if (currentPlayer.getAnimalToken().getStepTaken() == 0 && !currentPlayer.getAnimalToken().getIsOut()) {
 
                 for (int i = 0; i < decks.getChildren().size(); i++) {
@@ -622,8 +620,8 @@ public class FieryDragonGameController{ //implements Initializable
                     // wait for 2 seconds to allow players to understand game state and display instruction text
                     PauseTransition pause = new PauseTransition(Duration.seconds(2));
 
-                instructions.setText(" moves " + card.getCount() + " steps backward");
-                card.applyMovement(currentPlayer, gameMap);
+                    instructions.setText(" moves " + card.getCount() + " steps backward");
+                    card.applyMovement(currentPlayer, gameMap);
                     if (inTutorialMode) {
                         tutorialMode.setText("OPPS! You move " + card.getCount() + " steps backward");
                         steps.setText("AISH! You flipped the pirate card that you should avoid! The number of pirates in the card shows how many steps you should move backward. Its still your turn. Flip another card!");
@@ -650,6 +648,93 @@ public class FieryDragonGameController{ //implements Initializable
                     });
                     pause.play();
                 }
+            }
+        }
+
+        if (card.getCardType() == CardType.swapCard) {
+            Player closestPlayer = null;
+            int closestDistance = Integer.MAX_VALUE;
+            int totalPositions = gameMap.getHabitats().size(); // Total number of positions on the board
+
+            // Find the closest player who is out of their cave
+            for (Player otherPlayer : playerList) {
+                if (otherPlayer != currentPlayer && otherPlayer.getAnimalToken().getIsOut()) {
+                    int forwardDistance = (otherPlayer.getPosition() - currentPlayer.getPosition() + totalPositions) % totalPositions;
+                    int backwardDistance = (currentPlayer.getPosition() - otherPlayer.getPosition() + totalPositions) % totalPositions;
+
+                    // Determine the smaller of the two possible distances
+                    int smallerDistance = Math.min(forwardDistance, backwardDistance);
+
+                    if (smallerDistance < closestDistance) {
+                        closestDistance = smallerDistance;
+                        closestPlayer = otherPlayer;
+                    }
+                }
+            }
+
+            if (closestPlayer != null) {
+                int tempPosition = currentPlayer.getPosition();
+                int newCurrentPlayerPosition = closestPlayer.getPosition();
+                int newClosestPlayerPosition = tempPosition;
+
+                // Calculate distance and direction to move each player
+                int currentPlayerStepChange = (newCurrentPlayerPosition - tempPosition + totalPositions) % totalPositions;
+                int closestPlayerStepChange = (newClosestPlayerPosition - closestPlayer.getPosition() + totalPositions) % totalPositions;
+
+                // Adjust for backward movement
+                if (currentPlayerStepChange > totalPositions / 2) { // It went the "long way" around, meaning backwards
+                    currentPlayerStepChange -= totalPositions;
+                }
+                if (closestPlayerStepChange > totalPositions / 2) { // Similarly for the other player
+                    closestPlayerStepChange -= totalPositions;
+                }
+
+                // Apply the calculated step changes
+                currentPlayer.moveToken(currentPlayerStepChange, gameMap);
+                closestPlayer.moveToken(closestPlayerStepChange, gameMap);
+
+                System.out.println("Swapped positions: " + currentPlayer.getAnimalToken().getType() +
+                        " (Player " + currentPlayer.getPlayerID() + ") with " +
+                        closestPlayer.getAnimalToken().getType() + " (Player " + closestPlayer.getPlayerID() + ")");
+
+                // Physically swap their positions on the board
+                currentPlayer.setPosition(newCurrentPlayerPosition);
+                closestPlayer.setPosition(newClosestPlayerPosition);
+
+                // Update game UI or state as needed
+                updateGameBoard();
+                if (inTutorialMode) {
+                    tutorialMode.setText("You used a Swap Card! You swapped positions with " +
+                            closestPlayer.getAnimalToken().getType());
+                    steps.setText("You are now at position " + currentPlayer.getPosition() +
+                            ". Flip Card again");
+                }
+
+                // Wait for 2 seconds to allow players to understand game state and display instruction text
+                PauseTransition pause = new PauseTransition(Duration.seconds(2));
+                pause.setOnFinished(event -> {
+                    // Change player turns and flip unfolded cards back
+                    nextPlayer();
+                    flipCardsBack();
+                });
+                pause.play();
+
+
+            } else {
+                System.out.println("No eligible player found to swap positions.");
+                instructions.setText("No player found to swap positions.");
+                for (int i = 0; i < decks.getChildren().size(); i++) {
+                    cardsInGame.get(i).setFlipped(true);
+                }
+
+                // Wait for 2 seconds to allow players to understand game state and display instruction text
+                PauseTransition pause = new PauseTransition(Duration.seconds(2));
+                pause.setOnFinished(event -> {
+                    // Change player turns and flip unfolded cards back
+                    nextPlayer();
+                    flipCardsBack();
+                });
+                pause.play();
             }
         }
         System.out.println("After card move: Player - " + currentPlayer.getAnimalToken().getType() + ", StepTaken - " + currentPlayer.getAnimalToken().getStepTaken() + ", IsOut - " + currentPlayer.getAnimalToken().getIsOut());
@@ -783,7 +868,3 @@ public class FieryDragonGameController{ //implements Initializable
     }
 
 }
-
-
-
-

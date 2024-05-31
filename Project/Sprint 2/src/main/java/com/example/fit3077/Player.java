@@ -90,4 +90,9 @@ public class Player {
         this.getAnimalToken().setStepTaken(0);
         this.getAnimalToken().setIsOut(false);
     }
+
+    public void setPosition(int position) {
+        this.position = position;
+        // Additional logic can be added here if needed
+    }
 }
