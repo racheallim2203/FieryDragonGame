@@ -41,7 +41,6 @@ public class Player {
         }
     }
 
-
     // adjusts the player's position on the game board based on a number of steps to move, which can be positive or negative
     public void moveToken(int steps, GameMap gameMap) {
         List<Volcano> habitats = gameMap.getVolcanoList();

@@ -29,9 +29,6 @@ public class DeckOfCards {
             deck.add(new PirateCard(2, CardType.pirateCard)); // Pirate card with 2 pirates
         }
 
-        // Add BackToCaveCards
-        deck.add(new BackToCaveCard(CardType.backToCaveCard)); // Add two BackToCaveCards
-        deck.add(new BackToCaveCard(CardType.backToCaveCard));
 
         // Add SwapCards
         deck.add(new SwapCard(CardType.swapCard)); // Add two SwapCards
