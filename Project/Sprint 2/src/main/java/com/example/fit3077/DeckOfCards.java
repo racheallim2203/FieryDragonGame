@@ -1,9 +1,6 @@
 package com.example.fit3077;
 
-import com.example.fit3077.cards.AnimalCard;
-import com.example.fit3077.cards.BackToCaveCard;
-import com.example.fit3077.cards.Card;
-import com.example.fit3077.cards.PirateCard;
+import com.example.fit3077.cards.*;
 
 import java.util.ArrayList;
 
@@ -35,6 +32,10 @@ public class DeckOfCards {
         // Add BackToCaveCards
         deck.add(new BackToCaveCard(CardType.backToCaveCard)); // Add two BackToCaveCards
         deck.add(new BackToCaveCard(CardType.backToCaveCard));
+
+        // Add SwapCards
+        deck.add(new SwapCard(CardType.swapCard)); // Add two SwapCards
+        deck.add(new SwapCard(CardType.swapCard));
 
 
         // Debug: Print the number of cards in the deck after creation

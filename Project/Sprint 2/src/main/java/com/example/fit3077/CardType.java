@@ -4,6 +4,7 @@ public enum CardType {
     animalCard,
     pirateCard,
     backToCaveCard,
+    swapCard
 
 
 }
