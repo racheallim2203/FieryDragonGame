@@ -11,9 +11,7 @@ import javafx.scene.control.TextInputDialog;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,6 +19,7 @@ import java.util.Optional;
 
 public class Main extends Application {
     private int userInput;
+
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -40,11 +39,10 @@ public class Main extends Application {
             e.printStackTrace();
             Platform.exit();
         }
-        // Add listener to save game state when the application is closing
-        stage.setOnCloseRequest(event -> {
-            saveGame();
-        });
+
     }
+
+
 
     private Optional<ButtonType> setupGameChoiceDialog() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -86,10 +84,15 @@ public class Main extends Application {
             controller.setUserInput(userInput);  // Set user input
             System.out.println("Initializing new game with " + userInput + " players.");
             controller.initializeGame();
+            controller.saveGameState();
         } else {
             System.out.println("Loading existing game...");
             controller.loadGame();
         }
+        // Add listener to save game state when the application is closing
+        stage.setOnCloseRequest(event -> {
+            controller.saveGameState();
+        });
 
         Scene scene = new Scene(root, 620, 620);
         stage.setScene(scene);
@@ -98,6 +101,7 @@ public class Main extends Application {
         stage.setResizable(false);
         stage.show();
         System.out.println("Game loaded and displayed.");
+
     }
 
     private void setupStageIcon(Stage stage) {
@@ -106,15 +110,6 @@ public class Main extends Application {
             stage.getIcons().add(icon);
         } catch (Exception e) {
             System.err.println("Icon not found: " + e.getMessage());
-        }
-    }
-
-    private void saveGame() {
-        try {
-            Volcano.saveGameState(VolcanoList.getInstance(), "volcano_card_state.txt");
-            System.out.println("Game state saved successfully.");
-        } catch (IOException e) {
-            System.err.println("Error saving game state: " + e.getMessage());
         }
     }
 

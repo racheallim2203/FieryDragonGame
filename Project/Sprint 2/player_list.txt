@@ -1,0 +1,3 @@
+PlayerCount: 2
+Player1: FISH, Position: 3, Out: true, StepsTaken: 4
+Player2: DRAGON, Position: 13, Out: true, StepsTaken: 2

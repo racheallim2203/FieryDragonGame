@@ -1,6 +1,9 @@
 package com.example.fit3077;
 
 import java.util.List;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Player {
     private final AnimalToken animalToken; //  represents the which animal token is taken by the player
@@ -91,5 +94,28 @@ public class Player {
     public void setPosition(int position) {
         this.position = position;
         // Additional logic can be added here if needed
+    }
+
+    // Static method to save all players' states to a file
+    public static void savePlayers(List<Player> players, String filePath) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            writer.write("PlayerCount: " + players.size());
+            writer.newLine();
+
+            int playerIndex = 1;
+            for (Player player : players) {
+                String playerData = String.format("Player%d: %s, Position: %d, Out: %b, StepsTaken: %d",
+                        playerIndex++,
+                        player.getAnimalToken().getType(),
+                        player.getPosition(),
+                        player.getAnimalToken().getIsOut(),
+                        player.getAnimalToken().getStepTaken());
+                writer.write(playerData);
+                writer.newLine();
+            }
+            System.out.println("Game state saved successfully.");
+        } catch (IOException e) {
+            System.err.println("Error saving game state: " + e.getMessage());
+        }
     }
 }

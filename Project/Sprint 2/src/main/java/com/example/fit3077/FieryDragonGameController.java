@@ -13,9 +13,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 public class FieryDragonGameController{ //implements Initializable
@@ -244,6 +242,20 @@ public class FieryDragonGameController{ //implements Initializable
         } catch (IOException e) {
             System.err.println("Failed to load game: " + e.getMessage());
         }
+    }
+
+    public void saveGameState() {
+        // Save Volcano state
+        try {
+            Volcano.saveGameState(VolcanoList.getInstance(), "volcano_card_state.txt");
+        } catch (IOException e) {
+            System.err.println("Error saving Volcano state: " + e.getMessage());
+            return;
+        }
+
+        // Save player data
+        Player.savePlayers(playerList, "player_list.txt");
+        System.out.println("Player state saved successfully.");
     }
 
 
