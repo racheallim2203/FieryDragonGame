@@ -207,7 +207,7 @@
       <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="601.0" prefWidth="600.0" AnchorPane.bottomAnchor="109.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <Pane fx:id="boardcards" prefHeight="562.0" prefWidth="600.0" StackPane.alignment="CENTER" />
       </StackPane>
-      <FlowPane fx:id="decks" layoutX="185.0" layoutY="156.0" prefHeight="240.0" prefWidth="281.0" />
+      <FlowPane fx:id="decks" layoutX="212.0" layoutY="156.0" prefHeight="240.0" prefWidth="234.0" />
       <Pane id="winbg" fx:id="winbg" prefHeight="300.0" prefWidth="300.0" AnchorPane.bottomAnchor="240.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="150.0">
          <children>
             <Label alignment="CENTER" prefHeight="51.0" prefWidth="300.0" text="WINNER IS ..." textAlignment="CENTER">

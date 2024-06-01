@@ -66,9 +66,7 @@ public class GameMap {
 
     public void setUpHabitats(){
         for (Volcano volcanoCard : volcanoList) {
-            for (Habitat habitat : volcanoCard.getVolcanoCards()) {
-                habitats.add(habitat);
-            }
+            habitats.addAll(volcanoCard.getVolcanoCards());
         }
     }
 

@@ -13,6 +13,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 
 public class FieryDragonGameController{ //implements Initializable
@@ -132,6 +135,7 @@ public class FieryDragonGameController{ //implements Initializable
 
     public void setUserInput(int userInput) {
         this.userInput = userInput;
+        System.out.println("User input set to: " + userInput);  // Debugging line
     }
 
     private boolean inTutorialMode = false;
@@ -174,38 +178,42 @@ public class FieryDragonGameController{ //implements Initializable
 
     @FXML
     void startGame() {
+        if (!inTutorialMode) {
+            playerList = setPlayers(userInput);  // Ensure there are players before starting
+        } else {
+            setTutorialPlayer(4);  // Ensure tutorial players are set if in tutorial mode
+        }
+        System.out.println("Starting game. Player count: " + playerList.size());
+
         System.out.println("Restart Game");
 
-        winbg.setVisible(false); // Hide the win background if visible from a previous game.
-        // Show GridPane and HBox if not in tutorial mode
-        hBox.setVisible(!inTutorialMode);
+        winbg.setVisible(false);  // Hide the win background if visible from a previous game.
+        hBox.setVisible(!inTutorialMode);  // Show GridPane and HBox if not in tutorial mode
         gridPane.setVisible(!inTutorialMode);
         indicator.setVisible(false);
         backToGame.setVisible(inTutorialMode);
 
-        // Initialize or re-initialize player list based on the mode
-        if (!inTutorialMode) {
-            playerList = setPlayers(userInput);
+        // Check if playerList is not empty before setting the first player
+        if (!playerList.isEmpty()) {
+            inPlayPlayer = playerList.get(0);  // Set the first player
+            updateCurrentPlayerDisplay(inPlayPlayer.getAnimalToken().getType());
         } else {
-            setTutorialPlayer(4); // Ensure tutorial players are set if in tutorial mode
+            System.err.println("Player list is empty, cannot start the game.");
+            return;  // Exit the method if no players are set to avoid further errors
         }
-        inPlayPlayer = null;
-        nextPlayer();   // set first player
 
-        // Reset all game data and UI components to their initial state
-//        getCurrentPlayer().resetPosition();
         instructions.setText("-");
 
-        // UI and game logic initialization
+        // UI and game logic initialization on the UI thread
         Platform.runLater(() -> {
-            shuffleAndDisplayAnimals(); // Shuffle animal positions and display on the board.
-            initializeTokenViews(); // Set up visual representation of player tokens
-            displayShuffledDeck(); // Display the shuffled deck of cards.
-            initializeImageView(); // Initialize card images for interaction.
-
-            // Set the current player to the initial state and update UI
-//            resetPlayer();
-//            updateCurrentPlayerDisplay(AnimalType.FISH);
+            displayShuffledDeck();  // Display the shuffled deck of cards
+            if (!cardsInGame.isEmpty()) {
+                shuffleAndDisplayAnimals();  // Shuffle animal positions and display on the board
+            } else {
+                System.err.println("Card list is empty, ensure cards are initialized before starting the game.");
+            }
+            initializeImageView();  // Initialize card images for interaction
+            initializeTokenViews();  // Set up visual representation of player tokens
 
             if (inTutorialMode) {
                 steps.setText("You are in tutorial mode! Let's start by flipping a card! CLICK ON A CARD in the deck");
@@ -215,6 +223,28 @@ public class FieryDragonGameController{ //implements Initializable
         });
     }
 
+    public void loadGame() {
+        System.out.println("Loading an existing game...");
+        String filePath = "volcano_card_state.txt";
+        List<Volcano> loadedVolcanoes = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                List<Habitat> habitats = new ArrayList<>();
+                List<String> animals = Arrays.asList(line.split(","));
+                for (String animal : animals) {
+                    habitats.add(new Habitat(AnimalType.valueOf(animal)));
+                }
+                loadedVolcanoes.add(new Volcano(habitats));
+            }
+            VolcanoList.setVolcanoes(loadedVolcanoes);
+            System.out.println("Game loaded successfully.");
+            System.out.println("UI updated from loaded data.");
+        } catch (IOException e) {
+            System.err.println("Failed to load game: " + e.getMessage());
+        }
+    }
 
 
     private void resetPlayer() {
@@ -230,8 +260,14 @@ public class FieryDragonGameController{ //implements Initializable
     }
 
     public void initializeGame() {
-        gameMap = new GameMap(userInput); // Initialize gameMap which sets up the habitats
+        System.out.println("Initializing game with user input: " + userInput); // Debug output
+        if (userInput <= 0) {
+            System.err.println("Invalid number of players: " + userInput);
+            return; // Add a return to prevent further execution with invalid input
+        }
+        gameMap = new GameMap(userInput);
         tutorialPanel.setVisible(false);
+        setPlayers(userInput); // Ensure this is called after user input is confirmed
         startGame();
     }
 
@@ -816,7 +852,7 @@ public class FieryDragonGameController{ //implements Initializable
 
     public List<Player> setPlayers(int numberOfPlayer){
         List<Player> players = new ArrayList<>();
-
+        System.out.println("Setting players with input: " + numberOfPlayer);
         if(numberOfPlayer == 2){
             players.add(new Player(new AnimalToken(AnimalType.FISH), 0, -1, false));
             players.add(new Player(new AnimalToken(AnimalType.DRAGON), 1, 11, false));
@@ -830,7 +866,9 @@ public class FieryDragonGameController{ //implements Initializable
             for (int j = players.size()-1; j >= numberOfPlayer; j--){
                 players.remove(j);
             }
+            System.out.println("Added 4 players.");
         }
+        System.out.println("Total players now: " + players.size());
         return players;
     }
 

@@ -12,6 +12,10 @@ public class VolcanoList {
         initializeHabitats();
     }
 
+    public static void setVolcanoes(List<Volcano> newVolcanoes) {
+        volcanoList = newVolcanoes;  // Updates the list of volcanoes
+    }
+
     public static List<Volcano> getInstance() {
         if (volcanoList == null) {
             return new VolcanoList().volcanoList;
