@@ -1,8 +1,6 @@
 package com.example.fit3077;
 
-import javafx.application.Application;
 import javafx.scene.image.Image;
-import javafx.stage.Stage;
 
 // Represents the token each player uses to navigate the game map.
 public class AnimalToken {
@@ -21,8 +19,6 @@ public class AnimalToken {
 
     public AnimalToken(AnimalType animalType) {
         this.animalType = animalType;
-        this.isOut = false;
-        this.stepTaken = 0;
     }
 
     public AnimalType getType() {

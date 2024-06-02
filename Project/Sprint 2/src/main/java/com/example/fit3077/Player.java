@@ -9,19 +9,39 @@ public class Player {
     private final AnimalToken animalToken; //  represents the which animal token is taken by the player
     private int position; //stores the player's current position on the game board.
     private int playerID; // to track player turns
-    
-    // initializes a new Player object with an AnimalToken and sets the initial position to
-    public Player(AnimalToken animalToken, int playerID, int initialPosition, boolean isStatic) {
+    private boolean isOut;
+    private int stepsTaken;
+    boolean isNewGame;
+
+    // Constructor to initialize player with loaded attributes
+    public Player(AnimalToken animalToken, int playerID, int position, boolean isOut, int stepsTaken, boolean isNewGame) {
         this.animalToken = animalToken;
         this.playerID = playerID;
-        if (isStatic) {
-            this.position = initialPosition;
-            this.animalToken.setIsOut(true);
-            this.animalToken.setStepTaken(1);
-        } else {
-            setInitialPosition();
+        this.position = position;
+        this.stepsTaken=stepsTaken;
+        this.isOut = isOut;
+        this.isNewGame = isNewGame;
+        if (!isNewGame) {
+            animalToken.setIsOut(isOut);
+            System.out.println("Set Is Out");
+            animalToken.setStepTaken(stepsTaken);
+            System.out.println("Set Steps Taken");
         }
     }
+
+//    // initializes a new Player object with an AnimalToken and sets the initial position to
+//    public Player(AnimalToken animalToken, int playerID, int initialPosition, boolean isStatic) {
+//        this.animalToken = animalToken;
+//        this.playerID = playerID;
+//        if (isStatic) {
+//            this.position = initialPosition;
+//            this.animalToken.setIsOut(true);
+//            this.animalToken.setStepTaken(1);
+//        } else {
+//            setInitialPosition();
+//        }
+//    }
+
 
     private void setInitialPosition() {
         this.position = getInitialPositionForType(animalToken.getType());
@@ -93,17 +113,18 @@ public class Player {
 
     public void setPosition(int position) {
         this.position = position;
-        // Additional logic can be added here if needed
+
     }
 
     // Static method to save all players' states to a file
     public static void savePlayers(List<Player> players, String filePath) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-            writer.write("PlayerCount: " + players.size());
+            writer.write("Count: " + players.size());
             writer.newLine();
 
             int playerIndex = 1;
             for (Player player : players) {
+                // Serialize the state of players to a string
                 String playerData = String.format("Player%d: %s, Position: %d, Out: %b, StepsTaken: %d",
                         playerIndex++,
                         player.getAnimalToken().getType(),
@@ -118,4 +139,15 @@ public class Player {
             System.err.println("Error saving game state: " + e.getMessage());
         }
     }
+
+    @Override
+    public String toString() {
+        return "{Type=" + animalToken.getType() +
+                ", Position=" + position +
+                ", IsOut=" + isOut +
+                ", StepsTaken=" + stepsTaken +
+                '}';
+    }
 }
+
+

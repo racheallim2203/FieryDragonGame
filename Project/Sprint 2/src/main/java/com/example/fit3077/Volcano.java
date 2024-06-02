@@ -43,7 +43,7 @@ public class Volcano {
         return sb.toString();
     }
 
-    public static void saveGameState(List<Volcano> volcanoes, String filePath) throws IOException {
+    public static void saveVolcano(List<Volcano> volcanoes, String filePath) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             for (Volcano volcano : volcanoes) {
                 writer.write(volcano.serialize());

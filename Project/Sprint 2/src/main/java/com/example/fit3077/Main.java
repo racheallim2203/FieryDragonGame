@@ -19,7 +19,7 @@ import java.util.Optional;
 
 public class Main extends Application {
     private int userInput;
-
+    private boolean isNewGame = true;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -41,8 +41,6 @@ public class Main extends Application {
         }
 
     }
-
-
 
     private Optional<ButtonType> setupGameChoiceDialog() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -78,6 +76,7 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("fiery-dragon-game.fxml"));
         Parent root = loader.load();
         FieryDragonGameController controller = loader.getController();
+        controller.setIsNewGame(isNewGame); // Inform the controller whether it's a new game or continuation
 
         if (isNewGame) {
             userInput = promptForUserInput();  // Get user input right before starting a new game
@@ -87,7 +86,7 @@ public class Main extends Application {
             controller.saveGameState();
         } else {
             System.out.println("Loading existing game...");
-            controller.loadGame();
+            controller.startGame();
         }
         // Add listener to save game state when the application is closing
         stage.setOnCloseRequest(event -> {

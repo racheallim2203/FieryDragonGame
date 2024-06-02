@@ -6,7 +6,7 @@ import java.util.*;
 
 public class GameMap {
     private final int numberOfStepToWin = 26;
-    private final List<Volcano> volcanoList;
+    private List<Volcano> volcanoList;
     private final List<AnimalCave> animalCaves;
     private List<Habitat> habitats;
 
@@ -62,6 +62,11 @@ public class GameMap {
     @Override
     public String toString() {
         return "GameMap{" + "volcanoList=" + volcanoList + ", animalCaves=" + animalCaves + '}';
+    }
+
+    public void setVolcanoes(List<Volcano> volcanoes) {
+        this.volcanoList = volcanoes;
+        setUpHabitats();  // Re-setup habitats as volcanoes have changed
     }
 
     public void setUpHabitats(){
