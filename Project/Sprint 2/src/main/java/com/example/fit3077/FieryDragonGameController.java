@@ -658,36 +658,36 @@ public class FieryDragonGameController{ //implements Initializable
             currentAnimalTypeAtPosition = animalPositions[currentPlayerPosition];
         }
 
-        System.out.println("Current player's token type: " + currentPlayer.getAnimalToken().getType());
-        System.out.println("Current player position: " + currentPlayerPosition);
-        System.out.println("Animal type of habitat at current position: " + currentAnimalTypeAtPosition);
-
-
         if (card.getCardType() == CardType.animalCard) {
-
             // Check if the card type matches the animal at the current player's position
             if (card.matchesType(currentAnimalTypeAtPosition)) {
                 int predictStepTaken = currentPlayer.getAnimalToken().getStepTaken() + card.getCount();
-                int newPosition = (currentPlayerPosition+card.getCount()) % animalPositions.length ;
+                int newPosition = (currentPlayerPosition + card.getCount()) % animalPositions.length;
+                boolean positionOccupied = gameMap.getHabitats().get(newPosition).isContainAnimalToken();
+                System.out.println("Position " + newPosition + " occupied: " + positionOccupied);
 
-                // TO SEND CURRENT FIXED OTHER PLAYERS TOKEN BACK HOME IF REACHES THEIR HABITAT
-                if (inTutorialMode) {
+                // Check if position is occupied by another player and handle conflict
+                if (!conflictResolved && positionOccupied) {
                     for (Player other : playerList) {
                         if (other != currentPlayer && other.getPosition() == newPosition) {
-                            tutorialMode.setText("Good Job! You got to send" + " "  + other.getAnimalToken().getType() +" back home!");
+                            tutorialMode.setText("Good Job! You got to send " + other.getAnimalToken().getType() + " back home!");
                             steps.setText("OOF! You reach a habitat occupied by another player. You are able to send them back home!! FLIP AGAIN");
                             System.out.println(other.getAnimalToken().getType() + " found at the new position: " + newPosition + " and sent home.");
-                            other.resetPosition();
+//                            other.resetPosition();
+                            card.applyMovement(currentPlayer, gameMap);
+                            instructions.setText("Send player home!");
+                            sendTokenHome(newPosition);
                             updateGameBoard();
                             conflictResolved = true;
                             break;
                         }
                     }
                 }
-                if (!conflictResolved && (!gameMap.getHabitats().get(newPosition).isContainAnimalToken() || predictStepTaken == 26)) {
-                    // Apply card effect which includes moving the player forward
+
+                // If no conflict or habitat is empty, proceed with movement
+                if (!conflictResolved) {
                     card.applyMovement(currentPlayer, gameMap);
-                    instructions.setText(" moves " + card.getCount() + " steps forward");
+                    instructions.setText(currentPlayer.getAnimalToken().getType() + " moves " + card.getCount() + " steps forward");
                     System.out.println(currentAnimalTypeAtPosition + " moves " + card.getCount() + " steps forward to position " + currentPlayer.getPosition());
 
                     if (inTutorialMode) {
@@ -695,58 +695,34 @@ public class FieryDragonGameController{ //implements Initializable
                         steps.setText("GOOD JOB! You successfully flipped a card that matches the animal you are on! The number of animals in the card shows how many steps you can move forward. Its still your turn. Flip another card!");
                     }
 
-                    // SAM - check if it reaches its cave - hvn tested, feel free to comment
                     if (currentPlayer.getAnimalToken().getStepTaken() == 26) {
                         System.out.println("WINNNNNNNNN");
                         tutorialMode.setText("CONGRATS! You won!");
                         steps.setText("WOHOO! You have successfully reached back your cave after one round! Its time to start the real game NOW :D");
                         showWin();
-
                     }
+                } else {
+                    System.out.println("Conflict resolved at position " + newPosition + ", no further movement applied.");
                 }
-                else {
-                    for (int i = 0; i < decks.getChildren().size(); i++) {
-                        cardsInGame.get(i).setFlipped(true);
-                    }
-
-                    // wait for 2 seconds to allow players to understand game state and display instruction text
-                    PauseTransition pause = new PauseTransition(Duration.seconds(2));
-
-                    // RAC - Sending token back home
-                    card.applyMovement(currentPlayer, gameMap);
-                    sendTokenHome(newPosition);
-
-                    pause.setOnFinished(event -> {
-                        // change player turns and flip unfolded cards back
-                        nextPlayer();
-                        flipCardsBack();
-                    });
-                    pause.play();
-                }
-
             } else {
                 for (int i = 0; i < decks.getChildren().size(); i++) {
                     cardsInGame.get(i).setFlipped(true);
                 }
 
-                // wait for 2 seconds to allow players to understand game state and display instruction text
+                // Wait for 2 seconds to allow players to understand game state and display instruction text
                 PauseTransition pause = new PauseTransition(Duration.seconds(2));
-
                 instructions.setText("No match found, turn ends.");
                 if (inTutorialMode) {
-                    tutorialMode.setText("Flipped card doesn't match to" + " " + currentAnimalTypeAtPosition);
-                    steps.setText("Better Memory next time! You did not get the cards correct to continue moving forward! Look for" + " " + currentAnimalTypeAtPosition + " Card. FLIP AGAIN!");
+                    tutorialMode.setText("Flipped card doesn't match to " + currentAnimalTypeAtPosition);
+                    steps.setText("Better Memory next time! You did not get the cards correct to continue moving forward! Look for " + currentAnimalTypeAtPosition + " Card. FLIP AGAIN!");
                 }
 
                 pause.setOnFinished(event -> {
-                    // change player turns and flip unfolded cards back
+                    // Change player turns and flip unfolded cards back
                     nextPlayer();
                     flipCardsBack();
-
                 });
                 pause.play();
-
-
             }
 
         } else if (card.getCardType() == CardType.pirateCard) {
