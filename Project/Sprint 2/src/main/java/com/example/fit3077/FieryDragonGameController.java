@@ -178,7 +178,6 @@ public class FieryDragonGameController{ //implements Initializable
         playerList.clear(); // Clear any existing players in the list
         // Add the movable FISH
         playerList.add(new Player(new AnimalToken(AnimalType.FISH), 0, -1, false,0,true)); // FISH can move from the start position
-
         // Add static tokens with their fixed positions
         playerList.add(new Player(new AnimalToken(AnimalType.PUFFERFISH), 1, 8, true,1,true));
         playerList.add(new Player(new AnimalToken(AnimalType.DRAGON), 2, 15, true,1,true));
