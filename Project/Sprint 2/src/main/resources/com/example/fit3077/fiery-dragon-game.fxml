@@ -101,7 +101,7 @@
                            <font>
                               <Font size="14.0" />
                            </font></Button>
-                        <Button mnemonicParsing="false" onAction="#startGame" prefHeight="51.0" prefWidth="137.0" text="Start Game">
+                        <Button mnemonicParsing="false" onAction="#startGame" prefHeight="51.0" prefWidth="137.0" text="Restart Game">
                            <font>
                               <Font name="Arial Bold" size="17.0" />
                            </font>

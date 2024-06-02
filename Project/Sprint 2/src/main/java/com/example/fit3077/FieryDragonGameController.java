@@ -139,6 +139,13 @@ public class FieryDragonGameController{ //implements Initializable
 
     private boolean inTutorialMode = false;
 
+    private boolean shouldReset = false;  // Flag to determine if a reset is required
+
+    public void setShouldReset(boolean shouldReset) {
+        this.shouldReset = shouldReset;
+        System.out.println("Set reset flag to: " + shouldReset);
+    }
+
     public void setUserInput(int userInput) {
         this.userInput = userInput;
         System.out.println("User input set to: " + userInput);  // Debugging line
@@ -181,7 +188,12 @@ public class FieryDragonGameController{ //implements Initializable
     @FXML
     void backToGame() {
         inTutorialMode = false;
-        initializeGame();
+        if (isNewGame) {
+            initializeGame(true);
+        }
+        else{
+            initializeGame(false);
+        }
 
     }
 
@@ -191,12 +203,13 @@ public class FieryDragonGameController{ //implements Initializable
             if (isNewGame) {
                 playerList = setPlayers(userInput);  // Set new players for a new game
                 System.out.println("Initializing new game with " + userInput + " players.");
+                setShouldReset(true);  // Reset when starting a new game
             } else {
                 System.out.println("Using loaded players for continued game.");
-                continueGame();
             }
         } else {
             setTutorialPlayer(4);  // Set tutorial players if in tutorial mode
+            setShouldReset(true);  // Reset in tutorial mode
         }
         System.out.println("Starting game. Player count: " + playerList.size());
 
@@ -250,6 +263,10 @@ public class FieryDragonGameController{ //implements Initializable
         System.out.println("Restored game map: " + gameMap);
 
         Platform.runLater(() -> {
+            if (shouldReset) {
+                resetAllPlayers();  // Only reset players if shouldReset is true
+                System.out.println("Players reset.");
+            }
             initializeTokenViews();  // This should setup token views based on the newly loaded state
             System.out.println("Token views initialized, tokenViews size: " + tokenViews.size());
 
@@ -385,28 +402,37 @@ public class FieryDragonGameController{ //implements Initializable
     }
 
 
-    private void resetPlayer() {
-        // Get the current player and reset their position
-        Player currentPlayer = getCurrentPlayer();
-//        currentPlayer.resetPosition();
-//        // Update the game board to reflect the reset state
-//        updateGameBoard();
-        currentPlayer.getAnimalToken().setStepTaken(0);
-        currentPlayer.getAnimalToken().setIsOut(false);
-        currentPlayer.resetPosition();
-        updateGameBoard(); // Reflect the reset state on the game board
-    }
-
-    public void initializeGame() {
-        System.out.println("Initializing game with user input: " + userInput); // Debug output
-        if (userInput <= 0) {
-            System.err.println("Invalid number of players: " + userInput);
-            return; // Add a return to prevent further execution with invalid input
+    private void resetAllPlayers() {
+        for (Player player : playerList) {
+            player.getAnimalToken().setStepTaken(0);
+            player.getAnimalToken().setIsOut(false);
+            player.resetPosition();  // Assuming resetPosition() sets the player to an initial valid position
+            System.out.println("Reset player " + player.getAnimalToken().getType() + " to initial state.");
         }
-        gameMap = new GameMap(userInput);
-        tutorialPanel.setVisible(false);
-        setPlayers(userInput); // Ensure this is called after user input is confirmed
-        startGame();
+
+        updateGameBoard();  // Update the game board once after all players are reset
+        saveGameState();    // Save the updated state to file
+    }
+    public void initializeGame(boolean isNewGame) {
+        System.out.println("Initializing game with user input: " + userInput);
+        if (isNewGame) {
+            if (userInput <= 0) {
+                System.err.println("Invalid number of players: " + userInput);
+                return; // Prevent execution with invalid input
+            }
+            gameMap = new GameMap(userInput);
+            tutorialPanel.setVisible(false);
+            setPlayers(userInput); // Set players after confirming user input
+        } else {
+            loadPlayerState();
+            System.out.println("Loading existing game...");
+            loadPlayerState();
+            loadGameMapState();
+            continueGame();
+            tutorialPanel.setVisible(false);
+        }
+        this.isNewGame = isNewGame; // Set the game mode based on input flag
+        startGame(); // Start the game
     }
 
     private void displayShuffledDeck() {

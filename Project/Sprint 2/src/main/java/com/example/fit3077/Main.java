@@ -82,11 +82,11 @@ public class Main extends Application {
             userInput = promptForUserInput();  // Get user input right before starting a new game
             controller.setUserInput(userInput);  // Set user input
             System.out.println("Initializing new game with " + userInput + " players.");
-            controller.initializeGame();
+            controller.initializeGame(true);
             controller.saveGameState();
         } else {
             System.out.println("Loading existing game...");
-            controller.startGame();
+            controller.initializeGame(false);
         }
         // Add listener to save game state when the application is closing
         stage.setOnCloseRequest(event -> {
