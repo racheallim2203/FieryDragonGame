@@ -14,19 +14,20 @@ public class Player {
     boolean isNewGame;
 
     // Constructor to initialize player with loaded attributes
-    public Player(AnimalToken animalToken, int playerID, int position, boolean isOut, int stepsTaken, boolean isNewGame) {
+    public Player(AnimalToken animalToken, int playerID, int position, boolean isOut, int stepsTaken, boolean isNewGame, boolean isStatic) {
         this.animalToken = animalToken;
         this.playerID = playerID;
         this.position = position;
         this.stepsTaken=stepsTaken;
         this.isOut = isOut;
         this.isNewGame = isNewGame;
-        if (!isNewGame) {
+        if (!isNewGame || isStatic) {
             animalToken.setIsOut(isOut);
             System.out.println("Set Is Out");
             animalToken.setStepTaken(stepsTaken);
             System.out.println("Set Steps Taken");
         }
+
     }
 
 //    // initializes a new Player object with an AnimalToken and sets the initial position to

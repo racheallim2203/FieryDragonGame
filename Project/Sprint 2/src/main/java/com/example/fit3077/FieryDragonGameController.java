@@ -177,22 +177,17 @@ public class FieryDragonGameController{ //implements Initializable
     public void setTutorialPlayer(int numberOfPlayer){
         playerList.clear(); // Clear any existing players in the list
         // Add the movable FISH
-        playerList.add(new Player(new AnimalToken(AnimalType.FISH), 0, -1, false,0,true)); // FISH can move from the start position
+        playerList.add(new Player(new AnimalToken(AnimalType.FISH), 0, -1, false,0,true, false)); // FISH can move from the start position
         // Add static tokens with their fixed positions
-        playerList.add(new Player(new AnimalToken(AnimalType.PUFFERFISH), 1, 8, true,1,true));
-        playerList.add(new Player(new AnimalToken(AnimalType.DRAGON), 2, 15, true,1,true));
-        playerList.add(new Player(new AnimalToken(AnimalType.OCTOPUS), 3, 20, true,1,true));
+        playerList.add(new Player(new AnimalToken(AnimalType.PUFFERFISH), 1, 8, true,1,true, true));
+        playerList.add(new Player(new AnimalToken(AnimalType.DRAGON), 2, 15, true,1,true, true));
+        playerList.add(new Player(new AnimalToken(AnimalType.OCTOPUS), 3, 20, true,1,true, true));
     }
 
     @FXML
     void backToGame() {
         inTutorialMode = false;
-        if (isNewGame) {
-            initializeGame(true);
-        }
-        else{
-            initializeGame(false);
-        }
+        initializeGame(isNewGame);
 
     }
 
@@ -205,10 +200,10 @@ public class FieryDragonGameController{ //implements Initializable
                 setShouldReset(true);  // Reset when starting a new game
             } else {
                 System.out.println("Using loaded players for continued game.");
+
             }
         } else {
             setTutorialPlayer(4);  // Set tutorial players if in tutorial mode
-            setShouldReset(true);  // Reset in tutorial mode
         }
         System.out.println("Starting game. Player count: " + playerList.size());
 
@@ -254,7 +249,6 @@ public class FieryDragonGameController{ //implements Initializable
     public void continueGame() {
         isNewGame = false; // Ensure this is set before any potential early returns
         System.out.println("Loading existing game...");
-
         loadPlayerState();
         loadGameMapState();
 
@@ -262,10 +256,6 @@ public class FieryDragonGameController{ //implements Initializable
         System.out.println("Restored game map: " + gameMap);
 
         Platform.runLater(() -> {
-            if (shouldReset) {
-                resetAllPlayers();  // Only reset players if shouldReset is true
-                System.out.println("Players reset.");
-            }
             initializeTokenViews();  // This should setup token views based on the newly loaded state
             System.out.println("Token views initialized, tokenViews size: " + tokenViews.size());
 
@@ -376,7 +366,7 @@ public class FieryDragonGameController{ //implements Initializable
                 int position = Integer.parseInt(details[1].split(": ")[1]);
                 boolean isOut = Boolean.parseBoolean(details[2].split(": ")[1]);
                 int stepsTaken = Integer.parseInt(details[3].split(": ")[1]);
-                players.add(new Player(new AnimalToken(AnimalType.valueOf(type)), i - 1, position, isOut,stepsTaken, false));
+                players.add(new Player(new AnimalToken(AnimalType.valueOf(type)), i - 1, position, isOut,stepsTaken, false, false));
                 System.out.println("Player loaded: " + type + " at position " + position + " with steps " + stepsTaken + " and out status " + isOut);
             } catch (Exception e) {
                 System.err.println("Error parsing player data: " + e.getMessage());
@@ -408,7 +398,6 @@ public class FieryDragonGameController{ //implements Initializable
             player.resetPosition();  // Assuming resetPosition() sets the player to an initial valid position
             System.out.println("Reset player " + player.getAnimalToken().getType() + " to initial state.");
         }
-
         updateGameBoard();  // Update the game board once after all players are reset
         saveGameState();    // Save the updated state to file
     }
@@ -1008,15 +997,15 @@ public class FieryDragonGameController{ //implements Initializable
         List<Player> players = new ArrayList<>();
         System.out.println("Setting players with input: " + numberOfPlayer);
         if(numberOfPlayer == 2){
-            players.add(new Player(new AnimalToken(AnimalType.FISH), 0, -1, false, 0,true));
-            players.add(new Player(new AnimalToken(AnimalType.DRAGON), 1, 11, false,0, true));
+            players.add(new Player(new AnimalToken(AnimalType.FISH), 0, -1, false, 0,true, false));
+            players.add(new Player(new AnimalToken(AnimalType.DRAGON), 1, 11, false,0, true, false));
         }
         else {
             // create list of players
-            players.add(new Player(new AnimalToken(AnimalType.FISH), 0, -1, false, 0, true));
-            players.add(new Player(new AnimalToken(AnimalType.PUFFERFISH), 1, 5, false, 0, true));
-            players.add(new Player(new AnimalToken(AnimalType.DRAGON), 2, 11, false,0,true));
-            players.add(new Player(new AnimalToken(AnimalType.OCTOPUS), 3, 17, false,0,true));
+            players.add(new Player(new AnimalToken(AnimalType.FISH), 0, -1, false, 0, true, false));
+            players.add(new Player(new AnimalToken(AnimalType.PUFFERFISH), 1, 5, false, 0, true, false));
+            players.add(new Player(new AnimalToken(AnimalType.DRAGON), 2, 11, false,0,true, false));
+            players.add(new Player(new AnimalToken(AnimalType.OCTOPUS), 3, 17, false,0,true, false));
             for (int j = players.size()-1; j >= numberOfPlayer; j--){
                 players.remove(j);
             }
