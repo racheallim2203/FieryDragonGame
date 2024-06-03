@@ -11,12 +11,9 @@ public class AnimalCard extends Card {
 
     private final AnimalType animalType;
 
-    public AnimalCard(AnimalType animalType, int stepCount, CardType cardType) {
-//        super.type = animalType;      // sam - doesn't make sense to override the Card's type as it only can be "animal" or "pirate"
-        super(cardType);
-        super.stepCount = stepCount;
+    public AnimalCard(AnimalType animalType, int stepCount, CardType cardType, int index, boolean isFlipped) {
+        super(cardType,stepCount,isFlipped,index);
         this.animalType = animalType;
-        setFlipped(false);
     }
 
 
@@ -35,7 +32,6 @@ public class AnimalCard extends Card {
         }
 
     }
-
     @Override
     public Image getImage() {
 
@@ -59,6 +55,17 @@ public class AnimalCard extends Card {
         return animalType.toString().toLowerCase() + stepCount + ".png";
     }
 
+
+    @Override
+    public String toString() {
+        return "{" +
+                "index=" + index +
+                ", type=" + cardType +
+                ", animalType=" + animalType +
+                ", stepCount=" + stepCount +
+                ", isFlipped=" + isFlipped +
+                '}';
+    }
 
 
 }

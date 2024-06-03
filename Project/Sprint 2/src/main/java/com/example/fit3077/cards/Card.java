@@ -10,17 +10,30 @@ public abstract class Card implements Movement {
 //    protected String cardType; // This can be "animal" or "pirate"
     protected int stepCount;
 
-    private final CardType cardType;
-    private boolean isFlipped;
+    public CardType cardType;
 
-    protected Card(CardType cardType) {
+    protected boolean isFlipped;
+    protected int index;  // Position in the deck or display
+
+    public Card(CardType cardType, int stepCount, boolean isFlipped, int index) {
         this.cardType = cardType;
+        this.stepCount = stepCount;
+        this.isFlipped = isFlipped;
+        this.index = index;  // Initialize index
     }
 
     public abstract String getImageFileName(); // Abstract method to get image file name
 
     public boolean isFlipped() {
         return isFlipped;
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 
     public void setFlipped(boolean flipped) {
@@ -35,11 +48,6 @@ public abstract class Card implements Movement {
         this.stepCount = stepCount;
     }
 
-    // This method needs to be implemented in subclasses
-//    @Override
-//    public abstract void applyMovement(Player player, GameMap gameMap, Card card);
-
-//    public abstract void applyMovement(Player player, GameMap gameMap);
 
     // an abstract method
     // This method will return an Image that represents the Card
@@ -56,8 +64,15 @@ public abstract class Card implements Movement {
 
     public abstract boolean matchesType(AnimalType animalType);
 
-
-
+    @Override
+    public String toString() {
+        return "{" +
+                "index=" + index +
+                ", type=" + cardType +
+                ", stepCount=" + stepCount +
+                ", isFlipped=" + isFlipped +
+                '}';
+    }
 
 }
 

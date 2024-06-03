@@ -8,9 +8,8 @@ import javafx.scene.image.Image;
 
 public class SwapCard extends Card {
 
-    public SwapCard(CardType cardType) {
-        super(cardType);
-        setFlipped(false);
+    public SwapCard(CardType cardType, int index, boolean isFlipped) {
+        super(cardType,0,isFlipped, index);
     }
 
     @Override
@@ -36,4 +35,14 @@ public class SwapCard extends Card {
         return "swapCard.png";
     }
 
+    @Override
+    public String toString() {
+        return "{" +
+                "index=" + index +
+                ", type=" + cardType +
+                ", AnimalType=" + null +
+                ", isFlipped=" + isFlipped +
+                ", stepCount=" + stepCount +
+                '}';
+    }
 }

@@ -1,6 +1,9 @@
 package com.example.fit3077;
 
+import com.example.fit3077.cards.AnimalCard;
 import com.example.fit3077.cards.Card;
+import com.example.fit3077.cards.PirateCard;
+import com.example.fit3077.cards.SwapCard;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -14,6 +17,8 @@ import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class FieryDragonGameController{ //implements Initializable
@@ -138,6 +143,8 @@ public class FieryDragonGameController{ //implements Initializable
     private static final String VOLCANO_CARD_FILE = "volcano_card_state.txt";
     private static final String VOLCANO_POSITIONS_FILE = "volcano_positions.txt";
 
+    private static final String CARDS_DECK_FILE = "card_decks.txt";
+
     private boolean inTutorialMode = false;
 
     private boolean shouldReset = false;  // Flag to determine if a reset is required
@@ -202,6 +209,7 @@ public class FieryDragonGameController{ //implements Initializable
             } else {
                 System.out.println("Using loaded game map and players for continued game.");
                 arrangeAnimalsInCircle();
+                displayShuffledDeck();
             }
         } else {
             setTutorialPlayer(4);  // Set tutorial players if in tutorial mode
@@ -246,199 +254,6 @@ public class FieryDragonGameController{ //implements Initializable
         });
     }
 
-    // Method to continue the game by loading the saved state
-    public void continueGame() {
-        isNewGame = false; // Ensure this is set before any potential early returns
-        System.out.println("Loading existing game...");
-        loadPlayerState();
-        loadGameMapState();
-
-        Platform.runLater(() -> {
-            initializeTokenViews();  // This should setup token views based on the newly loaded state
-//            arrangeAnimalsInCircle();
-            System.out.println("Token views initialized, tokenViews size: " + tokenViews.size());
-            updateGameBoard();  // Now update the game board to reflect the loaded state
-            System.out.println("Game board updated after loading game.");
-            System.out.println("Game continued successfully. UI updated with loaded data.");
-        });
-    }
-
-    // Load players from saved state
-    void loadPlayerState() {
-        String playerData = readFromFile(PLAYER_LIST_FILE);
-        System.out.println("Successfully read file");
-        int numberOfPlayers = parsePlayerCount(playerData);
-        System.out.println("Successfully passed player count");
-        if (numberOfPlayers > 0) {
-            updatePlayerList(playerData, numberOfPlayers);
-            System.out.println("Successfully update player list");
-        }
-    }
-
-    // Method to load the saved state of the volcanoes
-    void loadGameMapState() {
-        String volcanoCardState = readFromFile(VOLCANO_CARD_FILE);
-        if (volcanoCardState != null) {
-            List<Volcano> loadedVolcanoes = parseVolcanoState(volcanoCardState);
-            if (loadedVolcanoes != null && !loadedVolcanoes.isEmpty()) {
-                // Again because need to get the number of players
-                String playerData = readFromFile(PLAYER_LIST_FILE);
-                int numberOfPlayers = parsePlayerCount(playerData);
-
-                // Load animal positions
-                try {
-                    loadAnimalPositions(VOLCANO_POSITIONS_FILE);
-                } catch (IOException | NumberFormatException e) {
-                    System.err.println("Error loading animal positions: " + e.getMessage());
-                    return;
-                }
-
-                  gameMap = new GameMap(numberOfPlayers);  // Use the number of players to initialize the game map properly
-//                gameMap.setVolcanoes(loadedVolcanoes);  // Set the loaded volcanoes
-//                gameMap.setUpHabitats();  // Set up habitats after loading volcanoes
-
-                System.out.println("Game map successfully loaded with " + loadedVolcanoes.size() + " volcanoes.");
-            } else {
-                System.err.println("No volcanoes were loaded, possibly due to parsing errors or empty data.");
-            }
-        } else {
-            System.err.println("No volcano data found, check the file path and data.");
-        }
-    }
-
-
-    // Parse the state of the volcanoes from a string
-    private List<Volcano> parseVolcanoState(String data) {
-        List<Volcano> volcanoes = new ArrayList<>();
-        String[] volcanoEntries = data.split("\n");
-        for (String entry : volcanoEntries) {
-            List<Habitat> habitats = new ArrayList<>();
-            String[] habitatEntries = entry.split(",");
-            for (String habitatEntry : habitatEntries) {
-                habitats.add(new Habitat(AnimalType.valueOf(habitatEntry.trim())));
-            }
-            volcanoes.add(new Volcano(habitats));
-        }
-        return volcanoes;
-    }
-
-    // read from a file
-    private String readFromFile(String filePath) {
-        StringBuilder content = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                content.append(line).append("\n");
-            }
-        } catch (IOException e) {
-            System.err.println("Failed to read from file: " + e.getMessage());
-        }
-        return content.toString();
-    }
-
-    // Method to update the player list using loaded player data
-    private void updatePlayerList(String playerData, int numberOfPlayers) {
-        List<Player> loadedPlayers = parsePlayerData(playerData);
-
-        if (loadedPlayers.size() != numberOfPlayers) {
-            System.err.println("Mismatch in the number of players expected and loaded. Expected: " + numberOfPlayers + ", Loaded: " + loadedPlayers.size());
-            return;
-        }
-
-        playerList = new ArrayList<>(loadedPlayers);  // Assign the new player list
-        System.out.println("Player list updated successfully. Total players: " + playerList.size());
-        for (Player player : playerList) {
-            System.out.println("Player ID: " + player.getPlayerID() + ", Type: " + player.getAnimalToken().getType() + ", Position: " + player.getPosition() + ", IsOut: " + player.getAnimalToken().getIsOut() + ", StepsTaken: " + player.getAnimalToken().getStepTaken());
-        }
-    }
-
-    // Parses the first line to get the number of players
-    private int parsePlayerCount(String data) {
-        try {
-            return Integer.parseInt(data.trim().split("\n")[0].split(":")[1].trim());
-        } catch (Exception e) {
-            System.err.println("Error parsing player count: " + e.getMessage());
-            return 0;
-        }
-    }
-
-    // Parse player data from string data
-    private List<Player> parsePlayerData(String data) {
-        List<Player> players = new ArrayList<>();
-        String[] entries = data.trim().split("\n");
-        for (int i = 1; i < entries.length; i++) {  // Skip the first line which is the count
-            try {
-                String[] details = entries[i].split(", ");
-                String type = details[0].split(": ")[1];
-                int position = Integer.parseInt(details[1].split(": ")[1]);
-                boolean isOut = Boolean.parseBoolean(details[2].split(": ")[1]);
-                int stepsTaken = Integer.parseInt(details[3].split(": ")[1]);
-                players.add(new Player(new AnimalToken(AnimalType.valueOf(type)), i - 1, position, isOut,stepsTaken, false, false));
-                System.out.println("Player loaded: " + type + " at position " + position + " with steps " + stepsTaken + " and out status " + isOut);
-            } catch (Exception e) {
-                System.err.println("Error parsing player data: " + e.getMessage());
-            }
-        }
-        return players;
-    }
-
-
-    public void saveGameState() {
-        // Save Volcano state
-        if (Arrays.asList(animalPositions).contains(null)) {
-            System.err.println("Error: Animal positions not fully initialized.");
-        }
-        try {
-            Volcano.saveVolcano(VolcanoList.getInstance(), "volcano_card_state.txt");
-            saveAnimalPositions(animalPositions, "volcano_positions.txt");
-            for (int i = 0; i < animalPositions.length; i++) {
-                if (animalPositions[i] == null) {
-                    System.err.println("Error: Position " + i + " is null after loading.");
-                }
-            }
-        } catch (IOException e) {
-            System.err.println("Error saving Volcano state: " + e.getMessage());
-            return;
-        }
-
-        // Save player data
-        Player.savePlayers(playerList, "player_list.txt");
-        System.out.println("Player state saved successfully.");
-    }
-
-    public void saveAnimalPositions(AnimalType[] positions, String filePath) throws IOException {
-        if (positions == null) {
-            throw new IllegalArgumentException("Positions array cannot be null.");
-        }
-
-        StringBuilder sb = new StringBuilder();
-        for (AnimalType position : positions) {
-            if (position != null) {
-                sb.append(position.ordinal()).append(",");
-            } else {
-                sb.append("-1,"); // Use -1 or some other placeholder to indicate 'no animal'
-            }
-        }
-        if (sb.length() > 0) {
-            sb.setLength(sb.length() - 1); // Remove the last comma
-        }
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-            writer.write(sb.toString());
-        }
-    }
-
-    public void loadAnimalPositions(String filePath) throws IOException, NumberFormatException {
-        String data = readFromFile(filePath);
-        if (!data.isEmpty()) {
-            String[] positionEntries = data.split(",");
-            for (int i = 0; i < positionEntries.length; i++) {
-                animalPositions[i] = AnimalType.values()[Integer.parseInt(positionEntries[i].trim())];
-            }
-            System.out.println("LoadedAnimalPositions");
-            System.out.println(Arrays.toString(positionEntries));
-        }
-    }
     private void resetAllPlayers() {
         for (Player player : playerList) {
             player.getAnimalToken().setStepTaken(0);
@@ -470,40 +285,69 @@ public class FieryDragonGameController{ //implements Initializable
 
     private void displayShuffledDeck() {
         decks.getChildren().clear(); // Clear existing children to avoid duplicates
-        // Instantiate the deck and shuffle it
-        DeckOfCards deck = new DeckOfCards();
-        deck.shuffle();
-        // Retrieve the shuffled list of cards
-        cardsInGame = new ArrayList<>(deck.getCards()); // Store the shuffled cards in the member variable.
+        // If it's a new game, shuffle the cards, else sort them by their index
+        if (isNewGame) {
+            DeckOfCards deck = new DeckOfCards(cardsInGame);
+            deck.shuffle();
+            System.out.println(deck);
+            // Update the cardsInGame with possibly shuffled cards
+            cardsInGame = new ArrayList<>(deck.getCards());
 
-        // Iterate over the shuffled deck and the imageView IDs together
-        for (int i = 0; i < cardsInGame.size(); i++) {
-            Card card = cardsInGame.get(i);
-            int count = card.getCount();
-            String cardFileName = "";
-            cardFileName = card.getImageFileName();
+            // Iterate over the shuffled deck and the imageView IDs together
+            for (int i = 0; i < cardsInGame.size(); i++) {
+                Card card = cardsInGame.get(i);
+                int count = card.getCount();
+                String cardFileName = "";
+                cardFileName = card.getImageFileName();
 
-            Image cardImage;
-            try {
-                cardImage = new Image(getClass().getResourceAsStream("images/" + cardFileName));
-            } catch (Exception e) {
-                System.err.println("Could not load image for card: " + cardFileName);
-                continue; // Skip this card if the image fails to load
-            }
+                Image cardImage;
+                try {
+                    cardImage = new Image(getClass().getResourceAsStream("images/" + cardFileName));
+                } catch (Exception e) {
+                    System.err.println("Could not load image for card: " + cardFileName);
+                    continue; // Skip this card if the image fails to load
+                }
 
-            // Create a new ImageView for the card
-            ImageView cardImageView = new ImageView(cardImage);
-            cardImageView.setFitHeight(50); // Adjust the size as needed
-            cardImageView.setFitWidth(50);
-            cardImageView.setPreserveRatio(true);
+                // Create a new ImageView for the card
+                ImageView cardImageView = new ImageView(cardImage);
+                cardImageView.setFitHeight(50); // Adjust the size as needed
+                cardImageView.setFitWidth(50);
+                cardImageView.setPreserveRatio(true);
 
-            // Add the ImageView to the container
-            decks.getChildren().add(cardImageView);
+                // Add the ImageView to the container
+                decks.getChildren().add(cardImageView);
 //            System.out.println(decks.getChildren().size());
+            }
+        } else {
+            // Sort cards by their index to maintain the order they were saved in
+            cardsInGame.sort(Comparator.comparingInt(Card::getIndex));
 
+            // Display cards, handling their flipped state and using their index for positioning if needed
+            for (Card card : cardsInGame) {
+                Image cardImage;
+                String cardFileName = card.getImageFileName();
 
+                try {
+                    // Load and set the image for the card
+                    cardImage = new Image(getClass().getResourceAsStream("images/" + cardFileName), 50, 50, true, true);
+                    ImageView cardImageView = new ImageView(cardImage);
+                    cardImageView.setFitHeight(50);
+                    cardImageView.setFitWidth(50);
+                    cardImageView.setPreserveRatio(true);
+                    cardImageView.setUserData(cardsInGame.indexOf(card));
+
+                    // If the card is not flipped, display the covered card image
+                    if (!card.isFlipped()) {
+                        cardImageView.setImage(new Image(getClass().getResourceAsStream("images/coveredcard.png"), 50, 50, true, true));
+                    }
+
+                    // Add the ImageView to the container
+                    decks.getChildren().add(cardImageView);
+                } catch (Exception e) {
+                    System.err.println("Could not load image for card: " + cardFileName);
+                }
+            }
         }
-
 
     }
 
@@ -687,42 +531,60 @@ public class FieryDragonGameController{ //implements Initializable
     /**
      * This will add a number to each ImageView and set the image to be the back of a Card
      */
+
     private void initializeImageView() {
         System.out.println("Initializing image views for card flip.");
-        for (int i = 0; i < decks.getChildren().size(); i++) {
-            ImageView imageView = (ImageView) decks.getChildren().get(i);
-            imageView.setImage(new Image(getClass().getResourceAsStream("images/coveredcard.png")));
-            imageView.setUserData(i);
+        decks.getChildren().clear();  // Ensure no duplicates when re-initializing.
 
+        for (int i = 0; i < cardsInGame.size(); i++) {
+            Card card = cardsInGame.get(i);
+            ImageView imageView = new ImageView();
+            imageView.setFitHeight(50); // Adjust the size as needed
+            imageView.setFitWidth(50);
+            imageView.setPreserveRatio(true);
+            imageView.setUserData(i); // Set user data to store card index
+
+            // Set the image based on the card's flipped state
+            String imagePath = card.isFlipped() ? "images/" + card.getImageFileName() : "images/coveredcard.png";
+            imageView.setImage(new Image(getClass().getResourceAsStream(imagePath)));
+
+            // Add click event handler to flip the card
             imageView.setOnMouseClicked(event -> {
                 int index = (int) imageView.getUserData();
                 System.out.println("Card at index " + index + " clicked.");
                 flipCard(index);
             });
+
+            // Add the ImageView to the container
+            decks.getChildren().add(imageView);
         }
     }
 
     private void flipCard(int indexOfCard) {
         indicator.setVisible(inTutorialMode);
-        if (!cardsInGame.get(indexOfCard).isFlipped()){
-            cardsInGame.get(indexOfCard).setFlipped(true);
-            System.out.println("Flipping card at index " + indexOfCard);
-            ImageView imageView = (ImageView) decks.getChildren().get(indexOfCard);
+        Card card = cardsInGame.get(indexOfCard);
+        ImageView imageView = (ImageView) decks.getChildren().get(indexOfCard);
 
-            if (imageView != null && cardsInGame.size() > indexOfCard) {
-                Card card = cardsInGame.get(indexOfCard);
+        if (imageView != null && cardsInGame.size() > indexOfCard) {
+            // Toggle the flipped state of the card
+            card.setFlipped(!card.isFlipped());
+            System.out.println("Toggling card at index " + indexOfCard + " to " + (card.isFlipped() ? "flipped" : "covered"));
 
+            if (card.isFlipped()) {
+                // If flipped, show the card's face
                 Image image = card.getImage();
                 if (image != null) {
-                    imageView.setImage(image); // Set the card image to show its face
-                    processCardMovement(card);   // Process the effect of the card
-
+                    imageView.setImage(image); // Display the card's image
+                    processCardMovement(card); // Process any game logic associated with flipping this card
                 } else {
                     System.err.println("Card image is null.");
                 }
             } else {
-                System.err.println("ImageView is null or index is out of bounds.");
+                // If not flipped, show the back of the card
+                imageView.setImage(new Image(getClass().getResourceAsStream("images/coveredcard.png")));
             }
+        } else {
+            System.err.println("ImageView is null or index is out of bounds.");
         }
     }
 
@@ -1120,6 +982,212 @@ public class FieryDragonGameController{ //implements Initializable
         winner.setImage(new Image(getClass().getResourceAsStream(pathName)));
         System.out.println("pathName:" + pathName);
     }
+
+/**********************************
+ ******* SAVING AND LOADING GAME*/
+
+// Method to continue the game by loading the saved state
+public void continueGame() {
+    isNewGame = false;
+    System.out.println("Loading existing game...");
+    try {
+        loadPlayerState();
+        loadGameMapState();
+        List<String> savedDeckState = Files.readAllLines(Paths.get(CARDS_DECK_FILE));
+        DeckOfCards deck = new DeckOfCards(savedDeckState);
+        cardsInGame = new ArrayList<>(deck.getCards());
+
+        Platform.runLater(() -> {
+            initializeTokenViews();
+            System.out.println("Token views initialized, tokenViews size: " + tokenViews.size());
+            updateGameBoard();
+            System.out.println("Game board updated after loading game.");
+            System.out.println("Game continued successfully. UI updated with loaded data.");
+        });
+    } catch (Exception e) {
+        System.err.println("Failed to load game state: " + e.getMessage());
+    }
+}
+
+
+
+    // Load players from saved state
+    void loadPlayerState() {
+        String playerData = readFromFile(PLAYER_LIST_FILE);
+        System.out.println("Successfully read file");
+        int numberOfPlayers = parsePlayerCount(playerData);
+        System.out.println("Successfully passed player count");
+        if (numberOfPlayers > 0) {
+            updatePlayerList(playerData, numberOfPlayers);
+            System.out.println("Successfully update player list");
+        }
+    }
+
+    void loadGameMapState() {
+        String volcanoCardState = readFromFile(VOLCANO_CARD_FILE);
+        if (volcanoCardState != null) {
+            List<Volcano> loadedVolcanoes = parseVolcanoState(volcanoCardState);
+            if (loadedVolcanoes != null && !loadedVolcanoes.isEmpty()) {
+                // Again because need to get the number of players
+                String playerData = readFromFile(PLAYER_LIST_FILE);
+                int numberOfPlayers = parsePlayerCount(playerData);
+
+                // Load animal positions
+                try {
+                    loadAnimalPositions(VOLCANO_POSITIONS_FILE);
+                } catch (IOException | NumberFormatException e) {
+                    System.err.println("Error loading animal positions: " + e.getMessage());
+                    return;
+                }
+
+                gameMap = new GameMap(numberOfPlayers);  // Use the number of players to initialize the game map properly
+
+                System.out.println("Game map successfully loaded with " + loadedVolcanoes.size() + " volcanoes.");
+            } else {
+                System.err.println("No volcanoes were loaded, possibly due to parsing errors or empty data.");
+            }
+        } else {
+            System.err.println("No volcano data found, check the file path and data.");
+        }
+    }
+
+
+    // Parse the state of the volcanoes from a string
+    private List<Volcano> parseVolcanoState(String data) {
+        List<Volcano> volcanoes = new ArrayList<>();
+        String[] volcanoEntries = data.split("\n");
+        for (String entry : volcanoEntries) {
+            List<Habitat> habitats = new ArrayList<>();
+            String[] habitatEntries = entry.split(",");
+            for (String habitatEntry : habitatEntries) {
+                habitats.add(new Habitat(AnimalType.valueOf(habitatEntry.trim())));
+            }
+            volcanoes.add(new Volcano(habitats));
+        }
+        return volcanoes;
+    }
+
+    // read from a file
+    private String readFromFile(String filePath) {
+        StringBuilder content = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                content.append(line).append("\n");
+            }
+        } catch (IOException e) {
+            System.err.println("Failed to read from file: " + e.getMessage());
+        }
+        return content.toString();
+    }
+
+    // Method to update the player list using loaded player data
+    private void updatePlayerList(String playerData, int numberOfPlayers) {
+        List<Player> loadedPlayers = parsePlayerData(playerData);
+
+        if (loadedPlayers.size() != numberOfPlayers) {
+            System.err.println("Mismatch in the number of players expected and loaded. Expected: " + numberOfPlayers + ", Loaded: " + loadedPlayers.size());
+            return;
+        }
+
+        playerList = new ArrayList<>(loadedPlayers);  // Assign the new player list
+        System.out.println("Player list updated successfully. Total players: " + playerList.size());
+        for (Player player : playerList) {
+            System.out.println("Player ID: " + player.getPlayerID() + ", Type: " + player.getAnimalToken().getType() + ", Position: " + player.getPosition() + ", IsOut: " + player.getAnimalToken().getIsOut() + ", StepsTaken: " + player.getAnimalToken().getStepTaken());
+        }
+    }
+
+    // Parses the first line to get the number of players
+    private int parsePlayerCount(String data) {
+        try {
+            return Integer.parseInt(data.trim().split("\n")[0].split(":")[1].trim());
+        } catch (Exception e) {
+            System.err.println("Error parsing player count: " + e.getMessage());
+            return 0;
+        }
+    }
+
+    // Parse player data from string data
+    private List<Player> parsePlayerData(String data) {
+        List<Player> players = new ArrayList<>();
+        String[] entries = data.trim().split("\n");
+        for (int i = 1; i < entries.length; i++) {  // Skip the first line which is the count
+            try {
+                String[] details = entries[i].split(", ");
+                String type = details[0].split(": ")[1];
+                int position = Integer.parseInt(details[1].split(": ")[1]);
+                boolean isOut = Boolean.parseBoolean(details[2].split(": ")[1]);
+                int stepsTaken = Integer.parseInt(details[3].split(": ")[1]);
+                players.add(new Player(new AnimalToken(AnimalType.valueOf(type)), i - 1, position, isOut,stepsTaken, false, false));
+                System.out.println("Player loaded: " + type + " at position " + position + " with steps " + stepsTaken + " and out status " + isOut);
+            } catch (Exception e) {
+                System.err.println("Error parsing player data: " + e.getMessage());
+            }
+        }
+        return players;
+    }
+
+
+    public void saveGameState() {
+        if (Arrays.asList(animalPositions).contains(null)) {
+            System.err.println("Error: Animal positions not fully initialized.");
+        }
+        try {
+            Volcano.saveVolcano(VolcanoList.getInstance(), "volcano_card_state.txt");
+            saveAnimalPositions(animalPositions, "volcano_positions.txt");
+            saveDeckState(CARDS_DECK_FILE); // Use this method to save deck state
+            Player.savePlayers(playerList, "player_list.txt");
+            System.out.println("Player state saved successfully.");
+        } catch (IOException e) {
+            System.err.println("Error saving game state: " + e.getMessage());
+        }
+    }
+
+    public void saveDeckState(String filePath) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            for (Card card : cardsInGame) { // Ensure you're saving from cardsInGame
+                writer.write(card.getIndex() + "," + card.isFlipped() + "," + card.getCardType() + "," + card.getCount() + "," +
+                        (card instanceof AnimalCard ? ((AnimalCard) card).getAnimalType() : "None"));
+                writer.newLine();
+            }
+        }
+    }
+    public void saveAnimalPositions(AnimalType[] positions, String filePath) throws IOException {
+        if (positions == null) {
+            throw new IllegalArgumentException("Positions array cannot be null.");
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (AnimalType position : positions) {
+            if (position != null) {
+                sb.append(position.ordinal()).append(",");
+            } else {
+                sb.append("-1,"); // Use -1 or some other placeholder to indicate 'no animal'
+            }
+        }
+        if (sb.length() > 0) {
+            sb.setLength(sb.length() - 1); // Remove the last comma
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            writer.write(sb.toString());
+        }
+    }
+
+    public void loadAnimalPositions(String filePath) throws IOException, NumberFormatException {
+        String data = readFromFile(filePath);
+        if (!data.isEmpty()) {
+            String[] positionEntries = data.split(",");
+            for (int i = 0; i < positionEntries.length; i++) {
+                animalPositions[i] = AnimalType.values()[Integer.parseInt(positionEntries[i].trim())];
+            }
+            System.out.println("LoadedAnimalPositions");
+            System.out.println(Arrays.toString(positionEntries));
+        }
+    }
+
+
+
 
 }
 

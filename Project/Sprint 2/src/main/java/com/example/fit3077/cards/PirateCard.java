@@ -8,10 +8,8 @@ import javafx.scene.image.Image;
 
 public class PirateCard extends Card {
 
-    public PirateCard(int stepCount, CardType cardType) {
-        super(cardType);
-        super.stepCount = stepCount; // Ensure this is within the range [1, 2] for PirateCard
-        setFlipped(false);
+    public PirateCard(int stepCount, CardType cardType, int index, boolean isFlipped) {
+        super(cardType,stepCount,isFlipped,index);
     }
 
     @Override
@@ -38,5 +36,15 @@ public class PirateCard extends Card {
         return "piratecard" + stepCount + ".png";
     }
 
+    @Override
+    public String toString() {
+        return "{" +
+                "index=" + index +
+                ", type=" + cardType +
+                ", AnimalType=" + null +
+                ", stepCount=" + stepCount +
+                ", isFlipped=" + isFlipped +
+                '}';
+    }
 }
 
