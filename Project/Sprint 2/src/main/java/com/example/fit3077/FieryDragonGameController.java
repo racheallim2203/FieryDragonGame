@@ -136,6 +136,7 @@ public class FieryDragonGameController{ //implements Initializable
     // Existing game state file paths or configuration
     private static final String PLAYER_LIST_FILE = "player_list.txt";
     private static final String VOLCANO_CARD_FILE = "volcano_card_state.txt";
+    private static final String VOLCANO_POSITIONS_FILE = "volcano_positions.txt";
 
     private boolean inTutorialMode = false;
 
@@ -199,8 +200,8 @@ public class FieryDragonGameController{ //implements Initializable
                 System.out.println("Initializing new game with " + userInput + " players.");
                 setShouldReset(true);  // Reset when starting a new game
             } else {
-                System.out.println("Using loaded players for continued game.");
-
+                System.out.println("Using loaded game map and players for continued game.");
+                arrangeAnimalsInCircle();
             }
         } else {
             setTutorialPlayer(4);  // Set tutorial players if in tutorial mode
@@ -229,7 +230,7 @@ public class FieryDragonGameController{ //implements Initializable
         // UI and game logic initialization on the UI thread
         Platform.runLater(() -> {
             displayShuffledDeck();  // Display the shuffled deck of cards
-            if (!cardsInGame.isEmpty()) {
+            if (!cardsInGame.isEmpty() || !isNewGame) {
                 shuffleAndDisplayAnimals();  // Shuffle animal positions and display on the board
             } else {
                 System.err.println("Card list is empty, ensure cards are initialized before starting the game.");
@@ -252,15 +253,11 @@ public class FieryDragonGameController{ //implements Initializable
         loadPlayerState();
         loadGameMapState();
 
-        System.out.println("Restored player list: " + playerList);
-        System.out.println("Restored game map: " + gameMap);
-
         Platform.runLater(() -> {
             initializeTokenViews();  // This should setup token views based on the newly loaded state
+//            arrangeAnimalsInCircle();
             System.out.println("Token views initialized, tokenViews size: " + tokenViews.size());
-
             updateGameBoard();  // Now update the game board to reflect the loaded state
-
             System.out.println("Game board updated after loading game.");
             System.out.println("Game continued successfully. UI updated with loaded data.");
         });
@@ -271,7 +268,7 @@ public class FieryDragonGameController{ //implements Initializable
         String playerData = readFromFile(PLAYER_LIST_FILE);
         System.out.println("Successfully read file");
         int numberOfPlayers = parsePlayerCount(playerData);
-        System.out.println("Successfullyn passed player count");
+        System.out.println("Successfully passed player count");
         if (numberOfPlayers > 0) {
             updatePlayerList(playerData, numberOfPlayers);
             System.out.println("Successfully update player list");
@@ -284,12 +281,21 @@ public class FieryDragonGameController{ //implements Initializable
         if (volcanoCardState != null) {
             List<Volcano> loadedVolcanoes = parseVolcanoState(volcanoCardState);
             if (loadedVolcanoes != null && !loadedVolcanoes.isEmpty()) {
+                // Again because need to get the number of players
                 String playerData = readFromFile(PLAYER_LIST_FILE);
                 int numberOfPlayers = parsePlayerCount(playerData);
-                // Create a new GameMap instance using the loaded data
-                gameMap = new GameMap(numberOfPlayers);  // Use the number of players to initialize the game map properly
-                gameMap.setVolcanoes(loadedVolcanoes);  // Set the loaded volcanoes
-                gameMap.setUpHabitats();  // Set up habitats after loading volcanoes
+
+                // Load animal positions
+                try {
+                    loadAnimalPositions(VOLCANO_POSITIONS_FILE);
+                } catch (IOException | NumberFormatException e) {
+                    System.err.println("Error loading animal positions: " + e.getMessage());
+                    return;
+                }
+
+                  gameMap = new GameMap(numberOfPlayers);  // Use the number of players to initialize the game map properly
+//                gameMap.setVolcanoes(loadedVolcanoes);  // Set the loaded volcanoes
+//                gameMap.setUpHabitats();  // Set up habitats after loading volcanoes
 
                 System.out.println("Game map successfully loaded with " + loadedVolcanoes.size() + " volcanoes.");
             } else {
@@ -299,6 +305,7 @@ public class FieryDragonGameController{ //implements Initializable
             System.err.println("No volcano data found, check the file path and data.");
         }
     }
+
 
     // Parse the state of the volcanoes from a string
     private List<Volcano> parseVolcanoState(String data) {
@@ -378,8 +385,17 @@ public class FieryDragonGameController{ //implements Initializable
 
     public void saveGameState() {
         // Save Volcano state
+        if (Arrays.asList(animalPositions).contains(null)) {
+            System.err.println("Error: Animal positions not fully initialized.");
+        }
         try {
             Volcano.saveVolcano(VolcanoList.getInstance(), "volcano_card_state.txt");
+            saveAnimalPositions(animalPositions, "volcano_positions.txt");
+            for (int i = 0; i < animalPositions.length; i++) {
+                if (animalPositions[i] == null) {
+                    System.err.println("Error: Position " + i + " is null after loading.");
+                }
+            }
         } catch (IOException e) {
             System.err.println("Error saving Volcano state: " + e.getMessage());
             return;
@@ -390,7 +406,39 @@ public class FieryDragonGameController{ //implements Initializable
         System.out.println("Player state saved successfully.");
     }
 
+    public void saveAnimalPositions(AnimalType[] positions, String filePath) throws IOException {
+        if (positions == null) {
+            throw new IllegalArgumentException("Positions array cannot be null.");
+        }
 
+        StringBuilder sb = new StringBuilder();
+        for (AnimalType position : positions) {
+            if (position != null) {
+                sb.append(position.ordinal()).append(",");
+            } else {
+                sb.append("-1,"); // Use -1 or some other placeholder to indicate 'no animal'
+            }
+        }
+        if (sb.length() > 0) {
+            sb.setLength(sb.length() - 1); // Remove the last comma
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            writer.write(sb.toString());
+        }
+    }
+
+    public void loadAnimalPositions(String filePath) throws IOException, NumberFormatException {
+        String data = readFromFile(filePath);
+        if (!data.isEmpty()) {
+            String[] positionEntries = data.split(",");
+            for (int i = 0; i < positionEntries.length; i++) {
+                animalPositions[i] = AnimalType.values()[Integer.parseInt(positionEntries[i].trim())];
+            }
+            System.out.println("LoadedAnimalPositions");
+            System.out.println(Arrays.toString(positionEntries));
+        }
+    }
     private void resetAllPlayers() {
         for (Player player : playerList) {
             player.getAnimalToken().setStepTaken(0);
@@ -412,10 +460,7 @@ public class FieryDragonGameController{ //implements Initializable
             tutorialPanel.setVisible(false);
             setPlayers(userInput); // Set players after confirming user input
         } else {
-            loadPlayerState();
             System.out.println("Loading existing game...");
-            loadPlayerState();
-            loadGameMapState();
             continueGame();
             tutorialPanel.setVisible(false);
         }
@@ -466,20 +511,25 @@ public class FieryDragonGameController{ //implements Initializable
      * This method will arrange images in a circle within the game board.
      */
     private void arrangeAnimalsInCircle() {
-        // Shuffle each habitat's animal cards and the list of habitats
-        gameMap.getVolcanoList().forEach(Volcano::shuffle);
-        Collections.shuffle(gameMap.getVolcanoList());
+        if (isNewGame) {
+            // Shuffle each habitat's animal cards and the list of habitats only if it's a new game
+            gameMap.getVolcanoList().forEach(Volcano::shuffle);
+            Collections.shuffle(gameMap.getVolcanoList());
+        }
 
         Platform.runLater(() -> {
             boardcards.getChildren().clear();
             double paneCenterX = boardcards.getWidth() / 2;
             double paneCenterY = boardcards.getHeight() / 2;
-            int totalAnimals = gameMap.getVolcanoList().stream().mapToInt(h -> h.getVolcanoCards().size()).sum();
+
+            // Use either dynamically counted total animals or fixed number from animalPositions.length
+            int totalAnimals = isNewGame ? gameMap.getVolcanoList().stream().mapToInt(h -> h.getVolcanoCards().size()).sum() : animalPositions.length;
             int animalIndex = 0;
 
-            for (Volcano volcanoCard : gameMap.getVolcanoList()) {
-                for (Habitat habitat : volcanoCard.getVolcanoCards()) {
-                    Image habitatImage = habitat.getHabitatImage();
+            if (!isNewGame) {
+                // Directly use animalPositions to set images
+                for (AnimalType animal : animalPositions) {
+                    Image habitatImage = new Image(getClass().getResourceAsStream("images/" + animal.toString().toLowerCase() + ".png"));
                     ImageView imageView = new ImageView(habitatImage);
                     imageView.setFitWidth(50);
                     imageView.setFitHeight(50);
@@ -493,8 +543,29 @@ public class FieryDragonGameController{ //implements Initializable
                     imageView.setLayoutY(paneCenterY + yOffset - imageView.getFitHeight() / 2);
 
                     boardcards.getChildren().add(imageView);
-                    animalPositions[animalIndex % animalPositions.length] = habitat.getAnimalType();
                     animalIndex++;
+                }
+            } else {
+                // For new game, place animals based on shuffled habitats
+                for (Volcano volcanoCard : gameMap.getVolcanoList()) {
+                    for (Habitat habitat : volcanoCard.getVolcanoCards()) {
+                        Image habitatImage = habitat.getHabitatImage();
+                        ImageView imageView = new ImageView(habitatImage);
+                        imageView.setFitWidth(50);
+                        imageView.setFitHeight(50);
+                        imageView.setPreserveRatio(true);
+
+                        double angle = Math.toRadians(360.0 * animalIndex / totalAnimals);
+                        double xOffset = radius * Math.cos(angle);
+                        double yOffset = radius * Math.sin(angle);
+
+                        imageView.setLayoutX(paneCenterX + xOffset - imageView.getFitWidth() / 2);
+                        imageView.setLayoutY(paneCenterY + yOffset - imageView.getFitHeight() / 2);
+
+                        boardcards.getChildren().add(imageView);
+                        animalPositions[animalIndex % animalPositions.length] = habitat.getAnimalType();
+                        animalIndex++;
+                    }
                 }
             }
             initialiseCaveView(); // Call to arrange tokens after animals are set
@@ -838,6 +909,7 @@ public class FieryDragonGameController{ //implements Initializable
         // Optionally, after processing the card effect, update the UI or game state
         updateGameBoard();
     }
+
 
 
     private Player findClosestPlayer(Player currentPlayer, List<Player> playerList, int totalPositions) {

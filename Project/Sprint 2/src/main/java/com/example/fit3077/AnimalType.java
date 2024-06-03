@@ -7,3 +7,10 @@ public enum AnimalType {
     DRAGON,
     OCTOPUS
 }
+
+/*
+* 0 = FISH
+1 = PUFFERFISH
+2 = DRAGON
+3 = OCTOPUS
+* */

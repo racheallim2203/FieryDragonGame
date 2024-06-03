@@ -83,7 +83,6 @@ public class Main extends Application {
             controller.setUserInput(userInput);  // Set user input
             System.out.println("Initializing new game with " + userInput + " players.");
             controller.initializeGame(true);
-            controller.saveGameState();
         } else {
             System.out.println("Loading existing game...");
             controller.initializeGame(false);
