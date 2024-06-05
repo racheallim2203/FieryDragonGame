@@ -108,7 +108,7 @@ public class Player {
     }
 
     // Static method to save all players' states to a file
-    public static void savePlayers(List<Player> players, String filePath) {
+    public static void savePlayers(List<Player> players, String filePath, Player inPlayPlayer) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             writer.write("Count: " + players.size());
             writer.newLine();
@@ -127,6 +127,11 @@ public class Player {
                 writer.write(playerData);
                 writer.newLine();
             }
+            // save current player data
+            String inPlayPlayerData = String.format("Current Player ID: %d", inPlayPlayer.getPlayerID());
+            writer.write(inPlayPlayerData);
+            writer.newLine();
+
             System.out.println("Game state saved successfully.");
         } catch (IOException e) {
             System.err.println("Error saving game state: " + e.getMessage());

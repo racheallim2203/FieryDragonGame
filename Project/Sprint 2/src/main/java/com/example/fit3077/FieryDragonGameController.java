@@ -226,7 +226,10 @@ public class FieryDragonGameController{ //implements Initializable
 
         // Check if playerList is not empty before setting the first player
         if (!playerList.isEmpty()) {
-            inPlayPlayer = playerList.get(0);  // Set the first player
+            if (this.isNewGame){
+                inPlayPlayer = playerList.get(0);  // Set the first player
+            }
+
             updateCurrentPlayerDisplay(inPlayPlayer.getAnimalToken().getType());
         } else {
             System.err.println("Player list is empty, cannot start the game.");
@@ -279,6 +282,7 @@ public class FieryDragonGameController{ //implements Initializable
             continueGame();
             tutorialPanel.setVisible(false);
         }
+
         this.isNewGame = isNewGame; // Set the game mode based on input flag
         startGame(); // Start the game
     }
@@ -1018,8 +1022,13 @@ public void continueGame() {
         System.out.println("Successfully passed player count");
         if (numberOfPlayers > 0) {
             updatePlayerList(playerData, numberOfPlayers);
-            System.out.println("Successfully update player list");
+            System.out.println("Successfully update player list: " + playerList);
+
+            // load current player
+            updateCurrentPlayer(playerData);
         }
+
+
     }
 
     void loadGameMapState() {
@@ -1096,6 +1105,18 @@ public void continueGame() {
         }
     }
 
+    private void updateCurrentPlayer(String playerData){
+        int currentPlayerID = parseCurrentPlayerData(playerData);
+
+        if (currentPlayerID == -1){
+            System.err.println("Error in obtaining current player ID.");
+        }
+
+        System.out.println("Updating current player ID: " + currentPlayerID);
+        inPlayPlayer = playerList.get(currentPlayerID);
+        System.out.println("In play player: " + inPlayPlayer.getPlayerID());
+    }
+
     // Parses the first line to get the number of players
     private int parsePlayerCount(String data) {
         try {
@@ -1110,7 +1131,11 @@ public void continueGame() {
     private List<Player> parsePlayerData(String data) {
         List<Player> players = new ArrayList<>();
         String[] entries = data.trim().split("\n");
-        for (int i = 1; i < entries.length; i++) {  // Skip the first line which is the count
+
+        int playerCount = Integer.parseInt(entries[0].split(": ")[1]); // Extract player count from the first line
+        System.out.println("Player count: " + playerCount);
+
+        for (int i = 1; i < playerCount + 1; i++) {  // Skip the first line which is the count
             try {
                 String[] details = entries[i].split(", ");
                 String type = details[0].split(": ")[1];
@@ -1129,6 +1154,19 @@ public void continueGame() {
         return players;
     }
 
+    private int parseCurrentPlayerData(String data){
+        int currentPlayerID = -1;
+        String[] entries = data.trim().split("\n");
+        try{
+            currentPlayerID = Integer.parseInt(entries[entries.length-1].split(": ")[1]); // Extract current player ID from last line
+            System.out.println("Current player ID: " + currentPlayerID);
+
+        } catch (Exception e) {
+            System.err.println("Error parsing current player data: " + e.getMessage());
+        }
+        return currentPlayerID;
+    }
+
 
     public void saveGameState() {
         if (Arrays.asList(animalPositions).contains(null)) {
@@ -1138,7 +1176,7 @@ public void continueGame() {
             Volcano.saveVolcano(VolcanoList.getInstance(), "volcano_card_state.txt");
             saveAnimalPositions(animalPositions, "volcano_positions.txt");
             saveDeckState(CARDS_DECK_FILE); // Use this method to save deck state
-            Player.savePlayers(playerList, "player_list.txt");
+            Player.savePlayers(playerList, "player_list.txt", inPlayPlayer);
             System.out.println("Player state saved successfully.");
         } catch (IOException e) {
             System.err.println("Error saving game state: " + e.getMessage());
