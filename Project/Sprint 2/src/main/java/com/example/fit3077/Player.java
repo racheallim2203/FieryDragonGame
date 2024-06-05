@@ -116,7 +116,7 @@ public class Player {
             int playerIndex = 1;
             for (Player player : players) {
                 // Serialize the state of players to a string
-                String playerData = String.format("Player%d: %s, Position: %d, Out: %b, StepsTaken: %d, InitialX: , InitialY: ",
+                String playerData = String.format("Player%d: %s, Position: %d, Out: %b, StepsTaken: %d, InitialX: %.2f, InitialY: %.2f",
                         playerIndex++,
                         player.getAnimalToken().getType(),
                         player.getPosition(),
