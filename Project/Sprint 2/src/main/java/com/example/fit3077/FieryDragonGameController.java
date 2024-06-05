@@ -239,7 +239,7 @@ public class FieryDragonGameController{ //implements Initializable
         // UI and game logic initialization on the UI thread
         Platform.runLater(() -> {
             displayShuffledDeck();  // Display the shuffled deck of cards
-            if (!cardsInGame.isEmpty() || !isNewGame) {
+            if (!cardsInGame.isEmpty()) {
                 shuffleAndDisplayHabitats();  // Shuffle habitats and display on the board
             } else {
                 System.err.println("Card list is empty, ensure cards are initialized before starting the game.");
