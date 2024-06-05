@@ -982,10 +982,9 @@ public class FieryDragonGameController{ //implements Initializable
         winner.setImage(new Image(getClass().getResourceAsStream(pathName)));
         System.out.println("pathName:" + pathName);
     }
-
-/**********************************
- ******* SAVING AND LOADING GAME*/
-
+/**
+ * SAVING AND LOADING GAME
+ */
 // Method to continue the game by loading the saved state
 public void continueGame() {
     isNewGame = false;
@@ -1120,6 +1119,9 @@ public void continueGame() {
                 int stepsTaken = Integer.parseInt(details[3].split(": ")[1]);
                 players.add(new Player(new AnimalToken(AnimalType.valueOf(type)), i - 1, position, isOut,stepsTaken, false, false));
                 System.out.println("Player loaded: " + type + " at position " + position + " with steps " + stepsTaken + " and out status " + isOut);
+
+                System.out.println("x: " + players.get(i-1).getAnimalToken().getInitialLayoutX() + ", y: " + players.get(i-1).getAnimalToken().getInitialLayoutY());
+
             } catch (Exception e) {
                 System.err.println("Error parsing player data: " + e.getMessage());
             }
