@@ -239,7 +239,7 @@ public class FieryDragonGameController{ //implements Initializable
         // UI and game logic initialization on the UI thread
         Platform.runLater(() -> {
             displayShuffledDeck();  // Display the shuffled deck of cards
-            if (!cardsInGame.isEmpty() || !isNewGame) {
+            if (!cardsInGame.isEmpty()) {
                 shuffleAndDisplayHabitats();  // Shuffle habitats and display on the board
             } else {
                 System.err.println("Card list is empty, ensure cards are initialized before starting the game.");
@@ -841,8 +841,8 @@ public class FieryDragonGameController{ //implements Initializable
         if (inTutorialMode) {
             tutorialMode.setText("You swapped positions with " +
                     closestPlayer.getAnimalToken().getType());
-            steps.setText("You are now at position " + closestPlayer.getAnimalToken().getType() +
-                    ". FLIP CARD AGAIN!");
+            steps.setText("The closest player to you is " + closestPlayer.getAnimalToken().getType() + ". You got to switch place with them!" +
+                    " NOW FLIP CARD AGAIN!");
         }
         PauseTransition pause = new PauseTransition(Duration.seconds(2));
         pause.setOnFinished(event -> {

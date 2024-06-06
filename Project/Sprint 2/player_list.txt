@@ -1,6 +1,6 @@
 Count: 4
-Player1: FISH, Position: 0, Out: true, StepsTaken: 1
-Player2: PUFFERFISH, Position: 19, Out: true, StepsTaken: 14
-Player3: DRAGON, Position: 8, Out: true, StepsTaken: -3
-Player4: OCTOPUS, Position: 17, Out: false, StepsTaken: 0
-Current Player ID: 1
+Player1: FISH, Position: 20, Out: true, StepsTaken: -3, InitialX: 525.00, InitialY: 230.67
+Player2: PUFFERFISH, Position: 8, Out: true, StepsTaken: 1, InitialX: 0.00, InitialY: 0.00
+Player3: DRAGON, Position: 15, Out: true, StepsTaken: 1, InitialX: 0.00, InitialY: 0.00
+Player4: OCTOPUS, Position: -1, Out: true, StepsTaken: 4, InitialX: 0.00, InitialY: 0.00
+Current Player ID: 0
