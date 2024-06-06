@@ -428,7 +428,9 @@ public class FieryDragonGameController{ //implements Initializable
 
     private void shuffleAndDisplayHabitats() {
         // Shuffle the habitats to get a new random arrangement of the animals
-        Collections.shuffle(gameMap.getVolcanoList());
+        if (isNewGame){
+            Collections.shuffle(gameMap.getVolcanoList());
+        }
         // Now call the method to display animals in a circle
         arrangeHabitatsInCircle();
     }
@@ -1090,6 +1092,10 @@ public void continueGame() {
         if (volcanoCardState != null) {
             List<Volcano> loadedVolcanoes = parseVolcanoState(volcanoCardState);
             if (loadedVolcanoes != null && !loadedVolcanoes.isEmpty()) {
+
+                // store the saved volcano
+                VolcanoList.setVolcanoes(loadedVolcanoes);
+
                 // Again because need to get the number of players
                 String playerData = readFromFile(PLAYER_LIST_FILE);
                 int numberOfPlayers = parsePlayerCount(playerData);
