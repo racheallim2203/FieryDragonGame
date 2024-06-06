@@ -551,8 +551,8 @@ public class FieryDragonGameController{ //implements Initializable
         for (int i = 0; i < cardsInGame.size(); i++) {
             Card card = cardsInGame.get(i);
             ImageView imageView = new ImageView();
-            imageView.setFitHeight(50); // Adjust the size as needed
-            imageView.setFitWidth(50);
+            imageView.setFitHeight(45); // Adjust the size as needed
+            imageView.setFitWidth(45);
             imageView.setPreserveRatio(true);
             imageView.setUserData(i); // Set user data to store card index
 
@@ -658,14 +658,16 @@ public class FieryDragonGameController{ //implements Initializable
                         steps.setText("GOOD JOB! You successfully flipped a card that matches the animal you are on! The number of animals in the card shows how many steps you can move forward. Its still your turn. Flip another card!");
                     }
 
-                    if (currentPlayer.getAnimalToken().getStepTaken() == 26) {
-                        System.out.println("WINNNNNNNNN");
-                        tutorialMode.setText("CONGRATS! You won!");
-                        steps.setText("WOHOO! You have successfully reached back your cave after one round! Its time to start the real game NOW :D");
-                        showWin();
-                    }
+
                 } else {
                     System.out.println("Conflict resolved at position " + newPosition + ", no further movement applied.");
+                }
+
+                if (currentPlayer.getAnimalToken().getStepTaken() == 26) {
+                    System.out.println("WINNNNNNNNN");
+                    tutorialMode.setText("CONGRATS! You won!");
+                    steps.setText("WOHOO! You have successfully reached back your cave after one round! Its time to start the real game NOW :D");
+                    showWin();
                 }
             } else {
                 for (int i = 0; i < decks.getChildren().size(); i++) {
