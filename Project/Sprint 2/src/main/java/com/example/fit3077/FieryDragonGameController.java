@@ -1198,7 +1198,12 @@ public void continueGame() {
                 double initialY = Double.parseDouble(details[5].split(": ")[1]);
                 players.get(players.size() - 1).getAnimalToken().setInitialLayoutX(initialX);
                 players.get(players.size() - 1).getAnimalToken().setInitialLayoutY(initialY);
-                System.out.println("x: " + players.get(i-1).getAnimalToken().getInitialLayoutX() + ", y: " + players.get(i-1).getAnimalToken().getInitialLayoutY());
+                System.out.println("initial x: " + players.get(i-1).getAnimalToken().getInitialLayoutX() + ", initial y: " + players.get(i-1).getAnimalToken().getInitialLayoutY());
+                double x = Double.parseDouble(details[6].split(": ")[1]);
+                double y = Double.parseDouble(details[7].split(": ")[1]);
+                players.get(players.size() - 1).getAnimalToken().setLayoutX(x);
+                players.get(players.size() - 1).getAnimalToken().setLayoutY(y);
+                System.out.println("x: " + players.get(i-1).getAnimalToken().getLayoutX() + ", y: " + players.get(i-1).getAnimalToken().getLayoutY());
 
             } catch (Exception e) {
                 System.err.println("Error parsing player data: " + e.getMessage());
