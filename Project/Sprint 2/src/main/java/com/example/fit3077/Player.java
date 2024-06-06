@@ -67,6 +67,9 @@ public class Player {
         if (stepTaken == 0 && !this.getAnimalToken().getIsOut()) {
             System.out.println("it is out!!!");
             this.getAnimalToken().setIsOut(true);
+
+            gameMap.getAnimalCaves().get(this.playerID).setHasAnimal(false);
+            gameMap.getAnimalCaves().get(this.playerID).setCurrentAnimal(null);
         }
 
         System.out.println("player step taken before move: " + stepTaken);

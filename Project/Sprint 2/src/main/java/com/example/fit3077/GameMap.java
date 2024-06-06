@@ -29,14 +29,15 @@ public class GameMap {
         int i = 0;
 
         if (numberOfCaves == 2){
-            animalCaves.add(new AnimalCave(AnimalType.FISH, -1));
-            animalCaves.add(new AnimalCave(AnimalType.DRAGON, 11));
+            animalCaves.add(new AnimalCave(AnimalType.FISH, 0));
+            animalCaves.add(new AnimalCave(AnimalType.DRAGON, 12));
         }
         else {
+            int startingLocation = 0;
             for (AnimalType animalType: AnimalType.values()) {
                 if (i < numberOfCaves){
-                    int startingLocation = (volcanoList.size() / AnimalType.values().length) * i;
                     animalCaves.add(new AnimalCave(animalType, startingLocation));
+                    startingLocation += 6;
                     i++;
                 }
                 else {

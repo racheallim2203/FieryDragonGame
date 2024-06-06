@@ -1181,6 +1181,7 @@ public void continueGame() {
             System.err.println("Error: Animal positions not fully initialized.");
         }
         try {
+            AnimalCave.saveCaves(gameMap.getAnimalCaves(), "caves.txt");
             Volcano.saveVolcano(VolcanoList.getInstance(), "volcano_card_state.txt");
             saveAnimalPositions(animalPositions, "volcano_positions.txt");
             saveDeckState(CARDS_DECK_FILE); // Use this method to save deck state
