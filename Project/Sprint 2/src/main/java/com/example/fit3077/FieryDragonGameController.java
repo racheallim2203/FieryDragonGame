@@ -323,7 +323,7 @@ public class FieryDragonGameController{ //implements Initializable
             }
         } else {
 
-            isNewGame = true;
+
 
             // Sort cards by their index to maintain the order they were saved in
             cardsInGame.sort(Comparator.comparingInt(Card::getIndex));
@@ -377,6 +377,7 @@ public class FieryDragonGameController{ //implements Initializable
             int animalIndex = 0;
 
             if (!isNewGame) {
+                System.out.println("loading exiting habitats");
                 // Directly use animalPositions to set images
                 for (AnimalType animal : animalPositions) {
                     Image habitatImage = new Image(getClass().getResourceAsStream("images/" + animal.toString().toLowerCase() + ".png"));
@@ -394,6 +395,9 @@ public class FieryDragonGameController{ //implements Initializable
 
                     boardcards.getChildren().add(imageView);
                     animalIndex++;
+
+                    // all loading done
+                    isNewGame = true;
                 }
             } else {
                 // For new game, place animals based on shuffled habitats
@@ -1261,7 +1265,7 @@ public void continueGame() {
             if (position != null) {
                 sb.append(position.ordinal()).append(",");
             } else {
-                sb.append("-1,"); // Use -1 or some other placeholder to indicate 'no animal'
+                sb.append("-1,"); // Use -1 or some other placeholder to indicate 'no animal type for current position'
             }
         }
         if (sb.length() > 0) {
