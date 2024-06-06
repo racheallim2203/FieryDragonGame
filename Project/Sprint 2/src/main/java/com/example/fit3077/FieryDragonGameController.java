@@ -621,6 +621,8 @@ public class FieryDragonGameController{ //implements Initializable
             currentAnimalTypeAtPosition = animalPositions[currentPlayerPosition];
         }
 
+        System.out.println("current type: " + currentAnimalTypeAtPosition);
+
         if (card.getCardType() == CardType.animalCard) {
             // Check if the card type matches the animal at the current player's position
             if (card.matchesType(currentAnimalTypeAtPosition)) {
@@ -637,9 +639,9 @@ public class FieryDragonGameController{ //implements Initializable
                             steps.setText("OOF! You reach a habitat occupied by another player. You are able to send them back home!! FLIP AGAIN");
                             System.out.println(other.getAnimalToken().getType() + " found at the new position: " + newPosition + " and sent home.");
 //                            other.resetPosition();
+                            sendTokenHome(newPosition);
                             card.applyMovement(currentPlayer, gameMap);
                             instructions.setText("Send player home!");
-                            sendTokenHome(newPosition);
                             updateGameBoard();
                             conflictResolved = true;
                             break;
@@ -1216,7 +1218,7 @@ public void continueGame() {
                 players.get(players.size() - 1).getAnimalToken().setLayoutX(x);
                 players.get(players.size() - 1).getAnimalToken().setLayoutY(y);
                 System.out.println("x: " + players.get(i-1).getAnimalToken().getLayoutX() + ", y: " + players.get(i-1).getAnimalToken().getLayoutY());
-
+                players.get(players.size() - 1).getAnimalToken().setOtherCaveType(AnimalType.valueOf(details[8].split(": ")[1]));
             } catch (Exception e) {
                 System.err.println("Error parsing player data: " + e.getMessage());
             }
