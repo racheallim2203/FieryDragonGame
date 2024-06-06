@@ -9,6 +9,7 @@ public class Player {
     private final AnimalToken animalToken; //  represents the which animal token is taken by the player
     private int position; //stores the player's current position on the game board.
     private int playerID; // to track player turns
+    private int otherID; // to track cave that current player stays
     private boolean isOut;
     private int stepsTaken;
     boolean isNewGame;
@@ -30,9 +31,13 @@ public class Player {
 
     }
 
+    public void setOut(boolean out) {
+        isOut = out;
+    }
 
-
-
+    public boolean isOut() {
+        return isOut;
+    }
 
     private void setInitialPosition() {
         this.position = getInitialPositionForType(animalToken.getType());
@@ -50,6 +55,8 @@ public class Player {
 
     public int getInitialPosition() {
         return getInitialPositionForType(this.animalToken.getType());
+//        return this.animalToken.getType();
+
     }
 
     // adjusts the player's position on the game board based on a number of steps to move, which can be positive or negative
@@ -65,11 +72,16 @@ public class Player {
 
         int stepTaken = this.getAnimalToken().getStepTaken();
         if (stepTaken == 0 && !this.getAnimalToken().getIsOut()) {
-            System.out.println("it is out!!!");
+            System.out.println("it is out from own cave!!!");
             this.getAnimalToken().setIsOut(true);
-
             gameMap.getAnimalCaves().get(this.playerID).setHasAnimal(false);
             gameMap.getAnimalCaves().get(this.playerID).setCurrentAnimal(null);
+        }
+        else if (stepTaken != 0 && !this.getAnimalToken().getIsOut()) {
+            System.out.println("it is out from other cave!!!");
+            this.getAnimalToken().setIsOut(true);
+            gameMap.getAnimalCaves().get(this.otherID).setHasAnimal(false);
+            gameMap.getAnimalCaves().get(this.otherID).setCurrentAnimal(null);
         }
 
         System.out.println("player step taken before move: " + stepTaken);
@@ -110,6 +122,14 @@ public class Player {
 
     }
 
+    public int getOtherID() {
+        return otherID;
+    }
+
+    public void setOtherID(int otherID) {
+        this.otherID = otherID;
+    }
+
     // Static method to save all players' states to a file
     public static void savePlayers(List<Player> players, String filePath, Player inPlayPlayer) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
@@ -145,8 +165,8 @@ public class Player {
     public String toString() {
         return "{Type=" + animalToken.getType() +
                 ", Position=" + position +
-                ", IsOut=" + isOut +
-                ", StepsTaken=" + stepsTaken +
+                ", IsOut=" + this.getAnimalToken().getIsOut() +
+                ", StepsTaken=" + this.getAnimalToken().getStepTaken() +
                 '}';
     }
 }

@@ -17,6 +17,13 @@ public class AnimalToken {
     private double initialLayoutX;
     private double initialLayoutY;
 
+    // attributes to record the location of token at other cave
+    private double layoutX;
+    private double layoutY;
+
+    // attributes to record the animal type of other cave
+    private AnimalType otherCaveType;
+
     public AnimalToken(AnimalType animalType) {
         this.animalType = animalType;
     }
@@ -63,6 +70,30 @@ public class AnimalToken {
 
     public void setInitialLayoutY(double initialLayoutY) {
         this.initialLayoutY = initialLayoutY;
+    }
+
+    public double getLayoutX() {
+        return layoutX;
+    }
+
+    public void setLayoutX(double layoutX) {
+        this.layoutX = layoutX;
+    }
+
+    public double getLayoutY() {
+        return layoutY;
+    }
+
+    public void setLayoutY(double layoutY) {
+        this.layoutY = layoutY;
+    }
+
+    public AnimalType getOtherCaveType() {
+        return otherCaveType;
+    }
+
+    public void setOtherCaveType(AnimalType otherCaveType) {
+        this.otherCaveType = otherCaveType;
     }
 
     public Image getTokenImage() {

@@ -607,6 +607,10 @@ public class FieryDragonGameController{ //implements Initializable
             System.out.println("in the cave!!");
             currentAnimalTypeAtPosition = currentPlayer.getAnimalToken().getType();
         }
+        else if (currentPlayer.getAnimalToken().getStepTaken() != 0 && !currentPlayer.getAnimalToken().getIsOut()){
+            System.out.println("in other cave!!");
+            currentAnimalTypeAtPosition = currentPlayer.getAnimalToken().getOtherCaveType();
+        }
         else {
             currentAnimalTypeAtPosition = animalPositions[currentPlayerPosition];
         }
@@ -641,7 +645,7 @@ public class FieryDragonGameController{ //implements Initializable
                 if (!conflictResolved) {
                     card.applyMovement(currentPlayer, gameMap);
                     instructions.setText(currentPlayer.getAnimalToken().getType() + " moves " + card.getCount() + " steps forward");
-                    System.out.println(currentAnimalTypeAtPosition + " moves " + card.getCount() + " steps forward to position " + currentPlayer.getPosition());
+                    System.out.println(currentPlayer.getAnimalToken().getType() + " moves " + card.getCount() + " steps forward to position " + currentPlayer.getPosition());
 
                     if (inTutorialMode) {
                         tutorialMode.setText("NICE! You move " + card.getCount() + " steps forward");
@@ -786,8 +790,15 @@ public class FieryDragonGameController{ //implements Initializable
 
         for (Player otherPlayer : playerList) {
             if (otherPlayer != currentPlayer && otherPlayer.getAnimalToken().getIsOut()) {
-                int forwardDistance = (otherPlayer.getPosition() - currentPlayer.getPosition() + totalPositions) % totalPositions;
-                int backwardDistance = (currentPlayer.getPosition() - otherPlayer.getPosition() + totalPositions) % totalPositions;
+                int currentPlayerPosition;
+                if (currentPlayer.isOut()){
+                    currentPlayerPosition = currentPlayer.getPosition();
+                }
+                else {
+                    currentPlayerPosition = currentPlayer.getInitialPosition() + 1;
+                }
+                int forwardDistance = (otherPlayer.getPosition() - currentPlayerPosition + totalPositions) % totalPositions;
+                int backwardDistance = (currentPlayerPosition - otherPlayer.getPosition() + totalPositions) % totalPositions;
                 int smallerDistance = Math.min(forwardDistance, backwardDistance);
 
                 if (smallerDistance < closestDistance) {
@@ -819,21 +830,46 @@ public class FieryDragonGameController{ //implements Initializable
             closestPlayerStepChange -= totalPositions;
         }
 
-        // Perform the movement
-        currentPlayer.moveToken(currentPlayerStepChange, gameMap);
-        closestPlayer.moveToken(closestPlayerStepChange, gameMap);
 
         // Set positions directly to handle cases where players should not move normally
         if (!currentPlayer.getAnimalToken().getIsOut()) {
+
+            // Perform the movement
+            currentPlayer.moveToken(currentPlayerStepChange, gameMap);
+            closestPlayer.moveToken(closestPlayerStepChange, gameMap);
+
+
             // Set closest player's position to current player's initial position
-            closestPlayer.setPosition(currentPlayerInitialPosition);
+
             // Simulate that closest player is not out
             closestPlayer.getAnimalToken().setIsOut(false);
+            closestPlayer.setOut(false);
+            closestPlayer.getAnimalToken().setLayoutX(currentPlayer.getAnimalToken().getInitialLayoutX());
+            closestPlayer.getAnimalToken().setLayoutY(currentPlayer.getAnimalToken().getInitialLayoutY());
+            closestPlayer.getAnimalToken().setOtherCaveType(currentPlayer.getAnimalToken().getType());
+            closestPlayer.setOtherID(currentPlayer.getPlayerID());
+            System.out.println(
+                    "swap in cave to out cave"
+            );
+
+
+            // set cave details
+            gameMap.getAnimalCaves().get(currentPlayer.getPlayerID()).setHasAnimal(true);
+            gameMap.getAnimalCaves().get(currentPlayer.getPlayerID()).setCurrentAnimal(closestPlayer.getAnimalToken().getType());
+
         } else {
             // Normal position swap if both players are out
+            System.out.println("normal swap");
             currentPlayer.setPosition(newCurrentPlayerPosition);
             closestPlayer.setPosition(tempPosition);
+
+            // Perform the movement
+            currentPlayer.moveToken(currentPlayerStepChange, gameMap);
+            closestPlayer.moveToken(closestPlayerStepChange, gameMap);
         }
+
+
+
     }
 
     private void updateGameAfterSwap(Player currentPlayer, Player closestPlayer, boolean inTutorialMode) {
@@ -850,7 +886,7 @@ public class FieryDragonGameController{ //implements Initializable
             flipCardsBack();
         });
         pause.play();
-        System.out.println("After card move: Closest Player - " + closestPlayer.getAnimalToken().getType() + " StepTaken:" + closestPlayer.getAnimalToken().getStepTaken());
+        System.out.println("After card move: Closest Player - " + closestPlayer.getAnimalToken().getType() + ", StepTaken:" + closestPlayer.getAnimalToken().getStepTaken() + ", Out:" + closestPlayer.getAnimalToken().getIsOut());
     }
 
     // RAC- To send current player at position back home
@@ -898,7 +934,7 @@ public class FieryDragonGameController{ //implements Initializable
             AnimalToken token = player.getAnimalToken();
             ImageView tokenView = tokenViews.get(token.getType());
             int position = player.getPosition();  // Use the actual position
-            System.out.println(token.getType() + "is at position: " + position);
+            System.out.println(token.getType() + " is at position: " + position);
 
             if (tokenView != null) {
                 if (token.getStepTaken() == gameMap.getNumberOfStepToWin()) {
@@ -908,10 +944,17 @@ public class FieryDragonGameController{ //implements Initializable
                     tokenView.setLayoutY(token.getInitialLayoutY());
                 } else {
                     if (!token.getIsOut()) {
-                        // If the token is not out, place it at its starting position
-                        System.out.println("Updating position for " + token.getType() + ": InitialX=" + token.getInitialLayoutX() + ", InitialY=" + token.getInitialLayoutY() + ", StepTaken=" + token.getStepTaken() + ", IsOut=" + token.getIsOut());
-                        tokenView.setLayoutX(token.getInitialLayoutX());
-                        tokenView.setLayoutY(token.getInitialLayoutY());
+                        if (token.getStepTaken() == 0){
+                            // If the token is not out, place it at its starting position
+                            System.out.println("Updating position for " + token.getType() + ": InitialX=" + token.getInitialLayoutX() + ", InitialY=" + token.getInitialLayoutY() + ", StepTaken=" + token.getStepTaken() + ", IsOut=" + token.getIsOut());
+                            tokenView.setLayoutX(token.getInitialLayoutX());
+                            tokenView.setLayoutY(token.getInitialLayoutY());
+                        } else {
+                            // If the token is not out but in other cave, place it at the cave
+                            System.out.println("Updating position for " + token.getType() + ": X=" + token.getLayoutX() + ", Y=" + token.getLayoutY() + ", StepTaken=" + token.getStepTaken() + ", IsOut=" + token.getIsOut());
+                            tokenView.setLayoutX(token.getLayoutX());
+                            tokenView.setLayoutY(token.getLayoutY());
+                        }
                     } else {
                         // Update the position on the game board for tokens that are out
                         double angle = Math.toRadians(360.0 * position / 24); // Assuming 24 positions on the board
