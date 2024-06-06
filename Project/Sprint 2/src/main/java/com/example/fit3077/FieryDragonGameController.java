@@ -835,8 +835,8 @@ public class FieryDragonGameController{ //implements Initializable
         if (!currentPlayer.getAnimalToken().getIsOut()) {
 
             // Perform the movement
-            currentPlayer.moveToken(currentPlayerStepChange, gameMap);
             closestPlayer.moveToken(closestPlayerStepChange, gameMap);
+            currentPlayer.moveToken(currentPlayerStepChange, gameMap);
 
 
             // Set closest player's position to current player's initial position
@@ -860,12 +860,14 @@ public class FieryDragonGameController{ //implements Initializable
         } else {
             // Normal position swap if both players are out
             System.out.println("normal swap");
+
+            // Perform the movement
+            closestPlayer.moveToken(closestPlayerStepChange, gameMap);
+            currentPlayer.moveToken(currentPlayerStepChange, gameMap);
+            // Update position
             currentPlayer.setPosition(newCurrentPlayerPosition);
             closestPlayer.setPosition(tempPosition);
 
-            // Perform the movement
-            currentPlayer.moveToken(currentPlayerStepChange, gameMap);
-            closestPlayer.moveToken(closestPlayerStepChange, gameMap);
         }
 
 

@@ -63,10 +63,11 @@ public class Player {
     public void moveToken(int steps, GameMap gameMap) {
         List<Volcano> habitats = gameMap.getVolcanoList();
         int totalAnimals = habitats.stream().mapToInt(h -> h.getVolcanoCards().size()).sum();
-        System.out.println("Current Position: " + this.position);
+        System.out.println( this.getAnimalToken().getType() + " Current Position: " + this.position);
         System.out.println("Steps to Move: " + steps);
 
         if(this.getAnimalToken().getIsOut()){
+            System.out.println("animal is out and set current position to no animal before move");
             gameMap.getHabitats().get(this.position).setContainAnimalToken(false);
         }
 
@@ -88,12 +89,18 @@ public class Player {
         this.getAnimalToken().setStepTaken(stepTaken + steps);
         System.out.println("player step taken after move: " + this.getAnimalToken().getStepTaken());
 
+        if (this.getAnimalToken().getStepTaken() > 26){
+            System.out.println("Need to go one more round!");
+            this.getAnimalToken().setStepTaken((this.getAnimalToken().getStepTaken() % 25) + 1);
+        }
+
         // Adding totalHabitats ensures that the index remains positive, also works perfectly for positive steps
         // Set the new position
         this.position = (this.position + steps + totalAnimals) % totalAnimals;
         System.out.println("New Position: " + this.position);
 
         if (this.getAnimalToken().getIsOut()){
+            System.out.println("set new position has animal");
             gameMap.getHabitats().get(this.position).setContainAnimalToken(true);
         }
 
