@@ -841,8 +841,8 @@ public class FieryDragonGameController{ //implements Initializable
         if (inTutorialMode) {
             tutorialMode.setText("You swapped positions with " +
                     closestPlayer.getAnimalToken().getType());
-            steps.setText("You are now at position " + closestPlayer.getAnimalToken().getType() +
-                    ". FLIP CARD AGAIN!");
+            steps.setText("The closest player to you is " + closestPlayer.getAnimalToken().getType() + ". You got to switch place with them!" +
+                    " NOW FLIP CARD AGAIN!");
         }
         PauseTransition pause = new PauseTransition(Duration.seconds(2));
         pause.setOnFinished(event -> {
