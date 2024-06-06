@@ -146,7 +146,7 @@ public class Player {
             int playerIndex = 1;
             for (Player player : players) {
                 // Serialize the state of players to a string
-                String playerData = String.format("Player%d: %s, Position: %d, Out: %b, StepsTaken: %d, InitialX: %.2f, InitialY: %.2f, X: %.2f, Y: %.2f, other cave type: %s",
+                String playerData = String.format("Player%d: %s, Position: %d, Out: %b, StepsTaken: %d, InitialX: %.2f, InitialY: %.2f, X: %.2f, Y: %.2f",
                         playerIndex++,
                         player.getAnimalToken().getType(),
                         player.getPosition(),
@@ -155,8 +155,7 @@ public class Player {
                         player.getAnimalToken().getInitialLayoutX(),
                         player.getAnimalToken().getInitialLayoutY(),
                         player.getAnimalToken().getLayoutX(),
-                        player.getAnimalToken().getLayoutY(),
-                        player.getAnimalToken().getOtherCaveType());
+                        player.getAnimalToken().getLayoutY());
                 writer.write(playerData);
                 writer.newLine();
             }
